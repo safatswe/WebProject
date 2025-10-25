@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Tutor Connect</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Tutor Connect</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <nav>
   <h2>Tutor Connect</h2>
   <ul>
-    <li><a href="#" id="navHome">Home</a></li>
-    <li><a href="#" id="navCreate">Create Profile</a></li>
-    <li><a href="#" id="navShow">Show Profiles</a></li>
-    <li><a href="#" id="navAbout">About</a></li>
-    <li><a href="#" id="navContact">Contact</a></li>
+    <li><a href="#homeSection">Home</a></li>
+    <li><a href="#formSection">Create Profile</a></li>
+    <li><a href="#profilesSection">Show Profiles</a></li>
+    <li><a href="#aboutSection">About</a></li>
+    <li><a href="#contactSection">Contact</a></li>
   </ul>
 </nav>
 
@@ -25,7 +25,7 @@
     <div class="hero-text">
       <h1>Welcome to <span class="highlight">Tutor Connect</span></h1>
       <p>Empowering students to find the perfect tutor and helping tutors showcase their expertise — all in one place.</p>
-      <button class="btn" id="getStarted">Get Started</button>
+      <a href="#formSection" class="btn">Get Started</a>
     </div>
     <div class="hero-image">
       <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Tutor illustration">
@@ -34,7 +34,7 @@
 </section>
 
 <!-- Create Profile Section -->
-<div class="form-container" id="formSection">
+<section class="form-container" id="formSection">
   <h2>Create Profile</h2>
   <form id="profileForm" enctype="multipart/form-data">
     <input type="text" name="full_name" placeholder="Full Name" required><br>
@@ -46,10 +46,10 @@
     <input type="file" name="photo" accept="image/*" required><br>
     <button class="btn" type="submit">Create</button>
   </form>
-</div>
+</section>
 
 <!-- Show Profiles Section -->
-<div class="profiles-container" id="profilesSection">
+<section class="profiles-container" id="profilesSection">
   <h2>All Profiles</h2>
   <button class="filter-toggle" id="showFilter">&#9776; Filters</button>
 
@@ -66,21 +66,20 @@
   </div>
 
   <div id="profiles"></div>
-</div>
+</section>
 
 <!-- About Section -->
-
-<div class="about-container" id="aboutSection" style="background-color:white">
+<section class="about-container" id="aboutSection">
   <h2>About Tutor Connect</h2>
   <p>
     Tutor Connect is a simple and effective platform that connects students with expert tutors.
     Tutors can create profiles showcasing their qualifications, while students can find the best fit
     based on department, subjects, and experience.
   </p>
-</div>
+</section>
 
 <!-- Contact Section -->
-<div class="contact-container" id="contactSection">
+<section class="contact-container" id="contactSection">
   <h2>Contact Us</h2>
   <p>Have questions or feedback? Reach out to us anytime!</p>
   <form>
@@ -89,30 +88,10 @@
     <textarea placeholder="Your Message" rows="4" required></textarea><br>
     <button class="btn" type="submit">Send</button>
   </form>
-</div>
+</section>
 
 <script>
-const sections = {
-  home: document.getElementById("homeSection"),
-  form: document.getElementById("formSection"),
-  profiles: document.getElementById("profilesSection"),
-  about: document.getElementById("aboutSection"),
-  contact: document.getElementById("contactSection")
-};
-
-function showSection(section) {
-  for (let key in sections) sections[key].style.display = "none";
-  section.style.display = "block";
-}
-
-document.getElementById("navHome").onclick = () => showSection(sections.home);
-document.getElementById("navCreate").onclick = () => showSection(sections.form);
-document.getElementById("navShow").onclick = () => { showSection(sections.profiles); fetchProfiles(); };
-document.getElementById("navAbout").onclick = () => showSection(sections.about);
-document.getElementById("navContact").onclick = () => showSection(sections.contact);
-
-document.getElementById("getStarted").onclick = () => { showSection(sections.profiles); fetchProfiles(); };
-
+// Form submission
 document.getElementById("profileForm").onsubmit = async (e) => {
   e.preventDefault();
   const formData = new FormData(e.target);
@@ -121,6 +100,7 @@ document.getElementById("profileForm").onsubmit = async (e) => {
   e.target.reset();
 };
 
+// Fetch profiles
 async function fetchProfiles(department="", subject="") {
   let url = "/api/profiles";
   if(department && subject) url += `?department=${department}&subject=${subject}`;
@@ -159,7 +139,9 @@ showFilterBtn.onclick = () => {
   filterPanel.style.display = filterPanel.style.display === "flex" ? "none" : "flex";
 };
 
-showSection(sections.home);
+// Fetch profiles initially
+fetchProfiles();
 </script>
+
 </body>
 </html>
