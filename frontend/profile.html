@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tutor Portfolio</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: #f3f4f6;
+    color: #333;
+    text-align: center;
+}
+
+/* NAVBAR */
+nav {
+    background: #007bff;
+    padding: 12px 20px;
+    text-align: center;
+}
+nav h2 {
+    color: white;
+    margin: 0;
+    font-size: 22px;
+}
+
+/* PROFILE IMAGE */
+.profile-img {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: 20px;
+    border: 4px solid #007bff;
+}
+
+/* PROFILE INFO */
+.profile-info {
+    background: white;
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 700px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+.profile-info h1 {
+    font-size: 28px;
+    color: #007bff;
+    margin-bottom: 5px;
+}
+.profile-info h3 {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* INFO CARDS */
+.details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+.card {
+    background: white;
+    flex: 1 1 250px;
+    max-width: 300px;
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.card i {
+    color: #007bff;
+    font-size: 20px;
+    min-width: 25px;
+}
+.card p {
+    margin: 0;
+    font-size: 15px;
+    word-wrap: break-word;
+}
+
+/* ABOUT / BIO SECTION */
+.about {
+    background: white;
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    text-align: left;
+}
+
+/* BUTTON */
+.btn {
+    padding: 12px 25px;
+    margin: 30px auto 50px auto;
+    border: none;
+    border-radius: 8px;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+}
+.btn:hover {
+    background: #0056b3;
+}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+    .profile-info h1 { font-size: 24px; }
+    .profile-info h3 { font-size: 16px; }
+    .details { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<nav><h2>Tutor Connect</h2></nav>
+
+<!-- PROFILE IMAGE -->
+<img src="" alt="Profile Picture" class="profile-img" id="profilePic">
+
+<div class="profile-info">
+    <h1 id="fullName"></h1>
+    <h3 id="department"></h3>
+    <h3 id="subject"></h3>
+    <h3 id="salary"></h3>
+</div>
+
+<div class="details">
+    <div class="card"><i class="fas fa-envelope"></i><p id="email"></p></div>
+    <div class="card"><i class="fas fa-map-marker-alt"></i><p id="address"></p></div>
+</div>
+
+<div class="about">
+    <h3>About Me</h3>
+    <p id="bio">I am a passionate tutor dedicated to helping students achieve their academic goals. I specialize in my subjects and have experience teaching students of various levels.</p>
+</div>
+
+<button class="btn" onclick="window.history.back()">Go Back</button>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+fetch(`/api/profiles/${id}`)
+  .then(res => res.json())
+  .then(p => {
+    document.getElementById("profilePic").src = `/uploads/${p.photo}`;
+    document.getElementById("fullName").textContent = p.full_name;
+    document.getElementById("department").textContent = `Department: ${p.department}`;
+    document.getElementById("subject").textContent = `Subject: ${p.subject_to_teach}`;
+    document.getElementById("salary").textContent = `Salary: ${p.salary_range}`;
+    document.getElementById("email").textContent = p.email;
+    document.getElementById("address").textContent = p.address;
+  });
+</script>
+
+</body>
+</html>

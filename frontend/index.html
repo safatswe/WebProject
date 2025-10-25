@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tutor Connect</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <h2>Tutor Connect</h2>
+  <ul>
+    <li><a href="#" id="navHome">Home</a></li>
+    <li><a href="#" id="navCreate">Create Profile</a></li>
+    <li><a href="#" id="navShow">Show Profiles</a></li>
+    <li><a href="#" id="navAbout">About</a></li>
+    <li><a href="#" id="navContact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Home Section -->
+<section id="homeSection">
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Welcome to <span class="highlight">Tutor Connect</span></h1>
+      <p>Empowering students to find the perfect tutor and helping tutors showcase their expertise — all in one place.</p>
+      <button class="btn" id="getStarted">Get Started</button>
+    </div>
+    <div class="hero-image">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Tutor illustration">
+    </div>
+  </div>
+</section>
+
+<!-- Create Profile Section -->
+<div class="form-container" id="formSection">
+  <h2>Create Profile</h2>
+  <form id="profileForm" enctype="multipart/form-data">
+    <input type="text" name="full_name" placeholder="Full Name" required><br>
+    <input type="email" name="email" placeholder="Email" required><br>
+    <input type="text" name="address" placeholder="Address" required><br>
+    <input type="text" name="department" placeholder="Department" required><br>
+    <input type="text" name="salary_range" placeholder="Salary Range" required><br>
+    <input type="text" name="subject_to_teach" placeholder="Subject to Teach" required><br>
+    <input type="file" name="photo" accept="image/*" required><br>
+    <button class="btn" type="submit">Create</button>
+  </form>
+</div>
+
+<!-- Show Profiles Section -->
+<div class="profiles-container" id="profilesSection">
+  <h2>All Profiles</h2>
+  <button class="filter-toggle" id="showFilter">&#9776; Filters</button>
+
+  <div class="filter-panel" id="filterPanel">
+    <div class="filter-item">
+      <input type="text" id="filterDept" placeholder="Department">
+      <i class="fas fa-building"></i>
+    </div>
+    <div class="filter-item">
+      <input type="text" id="filterSubject" placeholder="Subject">
+      <i class="fas fa-book"></i>
+    </div>
+    <button class="btn" id="applyFilter">Apply Filter</button>
+  </div>
+
+  <div id="profiles"></div>
+</div>
+
+<!-- About Section -->
+
+<div class="about-container" id="aboutSection" style="background-color:white">
+  <h2>About Tutor Connect</h2>
+  <p>
+    Tutor Connect is a simple and effective platform that connects students with expert tutors.
+    Tutors can create profiles showcasing their qualifications, while students can find the best fit
+    based on department, subjects, and experience.
+  </p>
+</div>
+
+<!-- Contact Section -->
+<div class="contact-container" id="contactSection">
+  <h2>Contact Us</h2>
+  <p>Have questions or feedback? Reach out to us anytime!</p>
+  <form>
+    <input type="text" placeholder="Your Name" required><br>
+    <input type="email" placeholder="Your Email" required><br>
+    <textarea placeholder="Your Message" rows="4" required></textarea><br>
+    <button class="btn" type="submit">Send</button>
+  </form>
+</div>
+
+<script>
+const sections = {
+  home: document.getElementById("homeSection"),
+  form: document.getElementById("formSection"),
+  profiles: document.getElementById("profilesSection"),
+  about: document.getElementById("aboutSection"),
+  contact: document.getElementById("contactSection")
+};
+
+function showSection(section) {
+  for (let key in sections) sections[key].style.display = "none";
+  section.style.display = "block";
+}
+
+document.getElementById("navHome").onclick = () => showSection(sections.home);
+document.getElementById("navCreate").onclick = () => showSection(sections.form);
+document.getElementById("navShow").onclick = () => { showSection(sections.profiles); fetchProfiles(); };
+document.getElementById("navAbout").onclick = () => showSection(sections.about);
+document.getElementById("navContact").onclick = () => showSection(sections.contact);
+
+document.getElementById("getStarted").onclick = () => { showSection(sections.profiles); fetchProfiles(); };
+
+document.getElementById("profileForm").onsubmit = async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  await fetch("/api/profiles", { method: "POST", body: formData });
+  alert("Profile Created Successfully!");
+  e.target.reset();
+};
+
+async function fetchProfiles(department="", subject="") {
+  let url = "/api/profiles";
+  if(department && subject) url += `?department=${department}&subject=${subject}`;
+  else if(department) url += `?department=${department}`;
+  else if(subject) url += `?subject=${subject}`;
+
+  const res = await fetch(url);
+  const profiles = await res.json();
+  const container = document.getElementById("profiles");
+  container.innerHTML = "";
+  profiles.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "profile-card";
+    div.innerHTML = `
+      <img src="/uploads/${p.photo}" alt="photo">
+      <div class="profile-info">
+        <h3>${p.full_name}</h3>
+        <p><strong>Dept:</strong> ${p.department}</p>
+        <p><strong>Subject:</strong> ${p.subject_to_teach}</p>
+        <p><strong>Salary:</strong> ${p.salary_range}</p>
+      </div>`;
+    div.onclick = () => window.location.href = `profile.html?id=${p.id}`;
+    container.appendChild(div);
+  });
+}
+
+document.getElementById("applyFilter").onclick = () => {
+  const dept = document.getElementById("filterDept").value;
+  const subject = document.getElementById("filterSubject").value;
+  fetchProfiles(dept, subject);
+};
+
+const showFilterBtn = document.getElementById("showFilter");
+const filterPanel = document.getElementById("filterPanel");
+showFilterBtn.onclick = () => {
+  filterPanel.style.display = filterPanel.style.display === "flex" ? "none" : "flex";
+};
+
+showSection(sections.home);
+</script>
+</body>
+</html>
