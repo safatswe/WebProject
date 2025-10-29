@@ -253,3 +253,91 @@ input, select, textarea {
 
 /* -------------------- TEXTAREAS -------------------- */
 textarea { resize: none; }
+/* -------------------- FOOTER SECTION -------------------- */
+footer {
+    background: black;
+    color: white;
+    padding: 40px 20px 15px;
+    text-align: center;
+    margin-top: 60px;
+    border-top: 4px solid #007bff;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    text-align: left;
+    max-width: 1100px;
+    margin: auto;
+    gap: 30px;
+}
+
+.footer-left, .footer-center, .footer-right {
+    flex: 1 1 250px;
+    min-width: 250px;
+}
+
+.footer-left h3 {
+    color: #ffeb3b;
+    margin-bottom: 10px;
+    font-size: 22px;
+}
+
+.footer-left p {
+    font-size: 14px;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+.footer-center h4,
+.footer-right h4 {
+    color: #ffeb3b;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.footer-center ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-center ul li {
+    margin: 6px 0;
+}
+
+.footer-center ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.footer-center ul li a:hover {
+    color: #007bff;
+}
+
+.social-icons {
+    margin-top: 10px;
+}
+
+.social-icons a {
+    color: #fff;
+    margin: 0 8px;
+    font-size: 18px;
+    display: inline-block;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.social-icons a:hover {
+    color: #007bff;
+    transform: scale(1.2);
+}
+
+.footer-bottom {
+    border-top: 1px solid #333;
+    margin-top: 30px;
+    padding-top: 10px;
+    font-size: 14px;
+    color: #aaa;
+}

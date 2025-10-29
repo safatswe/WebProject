@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Create Tutor Profile</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <h2>Tutor Connect</h2>
+  <ul>
+    <li><a href="index.html#homeSection">Home</a></li>
+    <li><a href="index.html#profilesSection">Show Profiles</a></li>
+    <li><a href="index.html#aboutSection">About</a></li>
+    <li><a href="index.html#contactSection">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="form-container" style="margin-top:100px;">
+  <h2>Create Profile</h2>
+  <form id="profileForm" enctype="multipart/form-data">
+    <input type="text" name="full_name" placeholder="Full Name" required><br>
+    <input type="email" name="email" placeholder="Email" required><br>
+    <input type="text" name="address" placeholder="Address" required><br>
+    <input type="text" name="department" placeholder="Department" required><br>
+    <input type="text" name="salary_range" placeholder="Salary Range" required><br>
+    <input type="text" name="subject_to_teach" placeholder="Subject to Teach" required><br>
+    <input type="file" name="photo" accept="image/*" required><br>
+    <button class="btn" type="submit">Create</button>
+  </form>
+</section>
+
+<script>
+document.getElementById("profileForm").onsubmit = async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  await fetch("/api/profiles", { method: "POST", body: formData });
+  alert("Profile Created Successfully!");
+  e.target.reset();
+};
+</script>
+
+</body>
+</html>

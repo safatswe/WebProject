@@ -12,7 +12,7 @@
   <h2>Tutor Connect</h2>
   <ul>
     <li><a href="#homeSection">Home</a></li>
-    <li><a href="#formSection">Create Profile</a></li>
+    <li><a href="create.html">Create Profile</a></li>
     <li><a href="#profilesSection">Show Profiles</a></li>
     <li><a href="#aboutSection">About</a></li>
     <li><a href="#contactSection">Contact</a></li>
@@ -25,27 +25,12 @@
     <div class="hero-text">
       <h1>Welcome to <span class="highlight">Tutor Connect</span></h1>
       <p>Empowering students to find the perfect tutor and helping tutors showcase their expertise — all in one place.</p>
-      <a href="#formSection" class="btn">Get Started</a>
+      <a href="create.html" class="btn">Get Started</a>
     </div>
     <div class="hero-image">
       <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Tutor illustration">
     </div>
   </div>
-</section>
-
-<!-- Create Profile Section -->
-<section class="form-container" id="formSection">
-  <h2>Create Profile</h2>
-  <form id="profileForm" enctype="multipart/form-data">
-    <input type="text" name="full_name" placeholder="Full Name" required><br>
-    <input type="email" name="email" placeholder="Email" required><br>
-    <input type="text" name="address" placeholder="Address" required><br>
-    <input type="text" name="department" placeholder="Department" required><br>
-    <input type="text" name="salary_range" placeholder="Salary Range" required><br>
-    <input type="text" name="subject_to_teach" placeholder="Subject to Teach" required><br>
-    <input type="file" name="photo" accept="image/*" required><br>
-    <button class="btn" type="submit">Create</button>
-  </form>
 </section>
 
 <!-- Show Profiles Section -->
@@ -72,9 +57,14 @@
 <section class="about-container" id="aboutSection">
   <h2>About Tutor Connect</h2>
   <p>
-    Tutor Connect is a simple and effective platform that connects students with expert tutors.
-    Tutors can create profiles showcasing their qualifications, while students can find the best fit
-    based on department, subjects, and experience.
+    <strong>Tutor Connect</strong> is a trusted platform that connects <strong>SUST student tutors</strong> with students and guardians in Sylhet. 
+    It allows verified SUST students to create profiles highlighting their teaching subjects, department, and availability, 
+    helping learners easily find qualified tutors from the university.
+  </p>
+  <p>
+    With features like <strong>smart filters</strong> for subject and location and <strong>direct WhatsApp contact</strong>, 
+    Tutor Connect makes finding the right tutor quick and effortless. 
+    Our mission is to build a reliable, locally focused network where education meets trust and opportunity.
   </p>
 </section>
 
@@ -89,16 +79,53 @@
     <button class="btn" type="submit">Send</button>
   </form>
 </section>
+<!-- ✅ Footer Section -->
+<footer>
+  <div class="footer-content">
+    <div class="footer-left">
+      <h3><i class="fas fa-graduation-cap"></i> Tutor Connect</h3>
+      <p>Connecting students and tutors — building brighter futures together.</p>
+    </div>
+
+    <div class="footer-center">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#homeSection">Home</a></li>
+        <li><a href="#formSection">Create Profile</a></li>
+        <li><a href="#profilesSection">Show Profiles</a></li>
+        <li><a href="#aboutSection">About</a></li>
+        <li><a href="#contactSection">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-right">
+      <h4>Follow Us</h4>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 Tutor Connect | All Rights Reserved</p>
+  </div>
+</footer>
 
 <script>
-// Form submission
-document.getElementById("profileForm").onsubmit = async (e) => {
-  e.preventDefault();
-  const formData = new FormData(e.target);
-  await fetch("/api/profiles", { method: "POST", body: formData });
-  alert("Profile Created Successfully!");
-  e.target.reset();
-};
+// Form submission (only runs if the form exists)
+const profileForm = document.getElementById("profileForm");
+if (profileForm) {
+  profileForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(profileForm);
+    await fetch("/api/profiles", { method: "POST", body: formData });
+    alert("Profile Created Successfully!");
+    profileForm.reset();
+  };
+}
 
 // Fetch profiles
 async function fetchProfiles(department="", subject="") {
