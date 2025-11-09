@@ -1,179 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Tutor Connect</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Tuto SUST</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/bootstrap-5.3.3-dist/css/bootstrap.min.css">
 </head>
+
 <body>
 
-<nav>
-  <div class="navbar">
-    <div class="navbar-left"><h2>SUST TUTOR</h2></div>
-    <div class="navbar-right">
-      <ul class="list">
-        <li><a href="#homeSection">Home</a></li>
-        <li><a href="create.html">Create Profile</a></li>
-        <li><a href="#profilesSection">Show Profiles</a></li>
-        <li><a href="#aboutSection">About</a></li>
-        <li><a href="#contactSection">Contact</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-<!-- Home Section -->
-<section id="homeSection">
-    <div class="hero">
-      <div class="hero-left">
-        <h1 class="hero-headline">WELCOME TO</h1>
-        <h1 class="hero-headline2">SUST TUTOR</h1>
-        <h2 class="hero-headline">Trusted | Authentic | Reliable</h2>
-        <button id="hero-btn"><a href="#contactSection">Contact Us</a></button>
+  <nav>
+    <div class="navbar w-100 d-flex justify-content-between align-items-center flex-wrap bg-dark text-light fw-bolder">
+      <div class="navbar-left w-25 d-flex justify-content-center ">
+        <h4>SUST TUTOR</h4>
       </div>
-      <div class="hero-right">
-        <img id="hero-img" src="/uploads/sust.png.png" alt="IICT Building">
+      <div class="navbar-right me-5 ">
+        <ul class="list d-flex gap-4 list-unstyled">
+          <li><a class="text-decoration-none  text-light" href="#homeSection">Home</a></li>
+          <li><a class="text-decoration-none  text-light" href="create.html">Create Profile</a></li>
+          <li><a class="text-decoration-none  text-light" href="#profilesSection">Show Profiles</a></li>
+          <li><a class="text-decoration-none  text-light" href="#aboutSection">About</a></li>
+          <li><a class="text-decoration-none  text-light" href="#contactSection">Contact Us</a></li>
+        </ul>
       </div>
     </div>
+  </nav>
+  <!-- Home Section -->
+  <section id="homeSection">
+    <div class="hero mt-5 rounded-3 w-75 container mb-5">
+      <div class="banner-heading pt-2 ">
+        <h1 class="hero-headline text-light text-center mt-3">WELCOME TO <b class="text-warning">SUST TUTOR</b></h1>
+        <h2 class="hero-headline text-dark text-center">Trusted --- Authentic --- Reliable</h2>
+      </div>
+      <div class="container d-flex justify-content-center">
+        <img class="img-fluid" src="/uploads/sust.png.png" alt="IICT Building">
+      </div>
   </section>
 
-<!-- Show Profiles Section -->
-<section class="profiles-container" id="profilesSection">
-  <h2>All Profiles</h2>
-  <button class="filter-toggle" id="showFilter">&#9776; Filters</button>
+  <!-- Show Profiles Section -->
+  <h2 class="profile-heading text-success text-center mb-4  fw-bolder">Tutor Profiles</h2>
+  <section">
+    <div class="show-profile d-flex gap-5 justify-content-center flex-wrap container w-100">
+      <div class="tutor-details p-1">
+        <img class="tutor-img" src="/uploads/1760713934288.jpg" alt="tutor">
+        <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
+        <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
+        <div class="btn-details text-center">
+          <button class=" btn bg-primary mt-0"><a class="text-decoration-none text-light fw-bold"
+              href="">Details</a></button>
+        </div>
+      </div>
 
-  <div class="filter-panel" id="filterPanel">
-    <div class="filter-item">
-      <input type="text" id="filterDept" placeholder="Department">
-      <i class="fas fa-building"></i>
-    </div>
-    <div class="filter-item">
-      <input type="text" id="filterSubject" placeholder="Subject">
-      <i class="fas fa-book"></i>
-    </div>
-    <button class="btn" id="applyFilter">Apply Filter</button>
-  </div>
+      <div class="tutor-details p-1">
+        <img class="tutor-img" src="/uploads/Afaz102.jpg" alt="tutor">
+        <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
+        <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
+        <div class="btn-details text-center">
+          <button class=" btn bg-primary mt-0"><a class="text-decoration-none text-light fw-bold"
+              href="">Details</a></button>
+        </div>
+      </div>
 
-  <div id="profiles"></div>
-</section>
+      <div class="tutor-details p-1">
+        <img class="tutor-img" src="/uploads/Afaz5.png" alt="tutor">
+        <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
+        <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
+        <div class="btn-details text-center">
+          <button class=" btn bg-primary mt-0"><a class="text-decoration-none text-light fw-bold"
+              href="">Details</a></button>
+        </div>
+      </div>
+      <div class="tutor-details p-1">
+        <img class="tutor-img" src="/uploads/1760713934288.jpg" alt="tutor">
+        <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
+        <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
+        <div class="btn-details text-center">
+          <button class=" btn bg-primary mt-0"><a class="text-decoration-none text-light fw-bold"
+              href="">Details</a></button>
+        </div>
+      </div>
+      <div class="tutor-details p-1">
+        <img class="tutor-img" src="/uploads//Afaz102.jpg" alt="tutor" >
+        <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
+        <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
+        <div class="btn-details text-center">
+          <button class=" btn bg-primary mt-0"><a class="text-decoration-none text-light fw-bold"
+              href="">Details</a></button>
+        </div>
+      </div>
+      <div class="tutor-details p-1">
+        <img class="tutor-img" src="/uploads/1760713934288.jpg" alt="tutor">
+        <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
+        <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
+        <div class="btn-details text-center">
+          <button class=" btn bg-primary mt-0"><a class="text-decoration-none text-light fw-bold"
+              href="">Details</a></button>
+        </div>
+      </div>
 
-<!-- About Section -->
-<section class="about-container" id="aboutSection">
-  <h2>About Tutor Connect</h2>
-  <p>
-    <strong>Tutor Connect</strong> is a trusted platform that connects <strong>SUST student tutors</strong> with students and guardians in Sylhet. 
-    It allows verified SUST students to create profiles highlighting their teaching subjects, department, and availability, 
-    helping learners easily find qualified tutors from the university.
-  </p>
-  <p>
-    With features like <strong>smart filters</strong> for subject and location and <strong>direct WhatsApp contact</strong>, 
-    Tutor Connect makes finding the right tutor quick and effortless. 
-    Our mission is to build a reliable, locally focused network where education meets trust and opportunity.
-  </p>
-</section>
+      <div class="tutor-details p-1">
+        <img class="tutor-img" src="/uploads/Afaz102.jpg" alt="tutor" >
+        <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
+        <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
+        <div class="btn-details text-center">
+          <button class=" btn bg-primary mt-0"><a class="text-decoration-none text-light fw-bold"
+              href="">Details</a></button>
+        </div>
+      </div>
 
-<!-- Contact Section -->
-<section class="contact-container" id="contactSection">
-  <h2>Contact Us</h2>
-  <p>Have questions or feedback? Reach out to us anytime!</p>
-  <form>
-    <input type="text" placeholder="Your Name" required><br>
-    <input type="email" placeholder="Your Email" required><br>
-    <textarea placeholder="Your Message" rows="4" required></textarea><br>
-    <button class="btn" type="submit">Send</button>
-  </form>
-</section>
-<!-- ✅ Footer Section -->
-<footer>
-  <div class="footer-content">
-    <div class="footer-left">
-      <h3><i class="fas fa-graduation-cap"></i> Tutor Connect</h3>
-      <p>Connecting students and tutors — building brighter futures together.</p>
-    </div>
-
-    <div class="footer-center">
-      <h4>Quick Links</h4>
-      <ul>
-        <li><a href="#homeSection">Home</a></li>
-        <li><a href="#formSection">Create Profile</a></li>
-        <li><a href="#profilesSection">Show Profiles</a></li>
-        <li><a href="#aboutSection">About</a></li>
-        <li><a href="#contactSection">Contact</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-right">
-      <h4>Follow Us</h4>
-      <div class="social-icons">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      <div class="tutor-details p-1">
+        <img class="tutor-img" src="/uploads/1760713934288.jpg" alt="tutor">
+        <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
+        <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
+        <div class="btn-details text-center">
+          <button class=" btn bg-primary mt-0"><a class="text-decoration-none text-light fw-bold"
+              href="">Details</a></button>
+        </div>
       </div>
     </div>
-  </div>
+    </section>
 
-  <div class="footer-bottom">
-    <p>&copy; 2025 Tutor Connect | All Rights Reserved</p>
-  </div>
-</footer>
+    <!-- About Section -->
+    <section class="about-container" id="aboutSection">
+      <h2>About Tutor Connect</h2>
+      <p>
+        <strong>Tutor Connect</strong> is a trusted platform that connects <strong>SUST student tutors</strong> with
+        students and guardians in Sylhet.
+        It allows verified SUST students to create profiles highlighting their teaching subjects, department, and
+        availability,
+        helping learners easily find qualified tutors from the university.
+      </p>
+      <p>
+        With features like <strong>smart filters</strong> for subject and location and <strong>direct WhatsApp
+          contact</strong>,
+        Tutor Connect makes finding the right tutor quick and effortless.
+        Our mission is to build a reliable, locally focused network where education meets trust and opportunity.
+      </p>
+    </section>
+    <!-- Contact Section -->
+    <section class="contact-container" id="contactSection">
+      <h2>Contact Us</h2>
+      <p>Have questions or feedback? Reach out to us anytime!</p>
+      <form>
+        <input type="text" placeholder="Your Name" required><br>
+        <input type="email" placeholder="Your Email" required><br>
+        <textarea placeholder="Your Message" rows="4" required></textarea><br>
+        <button class="btn" type="submit">Send</button>
+      </form>
+    </section>
+    <!-- ✅ Footer Section -->
+    <footer>
+      <div class="footer-content">
+        <div class="footer-left">
+          <h3><i class="fas fa-graduation-cap"></i> Tutor Connect</h3>
+          <p>Connecting students and tutors — building brighter futures together.</p>
+        </div>
 
-<script>
-// Form submission (only runs if the form exists)
-const profileForm = document.getElementById("profileForm");
-if (profileForm) {
-  profileForm.onsubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(profileForm);
-    await fetch("/api/profiles", { method: "POST", body: formData });
-    alert("Profile Created Successfully!");
-    profileForm.reset();
-  };
-}
+        <div class="footer-center">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#homeSection">Home</a></li>
+            <li><a href="#formSection">Create Profile</a></li>
+            <li><a href="#profilesSection">Show Profiles</a></li>
+            <li><a href="#aboutSection">About</a></li>
+            <li><a href="#contactSection">Contact</a></li>
+          </ul>
+        </div>
 
-// Fetch profiles
-async function fetchProfiles(department="", subject="") {
-  let url = "/api/profiles";
-  if(department && subject) url += `?department=${department}&subject=${subject}`;
-  else if(department) url += `?department=${department}`;
-  else if(subject) url += `?subject=${subject}`;
+        <div class="footer-right">
+          <h4>Follow Us</h4>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+      </div>
 
-  const res = await fetch(url);
-  const profiles = await res.json();
-  const container = document.getElementById("profiles");
-  container.innerHTML = "";
-  profiles.forEach(p => {
-    const div = document.createElement("div");
-    div.className = "profile-card";
-    div.innerHTML = `
-      <img src="/uploads/${p.photo}" alt="photo">
-      <div class="profile-info">
-        <h3>${p.full_name}</h3>
-        <p><strong>Dept:</strong> ${p.department}</p>
-        <p><strong>Subject:</strong> ${p.subject_to_teach}</p>
-        <p><strong>Salary:</strong> ${p.salary_range}</p>
-      </div>`;
-    div.onclick = () => window.location.href = `profile.html?id=${p.id}`;
-    container.appendChild(div);
-  });
-}
+      <div class="footer-bottom">
+        <p>&copy; 2025 Tutor Connect | All Rights Reserved</p>
+      </div>
+    </footer>
 
-document.getElementById("applyFilter").onclick = () => {
-  const dept = document.getElementById("filterDept").value;
-  const subject = document.getElementById("filterSubject").value;
-  fetchProfiles(dept, subject);
-};
-
-const showFilterBtn = document.getElementById("showFilter");
-const filterPanel = document.getElementById("filterPanel");
-showFilterBtn.onclick = () => {
-  filterPanel.style.display = filterPanel.style.display === "flex" ? "none" : "flex";
-};
-
-// Fetch profiles initially
-fetchProfiles();
-</script>
+    <script src="script.js"></script>
 
 </body>
+
 </html>
