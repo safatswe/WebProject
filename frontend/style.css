@@ -46,10 +46,16 @@ section {
 
 /* -------------------- HERO SECTION -------------------- */
 .hero {
-    /*background-color: rgb(135, 206, 235);*/
     background-image: url('/uploads/background2.jpg');
     background-repeat: no-repeat;
     background-size: cover;
+    width: 1100px;
+}
+.banner-heading{
+    width: 400px;
+}
+.banner-right{
+    width: 600px;
 }
 @media (max-width: 768px) {
     .hero {
