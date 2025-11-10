@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Tutor Connect</title>
+  <title>SUST Tutor</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="/frontend/bootstrap-5.3.3-dist/css/bootstrap.min.css">
@@ -22,44 +22,43 @@
           <li><a class="list-nav text-decoration-none  text-light" href="#profilesSection">Show Profiles</a></li>
           <li><a class=" list-nav text-decoration-none  text-light" href="#aboutSection">About Us</a></li>
           <li><a class=" list-nav text-decoration-none  text-light" href="#contactSection">Contact Us</a></li>
-          <button class="btn-nav rounded text-secondary"><a class="text-decoration-none text-dark"href="">Register</a></button>
-          <button class=" btn-nav rounded text-secondary"><a class="text-decoration-none text-dark"href="">Login</a></button>
+          <button class="btn-nav rounded text-secondary"><a class="text-decoration-none text-dark"
+              href="">Register</a></button>
+          <button class=" btn-nav rounded text-secondary"><a class="text-decoration-none text-dark"
+              href="">Login</a></button>
         </ul>
       </div>
     </div>
   </nav>
 
   <!-- Home Section -->
-   <section id="homeSection" class="bg-color1 d-flex justify-content-center">
-    <div class="hero d-flex flex-wrap gap-5 mt-5 rounded-3 mb-5">
+  <section id="homeSection" class="bg-color1 d-flex justify-content-center">
+    <div class="hero d-flex flex-wrap gap-5 mt-5 rounded-3 mb-3">
       <div class="banner-heading p-4">
         <h1 class="text-light mt-5 ms-3">Welcome To</h1>
         <h1><b class="text-warning ms-5">SUST TUTOR</b></h1>
         <h2 class="hero-headline text-light  ms-5 mt-4">Trusted</h2>
         <h2 class="hero-headline text-light ms-5">Authentic</h2>
         <h2 class="hero-headline text-light ms-5">Reliable Platform</h2>
-        <button class="btn rounded bg-primary mt-4 ms-5 p-2"><a class="text-decoration-none text-light fw-bold" href="#contactSection">Contact Us</a></button>
+        <button class="btn rounded bg-primary mt-4 ms-5 p-2"><a class="text-decoration-none text-light fw-bold"
+            href="#contactSection">Contact Us</a></button>
       </div>
       <div class="banner-right d-flex justify-content-center">
-        <img  src="/uploads/sust1.png.png" alt="IICT Building" style="width: 700px; height: 450px;">
+        <img src="/uploads/sust1.png.png" alt="IICT Building" style="width: 700px; height: 450px;">
       </div>
   </section>
 
   <!-- Show Profiles Section -->
   <section class="profiles-container" id="profilesSection">
-    <h2>All Profiles</h2>
-    <button class="filter-toggle" id="showFilter">&#9776; Filters</button>
-
-    <div class="filter-panel" id="filterPanel">
+    <h2 class="text-center text-dark">All Profiles</h2>
+    <div class="filter-panel text-center bg-light p-3 rounded-3 justify-content-center gap-4 d-flex align-items-center flex-wrap" id="filterPanel">
       <div class="filter-item">
-        <input type="text" id="filterDept" placeholder="Department">
-        <i class="fas fa-building"></i>
+        <input style="width: 220px;" type="text" id="filterDept" placeholder="Department">
       </div>
       <div class="filter-item">
-        <input type="text" id="filterSubject" placeholder="Subject">
-        <i class="fas fa-book"></i>
+        <input style="width: 220px;" type="text" id="filterSubject" placeholder="Subject">
       </div>
-      <button class="btn" id="applyFilter">Apply Filter</button>
+      <button class="btn btn-primary p-2" style="width: 100px"; id="applyFilter" title="Apply Filter"><i class="fas fa-search"></i></button>
     </div>
 
     <div id="profiles"></div>
@@ -88,18 +87,18 @@
 
   <!-- Contact Section -->
   <section id="contactSection" class="text-center bg-color2">
-  <h2 class="fw-bold mt-3">Contact Us</h2>
-  <div class="d-flex justify-content-center mb-5">
-    <form class="border border-1 p-4 bg-dark text-light rounded-3" style="width: 450px;">
-      <input class="form-control mb-3" type="text" placeholder="Your Name" required>
-      <input class="form-control mb-3" type="email" placeholder="Your Email" required>
-      <textarea class="form-control mb-3" placeholder="Your Message" rows="4" required></textarea>
-      <button class="btn btn-primary text-light mb-2 d-block mx-auto w-50" type="submit">Send</button>
-    </form>
-  </div>
-</section>
+    <h2 class="fw-bold mt-3">Contact Us</h2>
+    <div class="d-flex justify-content-center mb-5">
+      <form class="border border-1 p-4 bg-dark text-light rounded-3" style="width: 450px;">
+        <input class="form-control mb-3" type="text" placeholder="Your Name" required>
+        <input class="form-control mb-3" type="email" placeholder="Your Email" required>
+        <textarea class="form-control mb-3" placeholder="Your Message" rows="4" required></textarea>
+        <button class="btn btn-primary text-light mb-2 d-block mx-auto w-50" type="submit">Send</button>
+      </form>
+    </div>
+  </section>
   <!-- ✅ Footer Section -->
- <footer class="bg-dark text-light text-center p-3 w-100">
+  <footer class="bg-dark text-light text-center p-3 w-100">
     <div class="footer-content mt-3 d-flex justify-content-center flex-wrap text-start gap-5 p-3">
       <div class="footer-left w-25">
         <h3 class="text-warning "><i class="fas fa-graduation-cap"></i>SUST TUTOR</h3>
@@ -157,36 +156,40 @@
       const profiles = await res.json();
       const container = document.getElementById("profiles");
       container.innerHTML = "";
+
       profiles.forEach(p => {
         const div = document.createElement("div");
         div.className = "profile-card";
         div.innerHTML = `
-      <img src="/uploads/${p.photo}" alt="photo">
-      <div class="profile-info">
-        <h3>${p.full_name}</h3>
-        <p><strong>Dept:</strong> ${p.department}</p>
-        <p><strong>Subject:</strong> ${p.subject_to_teach}</p>
-        <p><strong>Salary:</strong> ${p.salary_range}</p>
+      <div class="show-profile d-flex gap-5 justify-content-center flex-wrap container w-100">
+        <div class="tutor-details p-1">
+          <img class="tutor-img" src="/uploads/${p.photo}" alt="photo">
+          <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">${p.full_name}</h6>
+          <p class="text-dark text-center fw-bolder mt-0 p-1">${p.subject_to_teach}</p>
+          <div class="btn-details text-center">
+            <button class="details-btn btn bg-primary mt-0 text-light">Details</button>
+          </div>
+        </div>
       </div>`;
-        div.onclick = () => window.location.href = `profile.html?id=${p.id}`;
+
+        const detailsBtn = div.querySelector('.details-btn');
+        detailsBtn.addEventListener('click', () => {
+          window.location.href = `profile.html?id=${p.id}`;
+        });
+
         container.appendChild(div);
       });
     }
 
+    // Filter button click
     document.getElementById("applyFilter").onclick = () => {
       const dept = document.getElementById("filterDept").value;
       const subject = document.getElementById("filterSubject").value;
       fetchProfiles(dept, subject);
     };
-
-    const showFilterBtn = document.getElementById("showFilter");
-    const filterPanel = document.getElementById("filterPanel");
-    showFilterBtn.onclick = () => {
-      filterPanel.style.display = filterPanel.style.display === "flex" ? "none" : "flex";
-    };
-
     // Fetch profiles initially
     fetchProfiles();
+
   </script>
   <script src="/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 </body>
