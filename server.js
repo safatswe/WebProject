@@ -34,18 +34,19 @@ const upload = multer({ storage });
 
 // Create profile
 app.post("/api/profiles", upload.single("photo"), (req, res) => {
-  const { full_name, email, address, department, salary_range, subject_to_teach } = req.body;
+  const { full_name, email, address, department, salary_range, subject_to_teach, whatsapp_number } = req.body;
   const photo = req.file ? req.file.filename : null;
 
   const sql = `INSERT INTO profiles
-    (full_name, email, address, department, salary_range, subject_to_teach, photo)
-    VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    (full_name, email, address, department, salary_range, subject_to_teach, photo, whatsapp_number)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
-  db.query(sql, [full_name, email, address, department, salary_range, subject_to_teach, photo], (err) => {
+  db.query(sql, [full_name, email, address, department, salary_range, subject_to_teach, photo, whatsapp_number], (err) => {
     if (err) return res.status(500).json({ message: "Database error" });
     res.json({ message: "Profile created successfully!" });
   });
 });
+;
 
 // Get all profiles with optional filters
 app.get("/api/profiles", (req, res) => {
@@ -74,3 +75,7 @@ app.get("/api/profiles/:id", (req, res) => {
 // Start server
 const PORT = 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+
+
+
+////for wthsapp 

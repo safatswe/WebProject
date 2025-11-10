@@ -144,6 +144,7 @@ nav h2 {
     <h3>About Me</h3>
     <p id="bio">I am a passionate tutor dedicated to helping students achieve their academic goals. I specialize in my subjects and have experience teaching students of various levels.</p>
 </div>
+<button class="btn" id="whatsappBtn"><i class="fab fa-whatsapp"></i> Message on WhatsApp</button>
 
 <button class="btn" onclick="window.history.back()">Go Back</button>
 
@@ -161,8 +162,20 @@ fetch(`/api/profiles/${id}`)
     document.getElementById("salary").textContent = `Salary: ${p.salary_range}`;
     document.getElementById("email").textContent = p.email;
     document.getElementById("address").textContent = p.address;
+
+    // ✅ WhatsApp button
+    const waBtn = document.getElementById("whatsappBtn");
+    if (p.whatsapp_number) {
+      waBtn.onclick = () => {
+        const phone = p.whatsapp_number.replace(/\D/g, ''); // remove symbols like + or spaces
+        window.open(`https://wa.me/${phone}`, "_blank");
+      };
+    } else {
+      waBtn.style.display = "none"; // hide button if no number
+    }
   });
 </script>
+
 
 </body>
 </html>
