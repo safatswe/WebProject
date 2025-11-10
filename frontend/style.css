@@ -11,17 +11,20 @@ section {
     display: block; /* Make all sections visible */
     padding: 40px 20px;
 }
-
 /* -------------------- NAVBAR -------------------- */
 .navbar{
     width: 100%;
     height: 60px;
 }
-nav a:hover{
+.list-nav:hover{
     cursor:pointer;
     background-color: #7385eb;
-    padding: 5px;
+    padding: 3px;
     border-radius: 5px;
+}
+.btn-nav:hover{
+    cursor: pointer;
+    background-color: #e9442b;
 }
 /* -------------------- Section Color -------------------- */
 .bg-color1{
@@ -97,7 +100,4 @@ nav a:hover{
 .social-icons a:hover {
     color: #007bff;
     transform: scale(1.2);
-}
-.footer-bottom {
-    border-top: 1px solid #333;
 }
