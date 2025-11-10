@@ -2,15 +2,17 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    background-color: rgb(243, 242, 206);
+    background: #f3f4f6;
+    color: #333;
 }
 html {
     scroll-behavior: smooth; /* Smooth scrolling for nav links */
 }
 section {
     display: block; /* Make all sections visible */
-    padding: 40px 20px;
+    padding: 60px 20px;
 }
+
 /* -------------------- NAVBAR -------------------- */
 .navbar{
     width: 100%;
@@ -26,12 +28,20 @@ section {
     cursor: pointer;
     background-color: #e9442b;
 }
-/* -------------------- Section Color -------------------- */
-.bg-color1{
-    background-image: linear-gradient(135deg, rgb(172, 179, 237),rgb(182, 236, 182));
+
+/* -------------------- BUTTONS -------------------- */
+.btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin: 10px 0;
+    cursor: pointer;
+    font-size: 16px;
 }
-.bg-color2{
-    background-color: rgb(221, 244, 203);
+.btn:hover {
+    background: #0056b3;
 }
 
 /* -------------------- HERO SECTION -------------------- */
@@ -41,23 +51,16 @@ section {
     background-repeat: no-repeat;
     background-size: cover;
 }
-.show-profile{
-    width: 100%;
-    
+@media (max-width: 768px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+    .hero-text {
+        text-align: center;
+    }
 }
-.tutor-details{
-    width: 250px;
-    box-shadow: 4px 4px 8px sandybrown;
-    background-color: rgb(218, 239, 169);
-
-}
-.tutor-details{
-    width: 280px;
-}
-.tutor-img{
-    width: 100%;
-    height: 250px;
-}
+/* About Section */
 .about-us{
     width: 1000px;
     margin: auto;
@@ -73,44 +76,6 @@ section {
     width: 100%;
     height: 350px;
 }
-.contact-box{
-    width: 700px;
-}
-.input{
-    width: 400px;
-    padding: 5px;
-}
-.footer-content {
-    margin: auto;
-    margin-left: 200px;
-    width: 1200px;
-}
-.footer-center a{
-    color: white;
-}
-.footer-center a:hover{
-    cursor: pointer;
-    color: #007bff;
-    transition: color 0.3s, transform 0.3s;
-}
-.social-icons a {
-    color: #fff;
-    transition: color 0.3s, transform 0.3s;
-}
-.social-icons a:hover {
-    color: #007bff;
-    transform: scale(1.2);
-}
-@media (max-width: 768px) {
-    .hero {
-        flex-direction: column;
-        text-align: center;
-    }
-    .hero-text {
-        text-align: center;
-    }
-}
-
 /* -------------------- FORM SECTION -------------------- */
 .form-container {
     background: white;
@@ -177,4 +142,95 @@ input, select, textarea {
     font-size: 14px;
     color: #555;
 }
+/* -------------------- Section Color -------------------- */
+.bg-color1{
+    background-image: linear-gradient(135deg, rgb(172, 179, 237),rgb(182, 236, 182));
+}
+.bg-color2{
+    background-color: rgb(221, 244, 203);
+}
 /* -------------------- FILTER PANEL -------------------- */
+.filter-toggle {
+    background: #ffeb3b;
+    color: #007bff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+.filter-panel {
+    display: none;
+    margin: 15px auto;
+    width: 90%;
+    max-width: 700px;
+    text-align: center;
+    background: #fdfdfd;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    align-items: center;
+    display: flex;
+}
+.filter-item {
+    position: relative;
+    flex: 1 1 200px;
+}
+.filter-item input {
+    width: 100%;
+    padding: 12px 35px 12px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
+}
+.filter-item input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 6px rgba(0,123,255,0.3);
+}
+.filter-item i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #007bff;
+}
+.filter-panel .btn {
+    flex: 0 1 150px;
+    padding: 12px 20px;
+    border-radius: 8px;
+}
+/* Contact & footer */
+.contact-box{
+    width: 700px;
+}
+.input{
+    width: 400px;
+    padding: 5px;
+}
+.footer-content {
+    margin: auto;
+    margin-left: 200px;
+    width: 1200px;
+}
+.footer-center a{
+    color: white;
+}
+.footer-center a:hover{
+    cursor: pointer;
+    color: #007bff;
+    transition: color 0.3s, transform 0.3s;
+}
+.social-icons a {
+    color: #fff;
+    transition: color 0.3s, transform 0.3s;
+}
+.social-icons a:hover {
+    color: #007bff;
+    transform: scale(1.2);
+}

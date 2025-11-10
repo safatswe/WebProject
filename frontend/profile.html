@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Tutor Portfolio</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="style.css">
 <style>
 body {
     margin: 0;
@@ -12,6 +11,18 @@ body {
     background: #f3f4f6;
     color: #333;
     text-align: center;
+}
+
+/* NAVBAR */
+nav {
+    background: #007bff;
+    padding: 12px 20px;
+    text-align: center;
+}
+nav h2 {
+    color: white;
+    margin: 0;
+    font-size: 22px;
 }
 
 /* PROFILE IMAGE */
@@ -112,20 +123,7 @@ body {
 </head>
 <body>
 
-<nav>
-  <div class="navbar">
-    <div class="navbar-left"><h2>Tutor Connect</h2></div>
-    <div class="navbar-right">
-      <ul class="list">
-        <li><a href="#homeSection">Home</a></li>
-        <li><a href="create.html">Create Profile</a></li>
-        <li><a href="#profilesSection">Show Profiles</a></li>
-        <li><a href="#aboutSection">About</a></li>
-        <li><a href="#contactSection">Contact</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+<nav><h2>Tutor Connect</h2></nav>
 
 <!-- PROFILE IMAGE -->
 <img src="" alt="Profile Picture" class="profile-img" id="profilePic">
@@ -146,6 +144,7 @@ body {
     <h3>About Me</h3>
     <p id="bio">I am a passionate tutor dedicated to helping students achieve their academic goals. I specialize in my subjects and have experience teaching students of various levels.</p>
 </div>
+<button class="btn" id="whatsappBtn"><i class="fab fa-whatsapp"></i> Message on WhatsApp</button>
 
 <button class="btn" onclick="window.history.back()">Go Back</button>
 
@@ -159,12 +158,24 @@ fetch(`/api/profiles/${id}`)
     document.getElementById("profilePic").src = `/uploads/${p.photo}`;
     document.getElementById("fullName").textContent = p.full_name;
     document.getElementById("department").textContent = `Department: ${p.department}`;
-    document.getElementById("subject").textContent = `Subject: ${p.subject_to_teach}`;
+    document.getElementById("subject").textContent =` Subject: ${p.subject_to_teach}`;
     document.getElementById("salary").textContent = `Salary: ${p.salary_range}`;
     document.getElementById("email").textContent = p.email;
     document.getElementById("address").textContent = p.address;
+
+    // ✅ WhatsApp button
+    const waBtn = document.getElementById("whatsappBtn");
+    if (p.whatsapp_number) {
+      waBtn.onclick = () => {
+        const phone = p.whatsapp_number.replace(/\D/g, ''); // remove symbols like + or spaces
+        window.open(`https://wa.me/${phone}`, "_blank");
+      };
+    } else {
+      waBtn.style.display = "none"; // hide button if no number
+    }
   });
 </script>
+
 
 </body>
 </html>

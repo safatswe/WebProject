@@ -3,10 +3,10 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Tuto SUST</title>
+  <title>Tutor Connect</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/frontend/bootstrap-5.3.3-dist/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -22,14 +22,15 @@
           <li><a class="list-nav text-decoration-none  text-light" href="#profilesSection">Show Profiles</a></li>
           <li><a class=" list-nav text-decoration-none  text-light" href="#aboutSection">About Us</a></li>
           <li><a class=" list-nav text-decoration-none  text-light" href="#contactSection">Contact Us</a></li>
-          <button class="btn-nav rounded text-secondary"><a class="text-decoration-none text-dark" href="">Register</a></button>
-          <button class=" btn-nav rounded text-secondary"><a class="text-decoration-none text-dark" href="">Login</a></button>
+          <button class="btn-nav rounded text-secondary"><a class="text-decoration-none text-dark"href="">Register</a></button>
+          <button class=" btn-nav rounded text-secondary"><a class="text-decoration-none text-dark"href="">Login</a></button>
         </ul>
       </div>
     </div>
   </nav>
+
   <!-- Home Section -->
-  <section id="homeSection" class="bg-color1">
+   <section id="homeSection" class="bg-color1">
     <div class="hero mt-5 rounded-3 w-75 container mb-5">
       <div class="banner-heading pt-2 ">
         <h1 class="hero-headline text-light text-center mt-3">WELCOME TO <b class="text-warning">SUST TUTOR</b></h1>
@@ -41,86 +42,23 @@
   </section>
 
   <!-- Show Profiles Section -->
-  <section id="profilesSection" class="bg-color2">
-    <h2 class="profile-heading text-center mb-3  fw-bolder">Tutor Profiles</h2>
-    <div class="show-profile d-flex gap-5 justify-content-center flex-wrap container w-100">
-      <div class="tutor-details p-1">
-        <img class="tutor-img" src="/uploads/1760713934288.jpg" alt="tutor">
-        <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
-        <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
-        <div class="btn-details text-center">
-          <button class=" btn bg-primary mt-0"><a class="text-decoration-none text-light fw-bold"
-              href="">Details</a></button>
-        </div>
-      </div>
+  <section class="profiles-container" id="profilesSection">
+    <h2>All Profiles</h2>
+    <button class="filter-toggle" id="showFilter">&#9776; Filters</button>
 
-      <div class="tutor-details p-1">
-        <img class="tutor-img" src="/uploads/Afaz102.jpg" alt="tutor">
-        <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
-        <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
-        <div class="btn-details text-center">
-          <button class=" btn bg-primary mt-0"><a class="text-decoration-none text-light fw-bold"
-              href="">Details</a></button>
-        </div>
+    <div class="filter-panel" id="filterPanel">
+      <div class="filter-item">
+        <input type="text" id="filterDept" placeholder="Department">
+        <i class="fas fa-building"></i>
       </div>
-
-      <div class="tutor-details p-1">
-        <img class="tutor-img" src="/uploads/Afaz5.png" alt="tutor">
-        <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
-        <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
-        <div class="btn-details text-center">
-          <button class=" btn bg-primary mt-0"><a class="text-decoration-none text-light fw-bold"
-              href="">Details</a></button>
-        </div>
+      <div class="filter-item">
+        <input type="text" id="filterSubject" placeholder="Subject">
+        <i class="fas fa-book"></i>
       </div>
-      <div class="tutor-details p-1">
-        <img class="tutor-img" src="/uploads/1760713934288.jpg" alt="tutor">
-        <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
-        <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
-        <div class="btn-details text-center">
-          <button class=" btn bg-primary mt-0"><a class="text-decoration-none text-light fw-bold"
-              href="">Details</a></button>
-        </div>
-      </div>
-      <div class="tutor-details p-1">
-        <img class="tutor-img" src="/uploads//Afaz102.jpg" alt="tutor">
-        <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
-        <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
-        <div class="btn-details text-center">
-          <button class=" btn bg-primary mt-0"><a class="text-decoration-none text-light fw-bold"
-              href="">Details</a></button>
-        </div>
-      </div>
-      <div class="tutor-details p-1">
-        <img class="tutor-img" src="/uploads/1760713934288.jpg" alt="tutor">
-        <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
-        <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
-        <div class="btn-details text-center">
-          <button class=" btn bg-primary mt-0"><a class="text-decoration-none text-light fw-bold"
-              href="">Details</a></button>
-        </div>
-      </div>
-
-      <div class="tutor-details p-1">
-        <img class="tutor-img" src="/uploads/Afaz102.jpg" alt="tutor">
-        <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
-        <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
-        <div class="btn-details text-center">
-          <button class=" btn bg-primary mt-0"><a class="text-decoration-none text-light fw-bold"
-              href="">Details</a></button>
-        </div>
-      </div>
-
-      <div class="tutor-details p-1">
-        <img class="tutor-img" src="/uploads/1760713934288.jpg" alt="tutor">
-        <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
-        <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
-        <div class="btn-details text-center">
-          <button class=" btn bg-primary mt-0"><a class="text-decoration-none text-light fw-bold"
-              href="">Details</a></button>
-        </div>
-      </div>
+      <button class="btn" id="applyFilter">Apply Filter</button>
     </div>
+
+    <div id="profiles"></div>
   </section>
 
   <!-- About Section -->
@@ -143,6 +81,7 @@
       </div>
     </div>
   </section>
+
   <!-- Contact Section -->
   <section id="contactSection" class="text-center bg-color2">
   <h2 class="fw-bold mt-3">Contact Us</h2>
@@ -155,9 +94,8 @@
     </form>
   </div>
 </section>
-
   <!-- ✅ Footer Section -->
-  <footer class="bg-dark text-light text-center p-3 w-100">
+ <footer class="bg-dark text-light text-center p-3 w-100">
     <div class="footer-content mt-3 d-flex justify-content-center flex-wrap text-start gap-5 p-3">
       <div class="footer-left w-25">
         <h3 class="text-warning "><i class="fas fa-graduation-cap"></i>SUST TUTOR</h3>
@@ -191,8 +129,62 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    // Form submission (only runs if the form exists)
+    const profileForm = document.getElementById("profileForm");
+    if (profileForm) {
+      profileForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(profileForm);
+        await fetch("/api/profiles", { method: "POST", body: formData });
+        alert("Profile Created Successfully!");
+        profileForm.reset();
+      };
+    }
 
+    // Fetch profiles
+    async function fetchProfiles(department = "", subject = "") {
+      let url = "/api/profiles";
+      if (department && subject) url += `?department=${department}&subject=${subject}`;
+      else if (department) url += `?department=${department}`;
+      else if (subject) url += `?subject=${subject}`;
+
+      const res = await fetch(url);
+      const profiles = await res.json();
+      const container = document.getElementById("profiles");
+      container.innerHTML = "";
+      profiles.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "profile-card";
+        div.innerHTML = `
+      <img src="/uploads/${p.photo}" alt="photo">
+      <div class="profile-info">
+        <h3>${p.full_name}</h3>
+        <p><strong>Dept:</strong> ${p.department}</p>
+        <p><strong>Subject:</strong> ${p.subject_to_teach}</p>
+        <p><strong>Salary:</strong> ${p.salary_range}</p>
+      </div>`;
+        div.onclick = () => window.location.href = `profile.html?id=${p.id}`;
+        container.appendChild(div);
+      });
+    }
+
+    document.getElementById("applyFilter").onclick = () => {
+      const dept = document.getElementById("filterDept").value;
+      const subject = document.getElementById("filterSubject").value;
+      fetchProfiles(dept, subject);
+    };
+
+    const showFilterBtn = document.getElementById("showFilter");
+    const filterPanel = document.getElementById("filterPanel");
+    showFilterBtn.onclick = () => {
+      filterPanel.style.display = filterPanel.style.display === "flex" ? "none" : "flex";
+    };
+
+    // Fetch profiles initially
+    fetchProfiles();
+  </script>
+  <script src="/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
