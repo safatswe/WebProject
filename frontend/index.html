@@ -21,14 +21,14 @@
           <li><a class="text-decoration-none  text-light" href="#homeSection">Home</a></li>
           <li><a class="text-decoration-none  text-light" href="create.html">Create Profile</a></li>
           <li><a class="text-decoration-none  text-light" href="#profilesSection">Show Profiles</a></li>
-          <li><a class="text-decoration-none  text-light" href="#aboutSection">About</a></li>
+          <li><a class="text-decoration-none  text-light" href="#aboutSection">About Us</a></li>
           <li><a class="text-decoration-none  text-light" href="#contactSection">Contact Us</a></li>
         </ul>
       </div>
     </div>
   </nav>
   <!-- Home Section -->
-  <section id="homeSection">
+  <section id="homeSection" class="bg-color1">
     <div class="hero mt-5 rounded-3 w-75 container mb-5">
       <div class="banner-heading pt-2 ">
         <h1 class="hero-headline text-light text-center mt-3">WELCOME TO <b class="text-warning">SUST TUTOR</b></h1>
@@ -40,8 +40,8 @@
   </section>
 
   <!-- Show Profiles Section -->
-  <h2 class="profile-heading text-success text-center mb-4  fw-bolder">Tutor Profiles</h2>
-  <section">
+  <section id="profilesSection" class="bg-color2">
+    <h2 class="profile-heading text-center mb-3  fw-bolder">Tutor Profiles</h2>
     <div class="show-profile d-flex gap-5 justify-content-center flex-wrap container w-100">
       <div class="tutor-details p-1">
         <img class="tutor-img" src="/uploads/1760713934288.jpg" alt="tutor">
@@ -82,7 +82,7 @@
         </div>
       </div>
       <div class="tutor-details p-1">
-        <img class="tutor-img" src="/uploads//Afaz102.jpg" alt="tutor" >
+        <img class="tutor-img" src="/uploads//Afaz102.jpg" alt="tutor">
         <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
         <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
         <div class="btn-details text-center">
@@ -101,7 +101,7 @@
       </div>
 
       <div class="tutor-details p-1">
-        <img class="tutor-img" src="/uploads/Afaz102.jpg" alt="tutor" >
+        <img class="tutor-img" src="/uploads/Afaz102.jpg" alt="tutor">
         <h6 class="text-center text-light fw-bold bg-primary mb-0 p-2">Afazur Rahman</h6>
         <p class="text-dark text-center fw-bolder mt-0 p-1">Math, Physics</p>
         <div class="btn-details text-center">
@@ -120,72 +120,77 @@
         </div>
       </div>
     </div>
-    </section>
+  </section>
 
-    <!-- About Section -->
-    <section class="about-container" id="aboutSection">
-      <h2>About Tutor Connect</h2>
-      <p>
-        <strong>Tutor Connect</strong> is a trusted platform that connects <strong>SUST student tutors</strong> with
-        students and guardians in Sylhet.
-        It allows verified SUST students to create profiles highlighting their teaching subjects, department, and
-        availability,
-        helping learners easily find qualified tutors from the university.
-      </p>
-      <p>
-        With features like <strong>smart filters</strong> for subject and location and <strong>direct WhatsApp
-          contact</strong>,
-        Tutor Connect makes finding the right tutor quick and effortless.
-        Our mission is to build a reliable, locally focused network where education meets trust and opportunity.
-      </p>
-    </section>
-    <!-- Contact Section -->
-    <section class="contact-container" id="contactSection">
-      <h2>Contact Us</h2>
-      <p>Have questions or feedback? Reach out to us anytime!</p>
-      <form>
-        <input type="text" placeholder="Your Name" required><br>
-        <input type="email" placeholder="Your Email" required><br>
-        <textarea placeholder="Your Message" rows="4" required></textarea><br>
-        <button class="btn" type="submit">Send</button>
-      </form>
-    </section>
-    <!-- ✅ Footer Section -->
-    <footer>
-      <div class="footer-content">
-        <div class="footer-left">
-          <h3><i class="fas fa-graduation-cap"></i> Tutor Connect</h3>
-          <p>Connecting students and tutors — building brighter futures together.</p>
-        </div>
+  <!-- About Section -->
+  <section id="aboutSection" class="bg-color1 ">
+    <h2 class="text-center fw-bold mt-5">About Us</h2>
+    <div class="about-us d-flex justify-content-between flex-wrap border rounded-3">
+      <div class="about-left bg-warning text-center p-5 fw-bolder text-dark">
+        <p><strong>TUTOR SUST</strong> is a trusted platform that connects <strong>SUST student tutors</strong>
+          with students and guardians in Sylhet. It allows verified SUST students to create profiles highlighting
+          their teaching subjects, department, and availability, helping learners easily find qualified tutors from
+          the university.</p>
+        <p>
+          With features like <strong>smart filters</strong> for subject and location and <strong>direct WhatsApp
+            contact</strong>,Tutor Connect makes finding the right tutor quick and effortless. Our mission is to build a
+          reliable, locally focused network where education meets trust and opportunity.
+        </p>
+      </div>
+      <div class="about-right">
+        <img class="cartoon-img" src="/uploads/46325309.jpg" alt="" srcset="">
+      </div>
+    </div>
+  </section>
+  <!-- Contact Section -->
+  <section id="contactSection" class="text-center bg-color2">
+  <h2 class="fw-bold mt-3">Contact Us</h2>
+  <div class="d-flex justify-content-center mb-5">
+    <form class="border border-1 p-4 bg-dark text-light rounded-3" style="width: 450px;">
+      <input class="form-control mb-3" type="text" placeholder="Your Name" required>
+      <input class="form-control mb-3" type="email" placeholder="Your Email" required>
+      <textarea class="form-control mb-3" placeholder="Your Message" rows="4" required></textarea>
+      <button class="btn btn-primary text-light mb-2 d-block mx-auto w-50" type="submit">Send</button>
+    </form>
+  </div>
+</section>
 
-        <div class="footer-center">
-          <h4>Quick Links</h4>
-          <ul>
-            <li><a href="#homeSection">Home</a></li>
-            <li><a href="#formSection">Create Profile</a></li>
-            <li><a href="#profilesSection">Show Profiles</a></li>
-            <li><a href="#aboutSection">About</a></li>
-            <li><a href="#contactSection">Contact</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-right">
-          <h4>Follow Us</h4>
-          <div class="social-icons">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-          </div>
-        </div>
+  <!-- ✅ Footer Section -->
+  <footer class="bg-dark text-light text-center p-3 w-100">
+    <div class="footer-content mt-3 d-flex justify-content-center flex-wrap text-start gap-5 p-3">
+      <div class="footer-left w-25">
+        <h3 class="text-warning "><i class="fas fa-graduation-cap"></i>SUST TUTOR</h3>
+        <p>Connecting students and tutors — building brighter futures together.</p>
       </div>
 
-      <div class="footer-bottom">
-        <p>&copy; 2025 Tutor Connect | All Rights Reserved</p>
+      <div class="footer-center w-25">
+        <h4 class="text-warning">Quick Links</h4>
+        <ul class="list-unstyled">
+          <li><a class="text-decoration-none" href="#homeSection">Home</a></li>
+          <li><a class="text-decoration-none" href="#formSection">Create Profile</a></li>
+          <li><a class="text-decoration-none" href="#profilesSection">Show Profiles</a></li>
+          <li><a class="text-decoration-none" href="#aboutSection">About Us</a></li>
+          <li><a class="text-decoration-none" href="#contactSection">Contact Us</a></li>
+        </ul>
       </div>
-    </footer>
 
-    <script src="script.js"></script>
+      <div class="footer-right w-25">
+        <h4 class="text-warning">Follow Us</h4>
+        <div class="social-icons d-flex gap-3 fs-4">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom mt-3 p-2 fs-6 text-secondary border-top text-secondary">
+      <p>&copy; 2025 Tutor Connect | All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 
 </body>
 

@@ -23,7 +23,13 @@ nav a:hover{
     padding: 5px;
     border-radius: 5px;
 }
-/* -------------------- BUTTONS -------------------- */
+/* -------------------- Section Color -------------------- */
+.bg-color1{
+    background-image: linear-gradient(135deg, rgb(172, 179, 237),rgb(182, 236, 182));
+}
+.bg-color2{
+    background-color: rgb(221, 244, 203);
+}
 
 /* -------------------- HERO SECTION -------------------- */
 .hero {
@@ -43,9 +49,55 @@ nav a:hover{
 
 }
 .tutor-details{
-    width: 250px;
+    width: 280px;
 }
 .tutor-img{
     width: 100%;
     height: 250px;
+}
+.about-us{
+    width: 1000px;
+    margin: auto;
+}
+.about-left{
+    width: 60%;
+    background-image: linear-gradient(to bottom right, #eee613, #89ee31);
+}
+.about-right{
+    width: 40%;
+}
+.cartoon-img{
+    width: 100%;
+    height: 350px;
+}
+.contact-box{
+    width: 700px;
+}
+.input{
+    width: 400px;
+    padding: 5px;
+}
+.footer-content {
+    margin: auto;
+    margin-left: 200px;
+    width: 1200px;
+}
+.footer-center a{
+    color: white;
+}
+.footer-center a:hover{
+    cursor: pointer;
+    color: #007bff;
+    transition: color 0.3s, transform 0.3s;
+}
+.social-icons a {
+    color: #fff;
+    transition: color 0.3s, transform 0.3s;
+}
+.social-icons a:hover {
+    color: #007bff;
+    transform: scale(1.2);
+}
+.footer-bottom {
+    border-top: 1px solid #333;
 }
