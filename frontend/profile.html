@@ -12,6 +12,25 @@ body {
     text-align: center;
 }
 
+.id-section {
+    background: white;
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.id-img {
+    width: 300px;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 3px solid #007bff;
+}
+
+
 /* NAVBAR */
 nav {
     background: #007bff;
@@ -133,6 +152,12 @@ nav h2 {
     <h3 id="subject"></h3>
     <h3 id="salary"></h3>
 </div>
+<!-- STUDENT ID IMAGE -->
+<div class="id-section">
+  <h3 style="margin-top:30px;">Student ID Card</h3>
+  <img src="" alt="Student ID" id="idPhoto" class="id-img">
+</div>
+
 
 <div class="details">
     <div class="card"><i class="fas fa-envelope"></i><p id="email"></p></div>
@@ -145,6 +170,7 @@ nav h2 {
 </div>
 <button class="btn" id="whatsappBtn"><i class="fab fa-whatsapp"></i> Message on WhatsApp</button>
 
+
 <button class="btn" onclick="window.history.back()">Go Back</button>
 
 <script>
@@ -155,6 +181,9 @@ fetch(`/api/profiles/${id}`)
   .then(res => res.json())
   .then(p => {
     document.getElementById("profilePic").src = `/uploads/${p.photo}`;
+    if (p.id_photo) {
+      document.getElementById("idPhoto").src = `/uploads/${p.id_photo}`; 
+    }
     document.getElementById("fullName").textContent = p.full_name;
     document.getElementById("department").textContent = `Department: ${p.department}`;
     document.getElementById("subject").textContent =` Subject: ${p.subject_to_teach}`;

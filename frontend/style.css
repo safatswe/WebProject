@@ -2,7 +2,9 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    background: #f3f4f6;
+    background-image: url('/uploads/bg-4.jpg');
+    background-repeat: repeat;
+    background-size: cover;
 }
 html {
     scroll-behavior: smooth; /* Smooth scrolling for nav links */
@@ -101,8 +103,7 @@ section {
 }
 /* -------------------- FORM SECTION -------------------- */
 .form-container {
-    background: white;
-    border-radius: 12px;
+    background:#3fc3cc;
     padding: 20px;
     margin: 80px auto 40px auto;
     width: 80%;
@@ -131,6 +132,7 @@ input, select, textarea {
 }
 .profile-card {
     width: 280px;
+    height: 350px;
     cursor: pointer;
 }
 .profile-card:hover {
