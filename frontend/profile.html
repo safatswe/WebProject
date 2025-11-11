@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>Tutor Portfolio</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="/frontend/bootstrap-5.3.3-dist/css/bootstrap.min.css">
 <style>
 body {
     margin: 0;
@@ -141,19 +143,19 @@ nav h2 {
 </head>
 <body>
 
-<nav><h2>Tutor Connect</h2></nav>
+<!-- <nav><h2>Tutor Connect</h2></nav> -->
 
 <!-- PROFILE IMAGE -->
-<img src="" alt="Profile Picture" class="profile-img" id="profilePic">
+<!-- <img src="" alt="Profile Picture" class="profile-img" id="profilePic">
 
 <div class="profile-info">
     <h1 id="fullName"></h1>
     <h3 id="department"></h3>
     <h3 id="subject"></h3>
     <h3 id="salary"></h3>
-</div>
+</div> -->
 <!-- STUDENT ID IMAGE -->
-<div class="id-section">
+<!-- <div class="id-section">
   <h3 style="margin-top:30px;">Student ID Card</h3>
   <img src="" alt="Student ID" id="idPhoto" class="id-img">
 </div>
@@ -171,7 +173,33 @@ nav h2 {
 <button class="btn" id="whatsappBtn"><i class="fab fa-whatsapp"></i> Message on WhatsApp</button>
 
 
-<button class="btn" onclick="window.history.back()">Go Back</button>
+<button class="btn" onclick="window.history.back()">Go Back</button> -->
+
+<div class="profile-box d-flex justify-content-center gap-3 mt-4">
+    <div class="pic-box border border-5 bg-info border-success overflow-hidden" style="width: 250px; height: 250px; border-radius: 50%;">
+        <img style="width: 250px; height: 250px; object-fit: cover;" src="/uploads/Afaz102.jpg" alt="profile-pic" >
+    </div>
+    <div class="tutor-info" style="margin-top: 100px;">
+        <h3 class="text-success fw-bold">Afazur Rahman</h3>
+        <h5 class="text-success fw-bold">Department: SWE</h5>
+    </div>
+</div>
+<div class="tutor-address border border-2 mt-3 p-2 rounded-3" style="width: 500px; background-color: rgb(188, 235, 59); margin: auto;">
+    <h6><b>Teaching Subjects: </b></h6>
+    <h6>Biology, Math, Chemistry, Physics</h6>
+    <h6><b>Address:</b> Sumra R/A, Akhalia.</h6>
+    <h6><b>Email:</b> afazurr8@gmail.com</h6>
+</div>
+<div class="direct-contact border border-2 mt-3 p-2 rounded-3 text-bold" style="width: 500px; background-color: rgb(243, 170, 75); margin: auto;">
+    <h6>To contact directly to tutor: Click the link</h6>
+    <button class="p-2" id="whatsappBtn" style="background-color: rgb(28, 233, 38); "><i class="fab fa-whatsapp me-2"></i><b>Message on WhatsApp</b></button>
+</div>
+<div class="tutor-id-card border box-shadow rounded-4 p-2 mt-3" style="width: 400px; background-color: rgb(136, 181, 213); margin: auto;">
+    <h4 class="fw-bold text-dark">Tutor's ID Card</h4>
+    <div class="id-photo" style="width: 350px;">
+`       <img class="img-fluid ms-2" id="idPhoto" src="/uploads/afaz id card.jpg" alt="ID Photo">
+    </div>
+</div>
 
 <script>
 const params = new URLSearchParams(window.location.search);
@@ -203,7 +231,7 @@ fetch(`/api/profiles/${id}`)
     }
   });
 </script>
-
+<script src="/frontend/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
