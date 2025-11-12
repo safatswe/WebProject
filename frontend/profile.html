@@ -227,8 +227,9 @@ fetch(`/api/profiles/${id}`)
     }
     document.getElementById("fullName").textContent = p.full_name;
     document.getElementById("department").textContent = `Department: ${p.department}`;
+    document.getElementById("subject").textContent =`Available: ${p.available}`;
     document.getElementById("subject").textContent =` Subject: ${p.subject_to_teach}`;
-    document.getElementById("salary").textContent = `Salary: ${p.salary_range}`;
+    document.getElementById("salary").textContent = `Avilable Time: ${p.available_time}`;
     document.getElementById("email").textContent = p.email;
     document.getElementById("address").textContent = p.address;
 
