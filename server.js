@@ -35,7 +35,7 @@ const upload = multer({ storage });
 
 // Create profile
 app.post("/api/profiles", upload.fields([{ name: "photo" }, { name: "id_photo" }]), (req, res) => {
-  const { full_name, email, address,available, department, available_time, subject_to_teach, whatsapp_number,about_me } = req.body;
+  const {full_name, email, address, department,subject_to_teach,available_time,whatsapp_number, available,about_me} = req.body;
 
   // Extract both file names (if uploaded)
   const photo = req.files["photo"] ? req.files["photo"][0].filename : null;
@@ -43,13 +43,13 @@ app.post("/api/profiles", upload.fields([{ name: "photo" }, { name: "id_photo" }
 
   const sql = `
     INSERT INTO profiles
-    (full_name, email, address,available, department, available_time, subject_to_teach, photo, about_me,whatsapp_number, id_photo)
+    (full_name, email, address, department,subject_to_teach,available_time, photo,whatsapp_number, id_photo,available,about_me)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)
   `;
 
   db.query(
     sql,
-    [full_name, email, address,available, department, available_time, subject_to_teach,about_me, photo, whatsapp_number, id_photo],
+    [full_name, email, address, department,subject_to_teach,available_time, photo,whatsapp_number, id_photo,available,about_me],
     (err) => {
       if (err) {
         console.error(err);

@@ -20,7 +20,7 @@
     <input class="mt-3" type="text" name="available_time" placeholder="Available Time (e.g. 7:00AM-8:30AM & 5:00PM-7:00PM)" required><br>
     <input class="mt-3" type="text" name="subject_to_teach" placeholder="Subject to Teach (e.g. Math, Physics)" required><br>
     <input class="mt-3" type="text" name="whatsapp_number" placeholder="WhatsApp Number (e.g. +8801XXXXXXXXX)" required><br>
-    <textarea class="mt-3 p-2" type="text" name="about_me" placeholder="Write about yourself"></textarea>
+    <textarea class="mt-3 p-2" name="about_me" placeholder="Write about yourself"></textarea>
     <label class="mt-2 fw-bolder" for="">Upload Your Photo:</label>
     <input class="mt-1 bg-light text-dark" type="file" name="photo" accept="image/*" required><br>
     <label class="mt-3 fw-bolder" for="">Upload Your Student ID Card:</label>
@@ -38,7 +38,7 @@ document.getElementById("profileForm").onsubmit = async (e) => {
   e.target.reset();
 };
 </script>
-<script src="/frontend/bootstrap-5.3.3-dist/js/bootstrap.bundle.mim.js"></script>
+<script src="/frontend/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
