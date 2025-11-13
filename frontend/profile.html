@@ -1,251 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Tutor Portfolio</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="/frontend/bootstrap-5.3.3-dist/css/bootstrap.min.css">
-<style>
-body {
-    margin: 0;
-    font-family: 'Arial', sans-serif;
-    background: #f3f4f6;
-    text-align: center;
-}
-
-.id-section {
-    background: white;
-    max-width: 700px;
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    text-align: center;
-}
-
-.id-img {
-    width: 300px;
-    height: auto;
-    margin-top: 10px;
-    border-radius: 10px;
-    border: 3px solid #007bff;
-}
-
-
-/* NAVBAR */
-nav {
-    background: #007bff;
-    padding: 12px 20px;
-    text-align: center;
-}
-nav h2 {
-    color: white;
-    margin: 0;
-    font-size: 22px;
-}
-
-/* PROFILE IMAGE */
-.profile-img {
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-top: 20px;
-    border: 4px solid #007bff;
-}
-
-/* PROFILE INFO */
-.profile-info {
-    background: white;
-    margin: 20px auto;
-    padding: 20px;
-    max-width: 700px;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    text-align: center;
-}
-.profile-info h1 {
-    font-size: 28px;
-    color: #007bff;
-    margin-bottom: 5px;
-}
-.profile-info h3 {
-    font-size: 18px;
-    color: #555;
-    margin-bottom: 10px;
-}
-
-/* INFO CARDS */
-.details {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-}
-.card {
-    background: white;
-    flex: 1 1 250px;
-    max-width: 300px;
-    padding: 15px 20px;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.card i {
-    color: #007bff;
-    font-size: 20px;
-    min-width: 25px;
-}
-.card p {
-    margin: 0;
-    font-size: 15px;
-    word-wrap: break-word;
-}
-
-/* ABOUT / BIO SECTION */
-.about {
-    background: white;
-    max-width: 700px;
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    text-align: left;
-}
-
-/* BUTTON */
-.btn {
-    padding: 12px 25px;
-    margin: 30px auto 50px auto;
-    border: none;
-    border-radius: 8px;
-    background: #007bff;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-    display: block;
-}
-.btn:hover {
-    background: #0056b3;
-}
-
-/* RESPONSIVE */
-@media(max-width:600px){
-    .profile-info h1 { font-size: 24px; }
-    .profile-info h3 { font-size: 16px; }
-    .details { flex-direction: column; align-items: center; }
-}
-</style>
+    <meta charset="UTF-8">
+    <title>Tutor Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/frontend/bootstrap-5.3.3-dist/css/bootstrap.min.css">
 </head>
+
 <body style="background-image: url('/uploads/bg-3.jpg');background-size: cover;">
-
-<!-- <nav><h2>Tutor Connect</h2></nav> -->
-
-<!-- PROFILE IMAGE -->
-<!-- <img src="" alt="Profile Picture" class="profile-img" id="profilePic">
-
-<div class="profile-info">
-    <h1 id="fullName"></h1>
-    <h3 id="department"></h3>
-    <h3 id="subject"></h3>
-    <h3 id="salary"></h3>
-</div> -->
-<!-- STUDENT ID IMAGE -->
-<!-- <div class="id-section">
-  <h3 style="margin-top:30px;">Student ID Card</h3>
-  <img src="" alt="Student ID" id="idPhoto" class="id-img">
-</div>
-
-
-<div class="details">
-    <div class="card"><i class="fas fa-envelope"></i><p id="email"></p></div>
-    <div class="card"><i class="fas fa-map-marker-alt"></i><p id="address"></p></div>
-</div>
-
-<div class="about">
-    <h3>About Me</h3>
-    <p id="bio">I am a passionate tutor dedicated to helping students achieve their academic goals. I specialize in my subjects and have experience teaching students of various levels.</p>
-</div>
-<button class="btn" id="whatsappBtn"><i class="fab fa-whatsapp"></i> Message on WhatsApp</button>
-
-
-<button class="btn" onclick="window.history.back()">Go Back</button> -->
-
-<div class="profile-box d-flex justify-content-center gap-3 mt-5">
-    <div class="pic-box border border-5 bg-info border-success overflow-hidden" style="width: 250px; height: 250px; border-radius: 50%;">
-        <img style="width: 250px; height: 250px; object-fit: cover;" src="/uploads/Afaz102.jpg" alt="profile-pic" >
+    <div id="profile-container">
     </div>
-    <div class="tutor-info text-start" style="margin-top: 100px;">
-        <h3 class=" text-primary fw-bold"><b>Afazur Rahman</b></h3>
-        <h5 class="fw-bold">Department: SWE</h5>
-        <h5 class="fw-bold">Available: Yes</h5>
-    </div>
-</div>
-<div class="subject-address mt-5 d-flex justify-content-center gap-5">
-    <div class="sub-address-left border border-2 p-2 rounded-3" style="width: 450px; background-color: rgb(188, 235, 59);">
-        <h5>Teaching Subjects:</h5>
-        <h6><b>Biology, Math, Chemistry, Physics</b></h6>
-        <h5>Available Time:</h5>
-        <h6><b>7:00AM-9:00AM, 5:00PM-7:00, 9:00PM- 10:30PM</b></h6>
-    </div>
-    <div class="sub-address-right border border-2 p-2 rounded-3" style="width: 450px; background-color: rgb(188, 235, 59); ">
-        <h5>Address:</h5>
-        <h6><b>Sumra R/A, Road-2, Block-B, Akhalia</b></h6>
-        <h5>Email:</h5>
-        <h6><b>afazurr8@gmail.com</b></h6>
-    </div>
-</div>
-<div class="tutor-id-card border box-shadow rounded-4 p-2 mt-5" style="width: 400px; background-color: rgb(136, 181, 213); margin: auto;">
-    <h4 class="fw-bold text-dark">Tutor's ID Card</h4>
-    <div class="id-photo" style="width: 350px; margin: auto;">
-`       <img class="img-fluid" id="idPhoto" src="/uploads/afaz id card.jpg" alt="ID Photo">
-    </div>
-</div>
-<div class="direct-contact border border-2 mt-5 p-4 rounded-3 text-bold" style="width: 500px; background-color: rgb(243, 170, 75); margin: auto;">
-    <h6>To contact directly to tutor: Click the link</h6>
-    <button class="p-2" id="whatsappBtn" style="background-color: rgb(28, 233, 38); "><i class="fab fa-whatsapp me-2"></i><b>Message on WhatsApp</b></button>
-</div>
-<div class="about-me border border-2 rounded mt-5 mb-5 p-3" style="width: 800px; background-color: rgb(181, 148, 235); margin: auto;">
-    <h4 class="mt-3 fw-bold">About Me</h4>
-    <p class="text-start p-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur deserunt deleniti officiis sapiente, repellat est ullam totam facilis sed et soluta, placeat blanditiis ex magnam libero error modi eaque aliquid possimus cum? Nihil, corporis? Exercitationem possimus quidem dignissimos expedita, rem ratione et eligendi! Veritatis hic dolorum distinctio molestiae! Eligendi, iure.</p>
-</div>
 
-<script>
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
 
-fetch(`/api/profiles/${id}`)
-  .then(res => res.json())
-  .then(p => {
-    document.getElementById("profilePic").src = `/uploads/${p.photo}`;
-    if (p.id_photo) {
-      document.getElementById("idPhoto").src = `/uploads/${p.id_photo}`; 
-    }
-    document.getElementById("fullName").textContent = p.full_name;
-    document.getElementById("department").textContent = `Department: ${p.department}`;
-    document.getElementById("subject").textContent =` Subject: ${p.subject_to_teach}`;
-    document.getElementById("salary").textContent = `Salary: ${p.salary_range}`;
-    document.getElementById("email").textContent = p.email;
-    document.getElementById("address").textContent = p.address;
-
-    // ✅ WhatsApp button
-    const waBtn = document.getElementById("whatsappBtn");
-    if (p.whatsapp_number) {
-      waBtn.onclick = () => {
-        const phone = p.whatsapp_number.replace(/\D/g, ''); // remove symbols like + or spaces
-        window.open(`https://wa.me/${phone}`, "_blank");
-      };
-    } else {
-      waBtn.style.display = "none"; // hide button if no number
-    }
-  });
-</script>
-<script src="/frontend/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+        fetch(`/api/profiles/${id}`)
+            .then(res => res.json())
+            .then(p => {
+                const container = document.getElementById("profile-container");
+                container.innerHTML = "";
+                const div = document.createElement("div");
+                div.className = "profile-interface";
+                div.innerHTML = `
+        <div class="profile-box d-flex flex-wrap justify-content-center gap-3 mt-5">
+            <div class="pic-box border border-5 bg-info border-success overflow-hidden"
+                style="width: 250px; height: 250px; border-radius: 50%;">
+                <img style="width: 250px; height: 250px; object-fit: cover;" src="/uploads/${p.photo}"
+                    alt="profile-pic">
+            </div>
+            <div class="tutor-info text-start" style="margin-top: 100px;">
+                <h3 class=" text-primary fw-bold">${p.full_name}</h3>
+                <h5 class="fw-bold">Department: ${p.department}</h5>
+                <h5 class="fw-bold">Available: ${p.available}</h5>
+            </div>
+        </div>
+        <div class="subject-address mt-5 d-flex flex-wrap justify-content-center gap-5">
+            <div class="sub-address-left border border-2 p-2 rounded-3 text-center"
+                style="width: 450px; background-color: rgb(188, 235, 59);">
+                <h5>Teaching Subjects:</h5>
+                <h6><b>${p.subject_to_teach}</b></h6>
+                <h5>Available Time:</h5>
+                <h6><b>${p.available_time}</b></h6>
+            </div>
+            <div class="sub-address-right border border-2 p-2 rounded-3 text-center"
+                style="width: 450px; background-color: rgb(188, 235, 59); ">
+                <h5>Address:</h5>
+                <h6><b>${p.address}</b></h6>
+                <h5>Email:</h5>
+                <h6><b>${p.email}</b></h6>
+            </div>
+        </div>
+        <div class="tutor-id-card border box-shadow rounded-4 p-2 mt-5"
+            style="width: 400px; background-color: rgb(136, 181, 213); margin: auto;">
+            <h4 class="fw-bold text-dark text-center">Tutor's ID Card</h4>
+            <div class="id-photo" style="width: 350px; margin: auto;">
+                <img class="img-fluid" id = "idPhoto" src ="/uploads/${p.id_photo}" alt = "ID Photo">
+            </div >
+        </div >
+        <div class="direct-contact border border-2 mt-5 p-4 rounded-3 text-bold text-center"
+            style="width: 500px; background-color: rgb(243, 170, 75); margin: auto;">
+            <h6>To contact directly to tutor: Click the link</h6>
+            <button class="p-2" id="whatsappBtn" style="background-color: rgb(28, 233, 38); "><i
+                    class="fab fa-whatsapp me-2"></i><b>Message on WhatsApp</b></button>
+        </div>
+        <div class="about-me border border-2 rounded mt-5 mb-5 p-3 text-center"
+            style="width: 800px; background-color: rgb(181, 148, 235); margin: auto;">
+            <h4 class="mt-3 fw-bold">About Me</h4>
+            <p class="text-start p-2">${p.about_me}</p>
+        </div> `;
+                container.appendChild(div);
+                // ✅ WhatsApp button
+                const waBtn = document.getElementById("whatsappBtn");
+                if (p.whatsapp_number) {
+                    waBtn.onclick = () => {
+                        const phone = p.whatsapp_number.replace(/\D/g, ''); // remove symbols like + or spaces
+                        window.open(`https://wa.me/${phone}`, "_blank");
+                    };
+                } else {
+                    waBtn.style.display = "none"; // hide button if no number
+                }
+            });
+    </script>
+    <script src="/frontend/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 
 
 </body>
+
 </html>
