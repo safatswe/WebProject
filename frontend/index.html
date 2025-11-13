@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <title>SUST Tutor</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="/frontend/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
 <body>
   <nav>
     <div class="navbar w-100 d-flex justify-content-between align-items-center flex-wrap bg-dark text-light fw-bolder">
@@ -46,7 +44,7 @@
         </button>
       </div>
       <div class="banner-right d-flex justify-content-center">
-        <img src="/uploads/sust1.png.png" alt="IICT Building" style="width: 700px; height: 450px;">
+        <img src="uploads/sust1.png.png" alt="IICT Building" style="width: 700px; height: 450px;">
       </div>
     </div>
   </section>
@@ -63,7 +61,6 @@
       </div>
       <button class="btn btn-primary p-2" style="width: 100px" id="applyFilter" title="Apply Filter"><i class="fas fa-search"></i></button>
     </div>
-
     <div id="profiles"></div>
   </section>
 
@@ -72,18 +69,11 @@
     <h2 class="text-center fw-bold mt-5">About Us</h2>
     <div class="about-us d-flex justify-content-between flex-wrap border rounded-3">
       <div class="about-left bg-warning text-center p-5 fw-bolder text-dark">
-        <p><strong>TUTOR SUST</strong> is a trusted platform that connects <strong>SUST student tutors</strong>
-          with students and guardians in Sylhet. It allows verified SUST students to create profiles highlighting
-          their teaching subjects, department, and availability, helping learners easily find qualified tutors from
-          the university.</p>
-        <p>
-          With features like <strong>smart filters</strong> for subject and location and <strong>direct WhatsApp
-            contact</strong>, Tutor Connect makes finding the right tutor quick and effortless. Our mission is to build a
-          reliable, locally focused network where education meets trust and opportunity.
-        </p>
+        <p><strong>TUTOR SUST</strong> is a trusted platform that connects <strong>SUST student tutors</strong> with students and guardians in Sylhet.</p>
+        <p>With features like <strong>smart filters</strong> and <strong>direct WhatsApp contact</strong>, Tutor Connect makes finding the right tutor quick and effortless.</p>
       </div>
       <div class="about-right">
-        <img class="cartoon-img" src="/uploads/46325309.jpg" alt="">
+        <img class="cartoon-img" src="uploads/46325309.jpg" alt="">
       </div>
     </div>
   </section>
@@ -108,7 +98,6 @@
         <h3 class="text-warning"><i class="fas fa-graduation-cap"></i> SUST TUTOR</h3>
         <p>Connecting students and tutors — building brighter futures together.</p>
       </div>
-
       <div class="footer-center w-25">
         <h4 class="text-warning">Quick Links</h4>
         <ul class="list-unstyled">
@@ -119,7 +108,6 @@
           <li><a class="text-decoration-none" href="#contactSection">Contact Us</a></li>
         </ul>
       </div>
-
       <div class="footer-right w-25">
         <h4 class="text-warning">Follow Us</h4>
         <div class="social-icons d-flex gap-3 fs-4">
@@ -130,51 +118,11 @@
         </div>
       </div>
     </div>
-
     <div class="footer-bottom mt-3 p-2 fs-6 text-secondary border-top text-secondary">
       <p>&copy; 2025 Tutor Connect | All Rights Reserved</p>
     </div>
   </footer>
 
-  <script>
-    async function fetchProfiles(department = "", subject = "") {
-      let url = "/api/profiles";
-      if (department && subject) url += `?department=${department}&subject=${subject}`;
-      else if (department) url += `?department=${department}`;
-      else if (subject) url += `?subject=${subject}`;
-
-      const res = await fetch(url);
-      const profiles = await res.json();
-      const container = document.getElementById("profiles");
-      container.innerHTML = "";
-
-      profiles.forEach(p => {
-        const div = document.createElement("div");
-        div.className = "profile-card";
-        div.innerHTML = `
-        <div class="show-profile d-flex gap-5 justify-content-center flex-wrap container w-100">
-          <div class="tutor-details p-1">
-            <img class="tutor-img" src="/uploads/${p.photo}" alt="photo">
-            <h6 class="text-center text-light fw-bold bg-primary mb-3 p-2">${p.full_name}</h6>
-            <div class="btn-details text-center">
-              <button class="details-btn btn bg-primary mt-0 text-light">Details</button>
-            </div>
-          </div>
-        </div>`;
-        div.querySelector('.details-btn').onclick = () => window.location.href = `profile.html?id=${p.id}`;
-        container.appendChild(div);
-      });
-    }
-
-    document.getElementById("applyFilter").onclick = () => {
-      const dept = document.getElementById("filterDept").value;
-      const subject = document.getElementById("filterSubject").value;
-      fetchProfiles(dept, subject);
-    };
-
-    fetchProfiles();
-  </script>
-  <script src="/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+  <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

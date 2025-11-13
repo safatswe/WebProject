@@ -25,7 +25,6 @@
       </div>
 
       <button type="submit" class="btn btn-primary w-100 fw-bold">Login</button>
-
       <div id="message" class="text-center mt-3 fw-bold"></div>
     </form>
   </div>
@@ -33,13 +32,12 @@
   <script>
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const msg = document.getElementById("message");
 
   try {
-    const res = await fetch("http://localhost:5000/api/login", {
+    const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
@@ -50,13 +48,8 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     if (data.success) {
       msg.textContent = "✅ Login successful! Redirecting...";
       msg.style.color = "green";
-
       localStorage.setItem("loggedInUser", JSON.stringify(data.user));
-
-      // ✅ Use absolute path to avoid relative errors
-      setTimeout(() => {
-        window.location.href = "/myprofile.html";
-      }, 1000);
+      setTimeout(() => window.location.href = "myprofile.html", 1000);
     } else {
       msg.textContent = data.message || "❌ Invalid email or password.";
       msg.style.color = "red";
@@ -67,5 +60,6 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   }
 });
   </script>
+  <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

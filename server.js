@@ -13,6 +13,7 @@ app.use(bodyParser.json());
 
 // Serve frontend files
 app.use(express.static(path.join(__dirname, "frontend")));
+// Serve uploaded images
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // MySQL connection
@@ -28,7 +29,7 @@ db.connect(err => {
   else console.log("✅ MySQL Connected");
 });
 
-// Multer setup for uploads
+// Multer setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
@@ -39,14 +40,8 @@ const upload = multer({ storage });
 app.post("/api/profiles", upload.fields([{ name: "photo" }, { name: "id_photo" }]), async (req, res) => {
   try {
     const {
-      full_name,
-      email,
-      password,
-      address,
-      department,
-      salary_range,
-      subject_to_teach,
-      whatsapp_number
+      full_name, email, password, address, department,
+      salary_range, subject_to_teach, whatsapp_number
     } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -60,14 +55,10 @@ app.post("/api/profiles", upload.fields([{ name: "photo" }, { name: "id_photo" }
     `;
 
     db.query(sql, [full_name, email, hashedPassword, address, department, salary_range, subject_to_teach, photo, whatsapp_number, id_photo], err => {
-      if (err) {
-        console.error("❌ Database error:", err);
-        return res.status(500).json({ success: false, message: "Database error" });
-      }
+      if (err) return res.status(500).json({ success: false, message: "Database error" });
       res.json({ success: true, message: "✅ Profile created successfully!" });
     });
   } catch (error) {
-    console.error("❌ Error creating profile:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
@@ -75,7 +66,6 @@ app.post("/api/profiles", upload.fields([{ name: "photo" }, { name: "id_photo" }
 // ================= LOGIN =================
 app.post("/api/login", (req, res) => {
   const { email, password } = req.body;
-
   const sql = "SELECT * FROM profiles WHERE email = ?";
   db.query(sql, [email], async (err, results) => {
     if (err) return res.status(500).json({ success: false, message: "Database error" });
@@ -83,10 +73,8 @@ app.post("/api/login", (req, res) => {
 
     const user = results[0];
     const match = await bcrypt.compare(password, user.password);
-
     if (!match) return res.status(401).json({ success: false, message: "Invalid email or password" });
 
-    // Successful login
     res.json({
       success: true,
       message: "✅ Login successful!",
@@ -136,15 +124,11 @@ app.put("/api/profiles/:id", upload.fields([{ name: "photo" }, { name: "id_photo
   const { department, subject_to_teach, whatsapp_number } = req.body;
 
   let updates = [department, subject_to_teach, whatsapp_number, id];
-  let sql = `
-    UPDATE profiles
-    SET department = ?, subject_to_teach = ?, whatsapp_number = ?
-  `;
+  let sql = `UPDATE profiles SET department = ?, subject_to_teach = ?, whatsapp_number = ?`;
 
-  // Optional: update photo if provided
   if (req.files["photo"]) {
     sql += `, photo = ?`;
-    updates.splice(3, 0, req.files["photo"][0].filename); // insert photo before id
+    updates.splice(3, 0, req.files["photo"][0].filename);
   }
 
   sql += " WHERE id = ?";
@@ -156,6 +140,10 @@ app.put("/api/profiles/:id", upload.fields([{ name: "photo" }, { name: "id_photo
   });
 });
 
-// ================= START SERVER =================
+// Serve index.html as default route
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "index.html"));
+});
+
 const PORT = 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
