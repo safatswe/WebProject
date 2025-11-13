@@ -35,7 +35,7 @@ const upload = multer({ storage });
 
 // Create profile
 app.post("/api/profiles", upload.fields([{ name: "photo" }, { name: "id_photo" }]), (req, res) => {
-  const { full_name, email, address, department, salary_range, subject_to_teach, whatsapp_number } = req.body;
+  const {full_name, email, address, department,subject_to_teach,available_time,whatsapp_number, available,about_me} = req.body;
 
   // Extract both file names (if uploaded)
   const photo = req.files["photo"] ? req.files["photo"][0].filename : null;
@@ -43,13 +43,13 @@ app.post("/api/profiles", upload.fields([{ name: "photo" }, { name: "id_photo" }
 
   const sql = `
     INSERT INTO profiles
-    (full_name, email, address, department, salary_range, subject_to_teach, photo, whatsapp_number, id_photo)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    (full_name, email, address, department,subject_to_teach,available_time, photo,whatsapp_number, id_photo,available,about_me)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
     sql,
-    [full_name, email, address, department, salary_range, subject_to_teach, photo, whatsapp_number, id_photo],
+    [full_name, email, address, department,subject_to_teach,available_time, photo,whatsapp_number, id_photo,available,about_me],
     (err) => {
       if (err) {
         console.error(err);
@@ -59,8 +59,6 @@ app.post("/api/profiles", upload.fields([{ name: "photo" }, { name: "id_photo" }
     }
   );
 });
-
-
 // Get all profiles with optional filters
 app.get("/api/profiles", (req, res) => {
   let query = "SELECT * FROM profiles";
