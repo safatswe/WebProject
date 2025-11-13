@@ -35,29 +35,57 @@ const upload = multer({ storage });
 
 // Create profile
 app.post("/api/profiles", upload.fields([{ name: "photo" }, { name: "id_photo" }]), (req, res) => {
-  const { full_name, email, address, department, subject_to_teach, available_time, whatsapp_number, available, about_me } = req.body;
+  const {
+    full_name,
+    email,
+    address,
+    department,
+    subject_to_teach,
+    available_time,
+    whatsapp_number,
+    available,
+    about_me,
+    intro_video_link
+  } = req.body;
 
-  // Extract both file names (if uploaded)
+  // Extract uploaded file names
   const photo = req.files["photo"] ? req.files["photo"][0].filename : null;
   const id_photo = req.files["id_photo"] ? req.files["id_photo"][0].filename : null;
 
-  console.log("REQ.BODY:", req.body);
-  console.log("REQ.FILES:", req.files);
+  // console.log("REQ.BODY:", req.body);
+  // console.log("REQ.FILES:", req.files);
+
+  // Convert available to boolean (1 or 0)
+  const availableBool = (available && available.toLowerCase() === "yes") ? 1 : 0;
 
   const sql = `
     INSERT INTO profiles
-    (full_name, email, address, department, subject_to_teach, available_time, photo, whatsapp_number, id_photo, available, about_me)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    (full_name, email, address, department, subject_to_teach, available_time, photo, whatsapp_number, id_photo, available, about_me, intro_video_link)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
     sql,
-    [full_name, email, address, department, subject_to_teach, available_time, photo, whatsapp_number, id_photo, available, about_me],
-    (err) => {
+    [
+      full_name,
+      email,
+      address,
+      department,
+      subject_to_teach,
+      available_time,
+      photo,
+      whatsapp_number,
+      id_photo,
+      availableBool,
+      about_me,
+      intro_video_link
+    ],
+    (err, results) => {
       if (err) {
-        console.error(err);
+        console.error("DB Insert Error:", err);
         return res.status(500).json({ message: "Database error" });
       }
+      console.log("Profile created, ID:", results.insertId);
       res.json({ message: "Profile created successfully!" });
     }
   );
@@ -68,12 +96,19 @@ app.get("/api/profiles", (req, res) => {
   let query = "SELECT * FROM profiles";
   const { department, subject } = req.query;
 
-  if (department && subject) query += ` WHERE department = ${db.escape(department)} AND subject_to_teach = ${db.escape(subject)}`;
-  else if (department) query += ` WHERE department = ${db.escape(department)}`;
-  else if (subject) query += ` WHERE subject_to_teach = ${db.escape(subject)}`;
+  if (department && subject) {
+    query += ` WHERE department = ${db.escape(department)} AND subject_to_teach = ${db.escape(subject)}`;
+  } else if (department) {
+    query += ` WHERE department = ${db.escape(department)}`;
+  } else if (subject) {
+    query += ` WHERE subject_to_teach = ${db.escape(subject)}`;
+  }
 
   db.query(query, (err, results) => {
-    if (err) return res.status(500).json({ message: "Database error" });
+    if (err) {
+      console.error("DB Fetch Error:", err);
+      return res.status(500).json({ message: "Database error" });
+    }
     res.json(results);
   });
 });
@@ -82,7 +117,13 @@ app.get("/api/profiles", (req, res) => {
 app.get("/api/profiles/:id", (req, res) => {
   const sql = "SELECT * FROM profiles WHERE id = ?";
   db.query(sql, [req.params.id], (err, result) => {
-    if (err) return res.status(500).json({ message: "Error fetching profile" });
+    if (err) {
+      console.error("DB Fetch Single Error:", err);
+      return res.status(500).json({ message: "Error fetching profile" });
+    }
+    if (!result.length) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
     res.json(result[0]);
   });
 });
