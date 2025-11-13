@@ -59,10 +59,6 @@ app.post("/api/profiles", upload.fields([{ name: "photo" }, { name: "id_photo" }
     }
   );
 });
-
-console.log("REQ.BODY:", req.body);
-console.log("REQ.FILES:", req.files);
-
 // Get all profiles with optional filters
 app.get("/api/profiles", (req, res) => {
   let query = "SELECT * FROM profiles";
