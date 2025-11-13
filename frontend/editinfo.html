@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Profile | SUST Tutor</title>
+  <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f7f9fb, #e9f0ff);
+      min-height: 100vh;
+    }
+    .edit-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 600px;
+      margin: 50px auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #007bff;
+      font-weight: 700;
+      text-align: center;
+    }
+    input.form-control {
+      border-radius: 10px;
+    }
+    .btn {
+      border-radius: 25px;
+      padding: 10px 25px;
+      font-weight: 600;
+    }
+    .save-btn {
+      background-color: #198754;
+      color: #fff;
+    }
+    .save-btn:hover {
+      background-color: #157347;
+    }
+    img.preview-img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-top: 5px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="edit-card">
+    <h2>Edit Profile Information</h2>
+    <form id="editForm" class="mt-4" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Full Name</label>
+        <input type="text" id="editName" name="full_name" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Email</label>
+        <input type="email" id="editEmail" name="email" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Password</label>
+        <input type="password" id="editPassword" name="password" class="form-control" placeholder="Leave blank to keep current password">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Address</label>
+        <input type="text" id="editAddress" name="address" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Department</label>
+        <input type="text" id="editDept" name="department" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Salary Range</label>
+        <input type="text" id="editSalary" name="salary_range" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Subject to Teach</label>
+        <input type="text" id="editSubject" name="subject_to_teach" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">WhatsApp Number</label>
+        <input type="text" id="editWhatsapp" name="whatsapp_number" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Profile Photo</label>
+        <input type="file" id="editPhoto" name="photo" accept="image/*" class="form-control">
+        <img id="photoPreview" class="preview-img">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Student ID Photo</label>
+        <input type="file" id="editIdPhoto" name="id_photo" accept="image/*" class="form-control">
+        <img id="idPhotoPreview" class="preview-img">
+      </div>
+
+      <div class="d-flex justify-content-between mt-4">
+        <button type="submit" class="btn save-btn">Save Changes</button>
+        <a href="myprofile.html" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!user) {
+      alert("You must login first!");
+      window.location.href = "/login.html";
+    } else {
+      // Pre-fill the form
+      document.getElementById("editName").value = user.full_name;
+      document.getElementById("editEmail").value = user.email;
+      document.getElementById("editAddress").value = user.address;
+      document.getElementById("editDept").value = user.department;
+      document.getElementById("editSalary").value = user.salary_range;
+      document.getElementById("editSubject").value = user.subject_to_teach;
+      document.getElementById("editWhatsapp").value = user.whatsapp_number;
+
+      // Show current photos
+      document.getElementById("photoPreview").src = user.photo ? `http://localhost:5000/uploads/${user.photo}` : "https://via.placeholder.com/120";
+      document.getElementById("idPhotoPreview").src = user.id_photo ? `http://localhost:5000/uploads/${user.id_photo}` : "https://via.placeholder.com/120";
+    }
+
+    // Preview new uploaded images
+    document.getElementById("editPhoto").onchange = e => {
+      const [file] = e.target.files;
+      if (file) document.getElementById("photoPreview").src = URL.createObjectURL(file);
+    };
+    document.getElementById("editIdPhoto").onchange = e => {
+      const [file] = e.target.files;
+      if (file) document.getElementById("idPhotoPreview").src = URL.createObjectURL(file);
+    };
+
+    // Handle form submission
+    document.getElementById("editForm").onsubmit = async e => {
+      e.preventDefault();
+      const formData = new FormData();
+
+      formData.append("full_name", document.getElementById("editName").value);
+      formData.append("email", document.getElementById("editEmail").value);
+      const password = document.getElementById("editPassword").value;
+      if (password) formData.append("password", password); // Only update if filled
+      formData.append("address", document.getElementById("editAddress").value);
+      formData.append("department", document.getElementById("editDept").value);
+      formData.append("salary_range", document.getElementById("editSalary").value);
+      formData.append("subject_to_teach", document.getElementById("editSubject").value);
+      formData.append("whatsapp_number", document.getElementById("editWhatsapp").value);
+
+      const photoFile = document.getElementById("editPhoto").files[0];
+      if (photoFile) formData.append("photo", photoFile);
+
+      const idPhotoFile = document.getElementById("editIdPhoto").files[0];
+      if (idPhotoFile) formData.append("id_photo", idPhotoFile);
+
+      const response = await fetch(`http://localhost:5000/api/profiles/${user.id}`, {
+        method: "PUT",
+        body: formData
+      });
+
+      if (response.ok) {
+        alert("Profile updated successfully!");
+        // Update localStorage
+        const updatedUser = { ...user };
+        updatedUser.full_name = document.getElementById("editName").value;
+        updatedUser.email = document.getElementById("editEmail").value;
+        updatedUser.address = document.getElementById("editAddress").value;
+        updatedUser.department = document.getElementById("editDept").value;
+        updatedUser.salary_range = document.getElementById("editSalary").value;
+        updatedUser.subject_to_teach = document.getElementById("editSubject").value;
+        updatedUser.whatsapp_number = document.getElementById("editWhatsapp").value;
+        if (photoFile) updatedUser.photo = photoFile.name;
+        if (idPhotoFile) updatedUser.id_photo = idPhotoFile.name;
+
+        localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+        window.location.href = "/myprofile.html";
+      } else {
+        alert("Failed to update profile.");
+      }
+    };
+  </script>
+</body>
+</html>

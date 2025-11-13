@@ -17,14 +17,16 @@
       </div>
       <div class="navbar-right me-5 mt-2 ">
         <ul class="list d-flex gap-4 list-unstyled">
-          <li><a class="list-nav text-decoration-none  text-light" href="#homeSection">Home</a></li>
-          <li><a class="list-nav text-decoration-none  text-light" href="#profilesSection">Show Profiles</a></li>
-          <li><a class=" list-nav text-decoration-none  text-light" href="#aboutSection">About Us</a></li>
-          <li><a class=" list-nav text-decoration-none  text-light" href="#contactSection">Contact Us</a></li>
-          <button class="btn-nav rounded text-secondary"><a class="text-decoration-none text-dark"
-              href="create.html">Register</a></button>
-          <button class=" btn-nav rounded text-secondary"><a class="text-decoration-none text-dark"
-              href="">Login</a></button>
+          <li><a class="list-nav text-decoration-none text-light" href="#homeSection">Home</a></li>
+          <li><a class="list-nav text-decoration-none text-light" href="#profilesSection">Show Profiles</a></li>
+          <li><a class="list-nav text-decoration-none text-light" href="#aboutSection">About Us</a></li>
+          <li><a class="list-nav text-decoration-none text-light" href="#contactSection">Contact Us</a></li>
+          <button class="btn-nav rounded text-secondary">
+            <a class="text-decoration-none text-dark" href="create.html">Register</a>
+          </button>
+          <button class="btn-nav rounded text-secondary">
+            <a class="text-decoration-none text-dark" href="login.html">Login</a>
+          </button>
         </ul>
       </div>
     </div>
@@ -36,15 +38,17 @@
       <div class="banner-heading p-4">
         <h1 class="text-light mt-5 ms-3">Welcome To</h1>
         <h1><b class="text-warning ms-5">SUST TUTOR</b></h1>
-        <h2 class="hero-headline text-light  ms-5 mt-4">Trusted</h2>
+        <h2 class="hero-headline text-light ms-5 mt-4">Trusted</h2>
         <h2 class="hero-headline text-light ms-5">Authentic</h2>
         <h2 class="hero-headline text-light ms-5">Reliable Platform</h2>
-        <button class="btn rounded bg-primary mt-4 ms-5 p-2"><a class="text-decoration-none text-light fw-bold"
-            href="#contactSection">Contact Us</a></button>
+        <button class="btn rounded bg-primary mt-4 ms-5 p-2">
+          <a class="text-decoration-none text-light fw-bold" href="#contactSection">Contact Us</a>
+        </button>
       </div>
       <div class="banner-right d-flex justify-content-center">
         <img src="/uploads/sust1.png.png" alt="IICT Building" style="width: 700px; height: 450px;">
       </div>
+    </div>
   </section>
 
   <!-- Show Profiles Section -->
@@ -57,7 +61,7 @@
       <div class="filter-item">
         <input style="width: 220px;" type="text" id="filterSubject" placeholder="Subject">
       </div>
-      <button class="btn btn-primary p-2" style="width: 100px"; id="applyFilter" title="Apply Filter"><i class="fas fa-search"></i></button>
+      <button class="btn btn-primary p-2" style="width: 100px" id="applyFilter" title="Apply Filter"><i class="fas fa-search"></i></button>
     </div>
 
     <div id="profiles"></div>
@@ -74,12 +78,12 @@
           the university.</p>
         <p>
           With features like <strong>smart filters</strong> for subject and location and <strong>direct WhatsApp
-            contact</strong>,Tutor Connect makes finding the right tutor quick and effortless. Our mission is to build a
+            contact</strong>, Tutor Connect makes finding the right tutor quick and effortless. Our mission is to build a
           reliable, locally focused network where education meets trust and opportunity.
         </p>
       </div>
       <div class="about-right">
-        <img class="cartoon-img" src="/uploads/46325309.jpg" alt="" srcset="">
+        <img class="cartoon-img" src="/uploads/46325309.jpg" alt="">
       </div>
     </div>
   </section>
@@ -96,11 +100,12 @@
       </form>
     </div>
   </section>
-  <!-- ✅ Footer Section -->
+
+  <!-- Footer -->
   <footer class="bg-dark text-light text-center p-3 w-100">
     <div class="footer-content mt-3 d-flex justify-content-center flex-wrap text-start gap-5 p-3">
       <div class="footer-left w-25">
-        <h3 class="text-warning "><i class="fas fa-graduation-cap"></i>SUST TUTOR</h3>
+        <h3 class="text-warning"><i class="fas fa-graduation-cap"></i> SUST TUTOR</h3>
         <p>Connecting students and tutors — building brighter futures together.</p>
       </div>
 
@@ -108,7 +113,7 @@
         <h4 class="text-warning">Quick Links</h4>
         <ul class="list-unstyled">
           <li><a class="text-decoration-none" href="#homeSection">Home</a></li>
-          <li><a class="text-decoration-none" href="#formSection">Create Profile</a></li>
+          <li><a class="text-decoration-none" href="create.html">Create Profile</a></li>
           <li><a class="text-decoration-none" href="#profilesSection">Show Profiles</a></li>
           <li><a class="text-decoration-none" href="#aboutSection">About Us</a></li>
           <li><a class="text-decoration-none" href="#contactSection">Contact Us</a></li>
@@ -132,19 +137,6 @@
   </footer>
 
   <script>
-    // Form submission (only runs if the form exists)
-    const profileForm = document.getElementById("profileForm");
-    if (profileForm) {
-      profileForm.onsubmit = async (e) => {
-        e.preventDefault();
-        const formData = new FormData(profileForm);
-        await fetch("/api/profiles", { method: "POST", body: formData });
-        alert("Profile Created Successfully!");
-        profileForm.reset();
-      };
-    }
-
-    // Fetch profiles
     async function fetchProfiles(department = "", subject = "") {
       let url = "/api/profiles";
       if (department && subject) url += `?department=${department}&subject=${subject}`;
@@ -160,34 +152,27 @@
         const div = document.createElement("div");
         div.className = "profile-card";
         div.innerHTML = `
-      <div class="show-profile d-flex gap-5 justify-content-center flex-wrap container w-100">
-        <div class="tutor-details p-1">
-          <img class="tutor-img" src="/uploads/${p.photo}" alt="photo">
-          <h6 class="text-center text-light fw-bold bg-primary mb-3 p-2">${p.full_name}</h6>
-          <div class="btn-details text-center">
-            <button class="details-btn btn bg-primary mt-0 text-light">Details</button>
+        <div class="show-profile d-flex gap-5 justify-content-center flex-wrap container w-100">
+          <div class="tutor-details p-1">
+            <img class="tutor-img" src="/uploads/${p.photo}" alt="photo">
+            <h6 class="text-center text-light fw-bold bg-primary mb-3 p-2">${p.full_name}</h6>
+            <div class="btn-details text-center">
+              <button class="details-btn btn bg-primary mt-0 text-light">Details</button>
+            </div>
           </div>
-        </div>
-      </div>`;
-
-        const detailsBtn = div.querySelector('.details-btn');
-        detailsBtn.addEventListener('click', () => {
-          window.location.href = `profile.html?id=${p.id}`;
-        });
-
+        </div>`;
+        div.querySelector('.details-btn').onclick = () => window.location.href = `profile.html?id=${p.id}`;
         container.appendChild(div);
       });
     }
 
-    // Filter button click
     document.getElementById("applyFilter").onclick = () => {
       const dept = document.getElementById("filterDept").value;
       const subject = document.getElementById("filterSubject").value;
       fetchProfiles(dept, subject);
     };
-    // Fetch profiles initially
-    fetchProfiles();
 
+    fetchProfiles();
   </script>
   <script src="/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 </body>
