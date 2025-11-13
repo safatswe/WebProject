@@ -44,7 +44,7 @@ app.post("/api/profiles", upload.fields([{ name: "photo" }, { name: "id_photo" }
   const sql = `
     INSERT INTO profiles
     (full_name, email, address, department,subject_to_teach,available_time, photo,whatsapp_number, id_photo,available,about_me)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
@@ -60,6 +60,8 @@ app.post("/api/profiles", upload.fields([{ name: "photo" }, { name: "id_photo" }
   );
 });
 
+console.log("REQ.BODY:", req.body);
+console.log("REQ.FILES:", req.files);
 
 // Get all profiles with optional filters
 app.get("/api/profiles", (req, res) => {
