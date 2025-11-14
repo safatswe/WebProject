@@ -145,5 +145,18 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "index.html"));
 });
 
+// ================= DELETE PROFILE ===============
+app.delete("/api/profiles/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = "DELETE FROM profiles WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) return res.status(500).json({ success: false, message: "Database error" });
+    if (result.affectedRows === 0) return res.status(404).json({ success: false, message: "Profile not found" });
+    res.json({ success: true, message: "Profile deleted successfully!" });
+  });
+});
+
+
+
 const PORT = 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));

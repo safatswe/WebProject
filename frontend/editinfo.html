@@ -37,6 +37,13 @@
     .save-btn:hover {
       background-color: #157347;
     }
+    .delete-btn {
+      background-color: #dc3545;
+      color: #fff;
+    }
+    .delete-btn:hover {
+      background-color: #c82333;
+    }
     img.preview-img {
       width: 120px;
       height: 120px;
@@ -51,6 +58,7 @@
   <div class="edit-card">
     <h2>Edit Profile Information</h2>
     <form id="editForm" class="mt-4" enctype="multipart/form-data">
+      <!-- Form fields here (same as before) -->
       <div class="mb-3">
         <label class="form-label fw-semibold">Full Name</label>
         <input type="text" id="editName" name="full_name" class="form-control" required>
@@ -99,6 +107,11 @@
         <a href="myprofile.html" class="btn btn-secondary">Cancel</a>
       </div>
     </form>
+
+    <!-- Delete Profile Button -->
+    <div class="text-center mt-3">
+      <button id="deleteBtn" class="btn delete-btn">Delete Profile Permanently</button>
+    </div>
   </div>
 
   <script>
@@ -158,8 +171,9 @@
       });
 
       if (response.ok) {
+        const data = await response.json();
         alert("Profile updated successfully!");
-        // Update localStorage
+        // Update localStorage with correct filenames from server
         const updatedUser = { ...user };
         updatedUser.full_name = document.getElementById("editName").value;
         updatedUser.email = document.getElementById("editEmail").value;
@@ -168,13 +182,29 @@
         updatedUser.salary_range = document.getElementById("editSalary").value;
         updatedUser.subject_to_teach = document.getElementById("editSubject").value;
         updatedUser.whatsapp_number = document.getElementById("editWhatsapp").value;
-        if (photoFile) updatedUser.photo = photoFile.name;
-        if (idPhotoFile) updatedUser.id_photo = idPhotoFile.name;
+        if (data.photo) updatedUser.photo = data.photo;
+        if (data.id_photo) updatedUser.id_photo = data.id_photo;
 
         localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
         window.location.href = "/myprofile.html";
       } else {
         alert("Failed to update profile.");
+      }
+    };
+
+    // Handle Delete Profile
+    document.getElementById("deleteBtn").onclick = async () => {
+      if (confirm("If you delete everything will be lost permanently! Are you sure?")) {
+        const response = await fetch(`http://localhost:5000/api/profiles/${user.id}`, {
+          method: "DELETE"
+        });
+        if (response.ok) {
+          alert("Profile deleted permanently!");
+          localStorage.removeItem("loggedInUser");
+          window.location.href = "/index.html";
+        } else {
+          alert("Failed to delete profile.");
+        }
       }
     };
   </script>
