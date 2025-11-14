@@ -58,7 +58,6 @@
   <div class="edit-card">
     <h2>Edit Profile Information</h2>
     <form id="editForm" class="mt-4" enctype="multipart/form-data">
-      <!-- Form fields here (same as before) -->
       <div class="mb-3">
         <label class="form-label fw-semibold">Full Name</label>
         <input type="text" id="editName" name="full_name" class="form-control" required>
@@ -94,12 +93,12 @@
       <div class="mb-3">
         <label class="form-label fw-semibold">Profile Photo</label>
         <input type="file" id="editPhoto" name="photo" accept="image/*" class="form-control">
-        <img id="photoPreview" class="preview-img">
+        <img id="photoPreview" class="preview-img" src="https://via.placeholder.com/120" alt="Profile Preview">
       </div>
       <div class="mb-3">
         <label class="form-label fw-semibold">Student ID Photo</label>
         <input type="file" id="editIdPhoto" name="id_photo" accept="image/*" class="form-control">
-        <img id="idPhotoPreview" class="preview-img">
+        <img id="idPhotoPreview" class="preview-img" src="https://via.placeholder.com/120" alt="ID Preview">
       </div>
 
       <div class="d-flex justify-content-between mt-4">
@@ -108,33 +107,34 @@
       </div>
     </form>
 
-    <!-- Delete Profile Button -->
     <div class="text-center mt-3">
       <button id="deleteBtn" class="btn delete-btn">Delete Profile Permanently</button>
     </div>
   </div>
 
   <script>
+    const apiBase = "/api";
     const user = JSON.parse(localStorage.getItem("loggedInUser"));
+
     if (!user) {
       alert("You must login first!");
       window.location.href = "/login.html";
     } else {
       // Pre-fill the form
-      document.getElementById("editName").value = user.full_name;
-      document.getElementById("editEmail").value = user.email;
-      document.getElementById("editAddress").value = user.address;
-      document.getElementById("editDept").value = user.department;
-      document.getElementById("editSalary").value = user.salary_range;
-      document.getElementById("editSubject").value = user.subject_to_teach;
-      document.getElementById("editWhatsapp").value = user.whatsapp_number;
+      document.getElementById("editName").value = user.full_name || "";
+      document.getElementById("editEmail").value = user.email || "";
+      document.getElementById("editAddress").value = user.address || "";
+      document.getElementById("editDept").value = user.department || "";
+      document.getElementById("editSalary").value = user.salary_range || "";
+      document.getElementById("editSubject").value = user.subject_to_teach || "";
+      document.getElementById("editWhatsapp").value = user.whatsapp_number || "";
 
       // Show current photos
-      document.getElementById("photoPreview").src = user.photo ? `http://localhost:5000/uploads/${user.photo}` : "https://via.placeholder.com/120";
-      document.getElementById("idPhotoPreview").src = user.id_photo ? `http://localhost:5000/uploads/${user.id_photo}` : "https://via.placeholder.com/120";
+      document.getElementById("photoPreview").src = user.photo ? `/uploads/${user.photo}` : "https://via.placeholder.com/120";
+      document.getElementById("idPhotoPreview").src = user.id_photo ? `/uploads/${user.id_photo}` : "https://via.placeholder.com/120";
     }
 
-    // Preview new uploaded images
+    // Preview uploaded images locally
     document.getElementById("editPhoto").onchange = e => {
       const [file] = e.target.files;
       if (file) document.getElementById("photoPreview").src = URL.createObjectURL(file);
@@ -144,15 +144,20 @@
       if (file) document.getElementById("idPhotoPreview").src = URL.createObjectURL(file);
     };
 
-    // Handle form submission
-    document.getElementById("editForm").onsubmit = async e => {
+    document.getElementById("editForm").onsubmit = async (e) => {
       e.preventDefault();
-      const formData = new FormData();
+      if (!user || !user.id) {
+        alert("User info missing. Please login again.");
+        return window.location.href = "/login.html";
+      }
 
+      const formData = new FormData();
       formData.append("full_name", document.getElementById("editName").value);
       formData.append("email", document.getElementById("editEmail").value);
+
       const password = document.getElementById("editPassword").value;
-      if (password) formData.append("password", password); // Only update if filled
+      if (password && password.trim() !== "") formData.append("password", password);
+
       formData.append("address", document.getElementById("editAddress").value);
       formData.append("department", document.getElementById("editDept").value);
       formData.append("salary_range", document.getElementById("editSalary").value);
@@ -165,46 +170,60 @@
       const idPhotoFile = document.getElementById("editIdPhoto").files[0];
       if (idPhotoFile) formData.append("id_photo", idPhotoFile);
 
-      const response = await fetch(`http://localhost:5000/api/profiles/${user.id}`, {
-        method: "PUT",
-        body: formData
-      });
-
-      if (response.ok) {
+      try {
+        const response = await fetch(`${apiBase}/profiles/${user.id}`, {
+          method: "PUT",
+          body: formData
+        });
         const data = await response.json();
-        alert("Profile updated successfully!");
-        // Update localStorage with correct filenames from server
-        const updatedUser = { ...user };
-        updatedUser.full_name = document.getElementById("editName").value;
-        updatedUser.email = document.getElementById("editEmail").value;
-        updatedUser.address = document.getElementById("editAddress").value;
-        updatedUser.department = document.getElementById("editDept").value;
-        updatedUser.salary_range = document.getElementById("editSalary").value;
-        updatedUser.subject_to_teach = document.getElementById("editSubject").value;
-        updatedUser.whatsapp_number = document.getElementById("editWhatsapp").value;
-        if (data.photo) updatedUser.photo = data.photo;
-        if (data.id_photo) updatedUser.id_photo = data.id_photo;
 
-        localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
-        window.location.href = "/myprofile.html";
-      } else {
-        alert("Failed to update profile.");
+        if (response.ok && data.success) {
+          alert("Profile updated successfully!");
+
+          if (data.user) {
+            const updatedUser = {
+              id: data.user.id,
+              full_name: data.user.full_name,
+              email: data.user.email,
+              address: data.user.address,
+              department: data.user.department,
+              salary_range: data.user.salary_range,
+              subject_to_teach: data.user.subject_to_teach,
+              photo: data.user.photo,
+              whatsapp_number: data.user.whatsapp_number,
+              id_photo: data.user.id_photo
+            };
+            localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+          }
+
+          window.location.href = "/myprofile.html";
+        } else {
+          const msg = data && data.message ? data.message : "Failed to update profile.";
+          alert(msg);
+        }
+      } catch (err) {
+        console.error("Update failed:", err);
+        alert("Failed to update profile (network or server error).");
       }
     };
 
-    // Handle Delete Profile
+    // Delete
     document.getElementById("deleteBtn").onclick = async () => {
-      if (confirm("If you delete everything will be lost permanently! Are you sure?")) {
-        const response = await fetch(`http://localhost:5000/api/profiles/${user.id}`, {
-          method: "DELETE"
-        });
-        if (response.ok) {
+      if (!user || !user.id) return alert("User info missing.");
+      if (!confirm("If you delete everything will be lost permanently! Are you sure?")) return;
+      try {
+        const response = await fetch(`${apiBase}/profiles/${user.id}`, { method: "DELETE" });
+        const data = await response.json();
+        if (response.ok && data.success) {
           alert("Profile deleted permanently!");
           localStorage.removeItem("loggedInUser");
           window.location.href = "/index.html";
         } else {
-          alert("Failed to delete profile.");
+          alert(data && data.message ? data.message : "Failed to delete profile.");
         }
+      } catch (err) {
+        console.error("Delete failed:", err);
+        alert("Failed to delete profile (network or server error).");
       }
     };
   </script>

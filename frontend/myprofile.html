@@ -68,38 +68,68 @@
   </div>
 
   <script>
-    const user = JSON.parse(localStorage.getItem("loggedInUser"));
-    if (!user) {
-      alert("You must login first!");
-      window.location.href = "/login.html";
-    } else {
-      // Profile Photo
-      document.getElementById("profilePhoto").src = user.photo ? `http://localhost:5000/uploads/${user.photo}` : "https://via.placeholder.com/120";
+    const apiBase = "/api";
 
-      // Basic info
-      document.getElementById("profileName").textContent = user.full_name;
-      document.getElementById("profileEmail").textContent = user.email;
+    async function loadProfile() {
+      const localUser = JSON.parse(localStorage.getItem("loggedInUser"));
+      if (!localUser) {
+        alert("You must login first!");
+        return window.location.href = "/login.html";
+      }
 
-      // All registration info
-      document.getElementById("fullName").textContent = user.full_name;
-      document.getElementById("email").textContent = user.email;
-      document.getElementById("address").textContent = user.address;
-      document.getElementById("department").textContent = user.department;
-      document.getElementById("salaryRange").textContent = user.salary_range;
-      document.getElementById("subject").textContent = user.subject_to_teach;
-      document.getElementById("whatsapp").textContent = user.whatsapp_number;
+      try {
+        const resp = await fetch(`${apiBase}/profiles/${localUser.id}`);
+        if (resp.ok) {
+          const latest = await resp.json();
+          const updatedUser = {
+            id: latest.id,
+            full_name: latest.full_name,
+            email: latest.email,
+            address: latest.address,
+            department: latest.department,
+            salary_range: latest.salary_range,
+            subject_to_teach: latest.subject_to_teach,
+            photo: latest.photo,
+            whatsapp_number: latest.whatsapp_number,
+            id_photo: latest.id_photo
+          };
+          localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+          renderProfile(updatedUser);
+        } else {
+          console.warn("Failed to fetch latest profile; using local cache.");
+          renderProfile(localUser);
+        }
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+        renderProfile(localUser);
+      }
     }
 
-    // Logout
+    function renderProfile(user) {
+      document.getElementById("profilePhoto").src = user.photo ? `/uploads/${user.photo}` : "https://via.placeholder.com/120";
+      document.getElementById("profileName").textContent = user.full_name || "";
+      document.getElementById("profileEmail").textContent = user.email || "";
+
+      document.getElementById("fullName").textContent = user.full_name || "";
+      document.getElementById("email").textContent = user.email || "";
+      document.getElementById("address").textContent = user.address || "";
+      document.getElementById("department").textContent = user.department || "";
+      document.getElementById("salaryRange").textContent = user.salary_range || "";
+      document.getElementById("subject").textContent = user.subject_to_teach || "";
+      document.getElementById("whatsapp").textContent = user.whatsapp_number || "";
+    }
+
     document.getElementById("logoutBtn").onclick = () => {
       localStorage.removeItem("loggedInUser");
       window.location.href = "/login.html";
     };
 
-    // Edit profile button
     document.getElementById("editBtn").onclick = () => {
       window.location.href = "/editinfo.html";
     };
+
+    // Load on page open
+    loadProfile();
   </script>
 
 </body>
