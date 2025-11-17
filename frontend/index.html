@@ -86,17 +86,31 @@
   </section>
 
   <!-- Contact Section -->
-  <section id="contactSection" class="text-center bg-color2">
-    <h2 class="fw-bold mt-3">Contact Us</h2>
-    <div class="d-flex justify-content-center mb-5">
-      <form class="border border-1 p-4 bg-dark text-light rounded-3" style="width: 450px;">
-        <input class="form-control mb-3" type="text" placeholder="Your Name" required>
-        <input class="form-control mb-3" type="email" placeholder="Your Email" required>
-        <textarea class="form-control mb-3" placeholder="Your Message" rows="4" required></textarea>
-        <button class="btn btn-primary text-light mb-2 d-block mx-auto w-50" type="submit">Send</button>
-      </form>
-    </div>
-  </section>
+   <section id="contactSection">
+ <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; background-color: #f0f4f8; padding: 20px;">
+  <h2 style="color: #2c3e50; margin-bottom: 20px;">Contact Us</h2>
+  
+  <form id="contactForm" style="width: 400px; background: #ffffff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <input id="name" type="text" placeholder="Your Name" required
+      style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;" />
+    
+    <input id="email" type="email" placeholder="Your Email" required
+      style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;" />
+    
+    <textarea id="message" rows="5" placeholder="Your Message" required
+      style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; resize: vertical;"></textarea>
+    
+    <button type="submit" style="width: 100%; background-color: #3498db; color: white; padding: 12px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;">
+      Send
+    </button>
+  </form>
+
+  <p id="responseMsg" style="margin-top: 15px; font-weight: 600; color: #2c3e50;"></p>
+</div>
+</section>
+
+
+
   <!-- ✅ Footer Section -->
   <footer class="bg-dark text-light text-center p-3 w-100">
     <div class="footer-content mt-3 d-flex justify-content-center flex-wrap text-start gap-5 p-3">
@@ -133,6 +147,41 @@
   </footer>
 
   <script>
+    //  contact us logic
+ const form = document.getElementById('contactForm');
+    const responseMsg = document.getElementById('responseMsg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        message: form.message.value.trim(),
+      };
+
+      responseMsg.textContent = 'Sending...';
+
+      try {
+        const res = await fetch('http://localhost:5000/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        const json = await res.json();
+
+        if (json.ok) {
+          responseMsg.textContent = 'Message sent! Thank you.';
+          form.reset();
+        } else {
+          responseMsg.textContent = 'Failed to send: ' + (json.error || 'Unknown error');
+        }
+      } catch (err) {
+        responseMsg.textContent = 'Network error, please try again later.';
+        console.error(err);
+      }
+    });
     // Form submission (only runs if the form exists)
     const profileForm = document.getElementById("profileForm");
     if (profileForm) {
