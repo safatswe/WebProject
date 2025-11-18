@@ -2,64 +2,64 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Tutor Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="/frontend/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <title>Tutor Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/frontend/bootstrap-5.3.3-dist/css/bootstrap.min.css">
 </head>
 
 <body style="background-image: url('/uploads/bg-3.jpg');background-size: cover;">
-    <div id="profile-container">
-    </div>
+  <div id="profile-container">
+  </div>
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const id = params.get("id");
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
 
-        fetch(`/api/profiles/${id}`)
-            .then(res => res.json())
-           .then(p => {
-  const container = document.getElementById("profile-container");
-  container.innerHTML = "";
-  const div = document.createElement("div");
-  div.className = "profile-interface";
+    fetch(`/api/profiles/${id}`)
+      .then(res => res.json())
+      .then(p => {
+        const container = document.getElementById("profile-container");
+        container.innerHTML = "";
+        const div = document.createElement("div");
+        div.className = "profile-interface";
 
-  // helper functions to build embed url
-  function getYouTubeEmbed(url) {
-    const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
-    return ytMatch ? `https://www.youtube.com/embed/${ytMatch[1]}` : null;
-  }
+        // helper functions to build embed url
+        function getYouTubeEmbed(url) {
+          const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+          return ytMatch ? `https://www.youtube.com/embed/${ytMatch[1]}` : null;
+        }
 
-  function getDrivePreview(url) {
-    const idMatch = url.match(/\/d\/([A-Za-z0-9_-]{10,})/);
-    if (idMatch) return `https://drive.google.com/file/d/${idMatch[1]}/preview`;
-    const qMatch = url.match(/[?&]id=([A-Za-z0-9_-]{10,})/);
-    if (qMatch) return `https://drive.google.com/file/d/${qMatch[1]}/preview`;
-    return null;
-  }
+        function getDrivePreview(url) {
+          const idMatch = url.match(/\/d\/([A-Za-z0-9_-]{10,})/);
+          if (idMatch) return `https://drive.google.com/file/d/${idMatch[1]}/preview`;
+          const qMatch = url.match(/[?&]id=([A-Za-z0-9_-]{10,})/);
+          if (qMatch) return `https://drive.google.com/file/d/${qMatch[1]}/preview`;
+          return null;
+        }
 
-  // determine embed html
-  let embedHtml = "";
-  if (p.intro_video_link) {
-    const link = p.intro_video_link.trim();
-    const yt = getYouTubeEmbed(link);
-    const dr = getDrivePreview(link);
-    if (yt) {
-      embedHtml = `<div class="video-embed mt-4 text-center">
+        // determine embed html
+        let embedHtml = "";
+        if (p.intro_video_link) {
+          const link = p.intro_video_link.trim();
+          const yt = getYouTubeEmbed(link);
+          const dr = getDrivePreview(link);
+          if (yt) {
+            embedHtml = `<div class="video-embed mt-4 text-center">
                      <iframe width="560" height="315" src="${yt}" frameborder="0" allowfullscreen></iframe>
                    </div>`;
-    } else if (dr) {
-      embedHtml = `<div class="video-embed mt-4 text-center">
+          } else if (dr) {
+            embedHtml = `<div class="video-embed mt-4 text-center">
                      <iframe width="560" height="315" src="${dr}" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                    </div>`;
-    } else {
-      embedHtml = `<div class="mt-3 text-center">
+          } else {
+            embedHtml = `<div class="mt-3 text-center">
                      <a href="${p.intro_video_link}" target="_blank">Open Intro Video</a>
                    </div>`;
-    }
-  }
+          }
+        }
 
-  div.innerHTML = `
+        div.innerHTML = `
     <div class="profile-box d-flex flex-wrap justify-content-center gap-3 mt-5">
       <div class="pic-box border border-5 bg-info border-success overflow-hidden" style="width: 250px; height: 250px; border-radius: 50%;">
         <img style="width: 250px; height: 250px; object-fit: cover;" src="/uploads/${p.photo}" alt="profile-pic">
@@ -105,22 +105,21 @@
       <p class="text-start p-2">${p.about_me}</p>
     </div>
   `;
+        container.appendChild(div);
 
-  container.appendChild(div);
+        const waBtn = document.getElementById("whatsappBtn");
+        if (p.whatsapp_number) {
+          waBtn.onclick = () => {
+            const phone = p.whatsapp_number.replace(/\D/g, '');
+            window.open(`https://wa.me/${phone}`, "_blank");
+          };
+        } else {
+          waBtn.style.display = "none";
+        }
+      });
 
-  const waBtn = document.getElementById("whatsappBtn");
-  if (p.whatsapp_number) {
-    waBtn.onclick = () => {
-      const phone = p.whatsapp_number.replace(/\D/g, '');
-      window.open(`https://wa.me/${phone}`, "_blank");
-    };
-  } else {
-    waBtn.style.display = "none";
-  }
-});
-
-    </script>
-    <script src="/frontend/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+  </script>
+  <script src="/frontend/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 
 
 </body>
