@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | SUST Tutor</title>
+  <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-dark d-flex justify-content-center align-items-center vh-100">
+
+  <div class="card shadow-lg p-4" style="width: 400px; border-radius: 15px;">
+    <div class="text-center mb-4">
+      <h2 class="text-warning fw-bold">Login</h2>
+    </div>
+
+    <form id="loginForm">
+      <div class="mb-3">
+        <label for="email" class="form-label fw-bold">Email</label>
+        <input type="email" class="form-control" id="email" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label fw-bold">Password</label>
+        <input type="password" class="form-control" id="password" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 fw-bold">Login</button>
+      <div id="message" class="text-center mt-3 fw-bold"></div>
+    </form>
+  </div>
+
+  <script>
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const msg = document.getElementById("message");
+
+  try {
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      msg.textContent = "✅ Login successful! Redirecting...";
+      msg.style.color = "green";
+      localStorage.setItem("loggedInUser", JSON.stringify(data.user));
+      setTimeout(() => window.location.href = "myprofile.html", 1000);
+    } else {
+      msg.textContent = data.message || "❌ Invalid email or password.";
+      msg.style.color = "red";
+    }
+  } catch (err) {
+    msg.textContent = "⚠ Server not reachable.";
+    msg.style.color = "orange";
+  }
+});
+  </script>
+  <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

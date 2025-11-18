@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Profile | SUST Tutor</title>
+  <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f7f9fb, #e9f0ff);
+      min-height: 100vh;
+    }
+    .edit-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 600px;
+      margin: 50px auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #007bff;
+      font-weight: 700;
+      text-align: center;
+    }
+    input.form-control {
+      border-radius: 10px;
+    }
+    .btn {
+      border-radius: 25px;
+      padding: 10px 25px;
+      font-weight: 600;
+    }
+    .save-btn {
+      background-color: #198754;
+      color: #fff;
+    }
+    .save-btn:hover {
+      background-color: #157347;
+    }
+    .delete-btn {
+      background-color: #dc3545;
+      color: #fff;
+    }
+    .delete-btn:hover {
+      background-color: #c82333;
+    }
+    img.preview-img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-top: 5px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="edit-card">
+    <h2>Edit Profile Information</h2>
+    <form id="editForm" class="mt-4" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Full Name</label>
+        <input type="text" id="editName" name="full_name" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Email</label>
+        <input type="email" id="editEmail" name="email" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Password</label>
+        <input type="password" id="editPassword" name="password" class="form-control" placeholder="Leave blank to keep current password">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Address</label>
+        <input type="text" id="editAddress" name="address" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Department</label>
+        <input type="text" id="editDept" name="department" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Subject to Teach</label>
+        <input type="text" id="editSubject" name="subject_to_teach" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">WhatsApp Number</label>
+        <input type="text" id="editWhatsapp" name="whatsapp_number" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">About Me</label>
+        <textarea id="editAbout" name="about_me" class="form-control" rows="3"></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Intro Video Link</label>
+        <input type="text" id="editVideo" name="intro_video_link" class="form-control" placeholder="YouTube or other video link">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Available Time</label>
+        <input type="text" id="editTime" name="available_time" class="form-control" placeholder="e.g., Weekdays 6-9 PM">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Profile Photo</label>
+        <input type="file" id="editPhoto" name="photo" accept="image/*" class="form-control">
+        <img id="photoPreview" class="preview-img" src="https://via.placeholder.com/120" alt="Profile Preview">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Student ID Photo</label>
+        <input type="file" id="editIdPhoto" name="id_photo" accept="image/*" class="form-control">
+        <img id="idPhotoPreview" class="preview-img" src="https://via.placeholder.com/120" alt="ID Preview">
+      </div>
+
+      <div class="d-flex justify-content-between mt-4">
+        <button type="submit" class="btn save-btn">Save Changes</button>
+        <a href="myprofile.html" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+
+    <div class="text-center mt-3">
+      <button id="deleteBtn" class="btn delete-btn">Delete Profile Permanently</button>
+    </div>
+  </div>
+
+  <script>
+    const apiBase = "/api";
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+
+    if (!user) {
+      alert("You must login first!");
+      window.location.href = "/login.html";
+    } else {
+      // Pre-fill the form
+      document.getElementById("editName").value = user.full_name || "";
+      document.getElementById("editEmail").value = user.email || "";
+      document.getElementById("editAddress").value = user.address || "";
+      document.getElementById("editDept").value = user.department || "";
+      document.getElementById("editSubject").value = user.subject_to_teach || "";
+      document.getElementById("editWhatsapp").value = user.whatsapp_number || "";
+      document.getElementById("editAbout").value = user.about_me || "";
+      document.getElementById("editVideo").value = user.intro_video_link || "";
+      document.getElementById("editTime").value = user.available_time || "";
+
+      // Show current photos
+      document.getElementById("photoPreview").src = user.photo ? `/uploads/${user.photo}` : "https://via.placeholder.com/120";
+      document.getElementById("idPhotoPreview").src = user.id_photo ? `/uploads/${user.id_photo}` : "https://via.placeholder.com/120";
+    }
+
+    // Preview uploaded images locally
+    document.getElementById("editPhoto").onchange = e => {
+      const [file] = e.target.files;
+      if (file) document.getElementById("photoPreview").src = URL.createObjectURL(file);
+    };
+    document.getElementById("editIdPhoto").onchange = e => {
+      const [file] = e.target.files;
+      if (file) document.getElementById("idPhotoPreview").src = URL.createObjectURL(file);
+    };
+
+    document.getElementById("editForm").onsubmit = async (e) => {
+      e.preventDefault();
+      if (!user || !user.id) {
+        alert("User info missing. Please login again.");
+        return window.location.href = "/login.html";
+      }
+
+      const formData = new FormData();
+      formData.append("full_name", document.getElementById("editName").value);
+      formData.append("email", document.getElementById("editEmail").value);
+
+      const password = document.getElementById("editPassword").value;
+      if (password && password.trim() !== "") formData.append("password", password);
+
+      formData.append("address", document.getElementById("editAddress").value);
+      formData.append("department", document.getElementById("editDept").value);
+      formData.append("subject_to_teach", document.getElementById("editSubject").value);
+      formData.append("whatsapp_number", document.getElementById("editWhatsapp").value);
+      formData.append("about_me", document.getElementById("editAbout").value);
+      formData.append("intro_video_link", document.getElementById("editVideo").value);
+      formData.append("available_time", document.getElementById("editTime").value);
+
+      const photoFile = document.getElementById("editPhoto").files[0];
+      if (photoFile) formData.append("photo", photoFile);
+
+      const idPhotoFile = document.getElementById("editIdPhoto").files[0];
+      if (idPhotoFile) formData.append("id_photo", idPhotoFile);
+
+      try {
+        const response = await fetch(`${apiBase}/profiles/${user.id}`, {
+          method: "PUT",
+          body: formData
+        });
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          alert("Profile updated successfully!");
+
+          if (data.user) {
+            const updatedUser = {
+              id: data.user.id,
+              full_name: data.user.full_name,
+              email: data.user.email,
+              address: data.user.address,
+              department: data.user.department,
+              subject_to_teach: data.user.subject_to_teach,
+              photo: data.user.photo,
+              whatsapp_number: data.user.whatsapp_number,
+              id_photo: data.user.id_photo,
+              about_me: data.user.about_me,
+              intro_video_link: data.user.intro_video_link,
+              available_time: data.user.available_time
+            };
+            localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+          }
+
+          window.location.href = "/myprofile.html";
+        } else {
+          const msg = data && data.message ? data.message : "Failed to update profile.";
+          alert(msg);
+        }
+      } catch (err) {
+        console.error("Update failed:", err);
+        alert("Failed to update profile (network or server error).");
+      }
+    };
+
+    // Delete
+    document.getElementById("deleteBtn").onclick = async () => {
+      if (!user || !user.id) return alert("User info missing.");
+      if (!confirm("If you delete everything will be lost permanently! Are you sure?")) return;
+      try {
+        const response = await fetch(`${apiBase}/profiles/${user.id}`, { method: "DELETE" });
+        const data = await response.json();
+        if (response.ok && data.success) {
+          alert("Profile deleted permanently!");
+          localStorage.removeItem("loggedInUser");
+          window.location.href = "/index.html";
+        } else {
+          alert(data && data.message ? data.message : "Failed to delete profile.");
+        }
+      } catch (err) {
+        console.error("Delete failed:", err);
+        alert("Failed to delete profile (network or server error).");
+      }
+    };
+  </script>
+</body>
+</html>
