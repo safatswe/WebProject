@@ -43,7 +43,8 @@ app.post('/send-email', async (req, res) => {
 
     await resend.emails.send({
       from: 'Your Website <on@resend.dev>',  // default sender, no setup needed
-      to: 'farabisafat@gmail.com',            // your real email here
+      to: ['afazurr8@gmail.com', 'Farabisafat@gmail.com'],            // your real email here
+      reply_to: email,
       subject: `New message from ${name}`,
       html,
     });
@@ -176,8 +177,7 @@ app.get("/api/profiles/:id", (req, res) => {
   });
 });
 
-// Start server
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
 
 
