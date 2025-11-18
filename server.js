@@ -140,7 +140,13 @@ app.post("/api/profiles", upload.fields([{ name: "photo" }, { name: "id_photo" }
 
 // Get all profiles with optional filters
 app.get("/api/profiles", (req, res) => {
-    let query = "SELECT id, full_name, email, address, department, subject_to_teach, available_time, photo, whatsapp_number, available, about_me, intro_video_link FROM profiles";
+    let query = `
+        SELECT id, full_name, email, address, department, subject_to_teach,
+        available_time, photo, id_photo, whatsapp_number, available,
+        about_me, intro_video_link 
+        FROM profiles
+    `;
+
     const { department, subject } = req.query;
 
     if (department && subject) {
@@ -160,9 +166,17 @@ app.get("/api/profiles", (req, res) => {
     });
 });
 
+
 // Get single profile by id
 app.get("/api/profiles/:id", (req, res) => {
-    const sql = "SELECT id, full_name, email, address, department, subject_to_teach, available_time, photo, whatsapp_number, available, about_me, intro_video_link FROM profiles WHERE id = ?";
+    const sql = `
+        SELECT id, full_name, email, address, department, subject_to_teach,
+        available_time, photo, id_photo, whatsapp_number, available,
+        about_me, intro_video_link 
+        FROM profiles 
+        WHERE id = ?
+    `;
+
     db.query(sql, [req.params.id], (err, result) => {
         if (err) {
             console.error("DB Fetch Single Error:", err);
