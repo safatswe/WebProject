@@ -7,6 +7,8 @@ const path = require("path");
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
 require('dotenv').config();
+const crypto = require('crypto');
+
 const { Resend } = require('resend');
 
 const app = express();
@@ -379,6 +381,113 @@ app.delete("/api/profiles/:id", (req, res) => {
         });
     });
 });
+
+
+app.post('/api/forgot-password', async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) return res.status(400).json({ message: "Email is required" });
+
+  // Generate 6-digit numeric code
+  const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+  // Code expires in 15 minutes
+  const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+
+  const sqlInsert = `INSERT INTO password_resets (email, reset_code, expires_at) VALUES (?, ?, ?)`;
+
+  db.query(sqlInsert, [email, resetCode, expiresAt], async (err) => {
+    if (err) {
+      console.error("DB insert error:", err);
+      return res.status(500).json({ message: "Database error" });
+    }
+
+    const html = `
+      <h2>Password Reset Code</h2>
+      <p>Your reset code is: <strong>${resetCode}</strong></p>
+      <p>This code will expire in 15 minutes.</p>
+    `;
+
+    try {
+      await resend.emails.send({
+        from: 'Your Website <onboarding@resend.dev>',
+        to: email,
+        subject: 'Your Password Reset Code',
+        html,
+      });
+      res.json({ message: "Reset code sent to your email" });
+    } catch (error) {
+      console.error("Email sending error:", error);
+      res.status(500).json({ message: "Failed to send reset code email" });
+    }
+  });
+});
+
+
+
+app.post('/api/verify-reset-code', (req, res) => {
+  const { email, reset_code } = req.body;
+
+  if (!email || !reset_code)
+    return res.status(400).json({ message: "Email and code are required" });
+
+  const sqlSelect = `
+    SELECT * FROM password_resets
+    WHERE email = ? AND reset_code = ? AND used = FALSE AND expires_at > NOW()
+    ORDER BY created_at DESC LIMIT 1
+  `;
+
+  db.query(sqlSelect, [email, reset_code], (err, results) => {
+    if (err) return res.status(500).json({ message: "Database error" });
+
+    if (results.length === 0) {
+      return res.status(400).json({ message: "Invalid or expired reset code" });
+    }
+
+    res.json({ message: "Code verified" });
+  });
+});
+
+
+
+app.post('/api/reset-password', async (req, res) => {
+  const { email, reset_code, new_password, confirm_password } = req.body;
+
+  if (!email || !reset_code || !new_password || !confirm_password)
+    return res.status(400).json({ message: "All fields are required" });
+
+  if (new_password !== confirm_password)
+    return res.status(400).json({ message: "Passwords do not match" });
+
+  const sqlSelect = `
+    SELECT * FROM password_resets
+    WHERE email = ? AND reset_code = ? AND used = FALSE AND expires_at > NOW()
+    ORDER BY created_at DESC LIMIT 1
+  `;
+
+  db.query(sqlSelect, [email, reset_code], async (err, results) => {
+    if (err) return res.status(500).json({ message: "Database error" });
+
+    if (results.length === 0) {
+      return res.status(400).json({ message: "Invalid or expired reset code" });
+    }
+
+    const hashed = await bcrypt.hash(new_password, 10);
+
+    const sqlUpdate = `UPDATE profiles SET password = ? WHERE email = ?`;
+    db.query(sqlUpdate, [hashed, email], (err2) => {
+      if (err2) return res.status(500).json({ message: "Failed to update password" });
+
+      // Mark reset code as used
+      const sqlMarkUsed = `UPDATE password_resets SET used = TRUE WHERE id = ?`;
+      db.query(sqlMarkUsed, [results[0].id], () => {});
+
+      res.json({ message: "Password updated successfully" });
+    });
+  });
+});
+
+
 
 // Start server
 const PORT = process.env.PORT || 5000;
