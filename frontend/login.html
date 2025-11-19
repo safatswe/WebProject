@@ -5,7 +5,7 @@
   <title>Login | SUST Tutor</title>
   <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css" />
   <style>
-   <style>
+  
   body {
     background: #121212;
     color: #fff; /* White text for the entire body */
@@ -150,12 +150,12 @@
         const data = await res.json();
 
         if (data.success) {
-          msg.textContent = "✅ Login successful! Redirecting...";
+          msg.textContent = "Login successful! Redirecting...";
           msg.style.color = "lightgreen";
           localStorage.setItem("loggedInUser", JSON.stringify(data.user));
           setTimeout(() => (window.location.href = "myprofile.html"), 1000);
         } else {
-          msg.textContent = data.message || "❌ Invalid email or password.";
+          msg.textContent = data.message || " Invalid email or password.";
           msg.style.color = "tomato";
         }
       } catch (err) {
