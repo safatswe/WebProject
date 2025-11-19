@@ -34,8 +34,8 @@ const db = mysql.createConnection({
 });
 
 db.connect((err) => {
-    if (err) console.error("❌ MySQL Connection Failed:", err);
-    else console.log("✅ MySQL Connected");
+    if (err) console.error(" MySQL Connection Failed:", err);
+    else console.log(" MySQL Connected");
 });
 
 // Multer setup
@@ -231,7 +231,7 @@ app.post("/api/login", (req, res) => {
             console.log("Login successful for:", email);
             res.json({
                 success: true,
-                message: "✅ Login successful!",
+                message: " Login successful!",
                 user: {
                     id: user.id,
                     full_name: user.full_name,
@@ -343,7 +343,7 @@ app.put(
 
                             res.json({
                                 success: true,
-                                message: "✅ Profile updated successfully!",
+                                message: " Profile updated successfully!",
                                 user: updatedRows[0]
                             });
                         }
@@ -491,4 +491,4 @@ app.post('/api/reset-password', async (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
