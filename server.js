@@ -8,6 +8,8 @@ const bcrypt = require('bcryptjs');
 const fs = require('fs');
 require('dotenv').config();
 const crypto = require('crypto');
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 
 const app = express();
