@@ -55,15 +55,15 @@
   <section class="profiles-container" id="profilesSection">
     <h2 class="text-center text-dark">All Profiles</h2>
     <div
-      class="filter-panel text-center bg-light p-3 rounded-3 justify-content-center gap-4 d-flex align-items-center flex-wrap"
-      id="filterPanel">
+      class="filter-panel text-center p-3 rounded-3 flex justify-content-center align-items-center gap-4 flex-wrap"
+      id="filterPanel" style="background-color: rgb(226, 240, 214);">
       <div class="filter-item">
-        <input style="width: 220px;" type="text" id="filterDept" placeholder="Department">
+        <input class="p-3" style="width: 280px;" type="text" id="filterDept" placeholder="Department">
       </div>
       <div class="filter-item">
-        <input style="width: 220px;" type="text" id="filterSubject" placeholder="Subject">
+        <input class="p-3" style="width: 280px;" type="text" id="filterSubject" placeholder="Subject">
       </div>
-      <button class="btn btn-primary p-2" style="width: 100px" ; id="applyFilter" title="Apply Filter"><i
+      <button class="btn btn-primary p-3" style="width: 140px" ; id="applyFilter" title="Apply Filter"><i
           class="fas fa-search"></i></button>
     </div>
 
@@ -71,8 +71,8 @@
   </section>
 
   <!-- About Section -->
-  <section id="aboutSection" class="bg-color1 ">
-    <h2 class="text-center fw-bold mt-5">About Us</h2>
+  <section id="aboutSection" class="bg-color1 d-flex justify-content-center" style="margin: auto;">
+    <h2 class="text-center fw-bold">About Us</h2>
     <div class="about-us d-flex justify-content-between flex-wrap border rounded-3">
       <div class="about-left bg-warning text-center p-5 fw-bolder text-dark">
        
@@ -214,7 +214,7 @@
       <div class="show-profile d-flex gap-5 justify-content-center flex-wrap container w-100">
         <div class="tutor-details p-1 rounded">
           <img class="tutor-img" src="/uploads/${p.photo}" alt="photo">
-          <h6 class="text-center text-warning fw-bolder bg-dark mb-3 p-2">${p.full_name}</h6>
+          <h6 class="text-center text-dark fw-bolder bg-dark mb-3 p-2">${p.full_name}</h6>
           <div class="btn-details text-center">
             <button class="details-btn btn mt-0 text-light rounded" style="background-color:#5f1206">Details</button>
           </div>

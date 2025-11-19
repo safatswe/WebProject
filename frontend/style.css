@@ -68,6 +68,9 @@ nav .navbar-right ul li a:hover,
 nav .navbar-right ul li a:focus {
   color: #fff;
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  background: #27e221;
+  padding: 8px;
+  border-radius: 8px;
 }
 
 nav .btn-nav {
@@ -89,7 +92,7 @@ nav .btn-nav a {
 }
 
 nav .btn-nav:hover {
-  background: #000;
+  background: #27e221;
   color: #fff;
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
@@ -228,7 +231,6 @@ section {
 }
 
 .filter-panel input {
-  width: 230px;
   padding: 0.75rem 1.2rem;
   border-radius: 50px;
   border: 2px solid #e0e0e0;
@@ -351,19 +353,19 @@ section {
 /* --- About Section --- */
 #aboutSection {
   max-width: 1200px;
-  margin: 0 auto 5rem;
-  padding: 4rem 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
   background: linear-gradient(135deg, #f8f9fa 0%, #eef2f7 100%);
   border-radius: 18px;
-  display: flex;
-  flex-wrap: wrap;
   gap: 3.5rem;
-  align-items: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   border: 1px solid #eaeaea;
 }
 
 .about-left {
+  width: 60%;
   flex: 1 1 420px;
   background: #fff;
   border-radius: 16px;
@@ -393,7 +395,7 @@ section {
 
 .about-right img.cartoon-img {
   max-width: 100%;
-  max-height: 400px;
+  height: 450px;
   border-radius: 16px;
   filter: grayscale(70%) contrast(110%) brightness(1.03);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -627,13 +629,6 @@ footer {
   }
 }
 /* ====== PROFILE PAGE ====== */
-
-#profile-container {
-  max-width: 900px;
-  margin: 3rem auto;
-  padding: 0 1rem;
-  color: #111;
-}
 
 /* Profile interface */
 .profile-interface {
