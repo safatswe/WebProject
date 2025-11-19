@@ -1,205 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Login | SUST Tutor</title>
-  <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css" />
-<<<<<<< HEAD
-  <!-- <style>
-    .forgot-password-link {
-      color: #ffc107; /* Bootstrap warning yellow */
-      font-weight: 600;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-    .forgot-password-link:hover {
-      color: #ffdb4d;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-  </style> -->
-</head>
-<body class="d-flex justify-content-center align-items-center vh-100" style="background-image: url('/uploads/bg-11\ \(1\).jpg');">
-  <div class="p-4" style="width: 400px; border-radius: 15px; background-color: rgb(189, 179, 47);">
-    <div class="text-center mb-4">
-      <h2 class="text-dark fw-bold">Login</h2>
-=======
-  <style>
-  
-  body {
-    background: #121212;
-    color: #fff; /* White text for the entire body */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
+<meta charset="UTF-8">
+<title>Login | SUST Tutor</title>
+<link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
 
+<style>
+/* ===== Professional Dark-Gold Elegant Theme ===== */
+body {
+  background: linear-gradient(135deg, #121212, #1c1c1c);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #f0f0f0;
+  height: 100vh;
+}
+
+.card {
+  background-color: #1f1f1f;
+  border-radius: 15px;
+  border-left: 4px solid #d4af37;
+  border-right: 4px solid #d4af37;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  padding: 2.5rem 2rem;
+  width: 400px;
+}
+
+h2 {
+  color: #d4af37;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.form-label {
+  color: #d4af37;
+  font-weight: 600;
+}
+
+.form-control {
+  background-color: #2b2b2b;
+  color: #f0f0f0;
+  border: 1.5px solid #d4af37;
+  border-radius: 8px;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #ffd700;
+  background-color: #3a3a3a;
+  outline: none;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+}
+
+.btn-primary {
+  background: linear-gradient(145deg, #d4af37, #ffd700);
+  border: none;
+  color: #121212;
+  font-weight: 600;
+  padding: 0.75rem 0;
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(212, 175, 55, 0.7);
+}
+
+#message {
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 576px) {
   .card {
-    width: 400px;
-    border-radius: 15px;
-    background-color: #1f1f1f;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-    color: #fff; /* White text inside the card */
+    width: 90%;
+    padding: 2rem 1.5rem;
   }
-
-  h2 {
-    color: #ffc107; /* Bootstrap warning yellow */
-    font-weight: 700;
-  }
-
-  label {
-    font-weight: 600;
-    color: #fff; /* White labels */
-  }
-
-  input.form-control {
-    background-color: #2a2a2a;
-    border: 1px solid #444;
-    color: #fff; /* White input text */
-    transition: border-color 0.3s ease;
-  }
-
-  input.form-control::placeholder {
-    color: #ccc; /* Light placeholder */
-  }
-
-  input.form-control:focus {
-    background-color: #333;
-    border-color: #ffc107;
-    color: #fff;
-    box-shadow: none;
-  }
-
-  .btn-primary {
-    background-color: #ffc107;
-    border: none;
-    font-weight: 700;
-    transition: background-color 0.3s ease;
-    color: #000; /* Black text on yellow button for readability */
-  }
-
-  .btn-primary:hover,
-  .btn-primary:focus {
-    background-color: #e6b800;
-    box-shadow: none;
-    color: #000;
-  }
-
-  .forgot-password-link {
-    color: #ffc107;
-    font-weight: 600;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-
-  .forgot-password-link:hover {
-    color: #ffdb4d;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-
-  #message {
-    min-height: 1.5rem;
-    color: #fff; /* White messages */
-  }
+}
 </style>
-
-  </style>
 </head>
 <body class="d-flex justify-content-center align-items-center vh-100">
 
-  <div class="card shadow-lg p-4">
-    <div class="text-center mb-4">
-      <h2>Login</h2>
->>>>>>> f3d5d537594de51870b7f626dea0af27adbc591e
+<div class="card text-center">
+  <h2 class="mb-4">Login</h2>
+  <form id="loginForm">
+    <div class="mb-3 text-start">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" class="form-control" id="email" required>
     </div>
 
-    <form id="loginForm" novalidate>
-      <div class="mb-3">
-<<<<<<< HEAD
-        <label for="email" class="form-label fw-bold">Email</label>
-        <input type="email" class="form-control p-2" id="email" required />
-      </div>
+    <div class="mb-3 text-start">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" required>
+    </div>
 
-      <div class="mb-3">
-        <label for="password" class="form-label fw-bold">Password</label>
-        <input type="password" class="form-control p-2" id="password" required />
-      </div>
+    <button type="submit" class="btn btn-primary w-100">Login</button>
+    <div id="message" class="mt-3"></div>
+  </form>
+</div>
 
-      <div class="login-sub-btn d-flex justify-content-center">
-        <button type="submit" class="btn btn-primary w-50 fw-bold mt-3 p-2">Login</button>
-      </div>
-=======
-        <label for="email" class="form-label">Email</label>
-        <input
-          type="email"
-          class="form-control"
-          id="email"
-          placeholder="Enter your email"
-          required
-          autocomplete="username"
-        />
-      </div>
+<script>
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const msg = document.getElementById("message");
 
-      <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          id="password"
-          placeholder="Enter your password"
-          required
-          autocomplete="current-password"
-        />
-      </div>
-
-      <button type="submit" class="btn btn-primary w-100">Login</button>
->>>>>>> f3d5d537594de51870b7f626dea0af27adbc591e
-
-      <div class="text-center mt-3">
-        <a href="forgot-password.html" class="text-decoration-none fw-bolder text-danger">Forgot Password?</a>
-      </div>
-
-      <div id="message" class="text-center mt-3 fw-bold"></div>
-    </form>
-  </div>
-
-  <script>
-    document.getElementById("loginForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const msg = document.getElementById("message");
-
-      msg.textContent = '';
-      if (!email || !password) {
-        msg.textContent = "Please fill out all fields.";
-        msg.style.color = "orange";
-        return;
-      }
-
-      try {
-        const res = await fetch("/api/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        });
-
-        const data = await res.json();
-
-        if (data.success) {
-          msg.textContent = "Login successful! Redirecting...";
-          msg.style.color = "lightgreen";
-          localStorage.setItem("loggedInUser", JSON.stringify(data.user));
-          setTimeout(() => (window.location.href = "myprofile.html"), 1000);
-        } else {
-          msg.textContent = data.message || " Invalid email or password.";
-          msg.style.color = "tomato";
-        }
-      } catch (err) {
-        msg.textContent = "⚠ Server not reachable.";
-        msg.style.color = "orange";
-      }
+  try {
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
     });
-  </script>
-  <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+
+    const data = await res.json();
+
+    if (data.success) {
+      msg.textContent = "✅ Login successful! Redirecting...";
+      msg.style.color = "lightgreen";
+      localStorage.setItem("loggedInUser", JSON.stringify(data.user));
+      setTimeout(() => window.location.href = "myprofile.html", 1000);
+    } else {
+      msg.textContent = data.message || "❌ Invalid email or password.";
+      msg.style.color = "#ff6b6b";
+    }
+  } catch (err) {
+    msg.textContent = "⚠ Server not reachable.";
+    msg.style.color = "#ffa500";
+  }
+});
+</script>
+
+<script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

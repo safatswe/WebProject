@@ -5,84 +5,112 @@
   <meta charset="UTF-8">
   <title>My Profile | SUST Tutor</title>
   <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
-  <!-- <style>
+  <style>
+    /* ===== Modern Blue-Gray Professional Theme ===== */
     body {
-      background: #121212; /* dark background */
-      color: #f0f0f0; /* light text */
-      min-height: 100vh;
+      background: linear-gradient(135deg, #e0e4ec, #cfd6e1);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #2c3e50;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 2rem;
     }
+
     #profileCard {
-      background: #1e1e1e; /* dark card */
+      background-color: #ffffff;
       border-radius: 20px;
-      padding: 30px;
-      max-width: 600px;
-<<<<<<< HEAD
-      margin: auto;
-      /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); */
-=======
-      width: 100%;
-      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
-      text-align: center;
->>>>>>> f3d5d537594de51870b7f626dea0af27adbc591e
+      padding: 2.5rem 2rem;
+      width: 500px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    #profilePhoto {
-      border: 4px solid #f0f0f0; /* white border */
-      object-fit: cover;
-      margin-bottom: 15px;
-      border-radius: 50%;
-      width: 120px;
-      height: 120px;
-      filter: none; /* ensure original colors */
+
+    #profileCard:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
     }
+
     h2 {
-      font-weight: 700;
-      color: #f0f0f0;
-      margin-bottom: 1rem;
+      font-weight: 800;
+      color: #3498db; /* Primary blue heading */
+      letter-spacing: 1px;
     }
-    .info-label {
+
+    #profilePhoto {
+      border: 3px solid #3498db;
+      object-fit: cover;
+      width: 200px;
+      height: 200px;
+    }
+
+    #profileInfo label {
       font-weight: 600;
-      color: #ccc;
+      color: #2980b9; /* Blue accent for labels */
+      margin-top: 1rem;
     }
-    p {
-      color: #ddd;
-      margin: 6px 0;
-      font-size: 1rem;
+
+    #profileInfo h6 {
+      border: 1px solid #3498db;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      background-color: #f0f4f8;
+      color: #2c3e50;
     }
+
     .btn {
-      border-radius: 25px;
-      padding: 10px 25px;
+      border-radius: 12px;
       font-weight: 600;
+      padding: 0.6rem 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    #editBtn {
+      background-color: #3498db;
+      color: #ffffff;
       border: none;
-      transition: background-color 0.3s ease;
-      margin: 5px;
-      min-width: 140px;
+      margin-right: 0.5rem;
     }
-    .btn-primary {
-      background-color: #f0f0f0;
-      color: #121212;
+
+    #editBtn:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(52, 152, 219, 0.5);
     }
-    .btn-primary:hover {
-      background-color: #ddd;
+
+    #logoutBtn {
+      background-color: #e74c3c;
+      color: #ffffff;
+      border: none;
     }
-    .btn-danger {
-      background-color: #444;
-      color: #eee;
+
+    #logoutBtn:hover {
+      background-color: #c0392b;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(231, 76, 60, 0.5);
     }
-    .btn-danger:hover {
-      background-color: #666;
+
+    hr {
+      border-top: 1px solid #3498db;
     }
-  </style> -->
+
+    @media (max-width: 576px) {
+      #profileCard {
+        width: 100%;
+        padding: 2rem 1.5rem;
+      }
+
+      #profilePhoto {
+        width: 150px;
+        height: 150px;
+      }
+    }
+  </style>
 </head>
 
-<<<<<<< HEAD
-<body class="d-flex align-items-center justify-content-center p-5" style="background-color: rgb(230, 234, 225);">
-
-  <div id="profileCard" class=" card p-3 rounded" style="width: 500px;">
+<body>
+  <div id="profileCard" class="card p-3 rounded">
     <div class="profile-header p-2">
       <h2 class="text-center mb-4">My Profile</h2>
       <div class="box d-flex justify-content-center">
@@ -97,57 +125,24 @@
     <hr>
     <div id="profileInfo" class="p-3 rounded">
       <label class="mt-1" for="">Department:</label>
-      <h6 class="border border-1 rounded p-2 w-100 "> <span
-          id="department"></span></h6>
+      <h6 class="border border-1 rounded p-2 w-100 "> <span id="department"></span></h6>
       <label class="mt-2" for="">Subjects to teach:</label>
-      <h6 class="border border-1 rounded p-2 w-100 "><span
-          id="subject"></span></h6>
+      <h6 class="border border-1 rounded p-2 w-100 "><span id="subject"></span></h6>
       <label class="mt-2" for="">Available:</label>
-      <h6 class="border border-1 rounded p-2 w-100 "><span
-          id="available"></span></h6>
+      <h6 class="border border-1 rounded p-2 w-100 "><span id="available"></span></h6>
       <label class="mt-2" for="">Available Time:</label>
-      <h6 class="border border-1 rounded p-2 w-100 "><span
-          id="availableTime"></span></h6>
+      <h6 class="border border-1 rounded p-2 w-100 "><span id="availableTime"></span></h6>
       <label class="mt-2" for="">Address:</label>
-      <h6 class="border border-1 rounded p-2 w-100 "><span
-          id="address"></span></h6>
+      <h6 class="border border-1 rounded p-2 w-100 "><span id="address"></span></h6>
       <label class="mt-2" for="">About Me:</label>
-      <h6 class="border border-1 rounded p-2 w-100 "><span
-          id="aboutMe"></span></h6>
+      <h6 class="border border-1 rounded p-2 w-100 "><span id="aboutMe"></span></h6>
       <label class="mt-2" for="">WhatsApp Number:</label>
-      <h6 class="border border-1 rounded p-2 w-100 "><span
-          id="whatsapp"></span></h6>
+      <h6 class="border border-1 rounded p-2 w-100 "><span id="whatsapp"></span></h6>
     </div>
 
     <div class="text-center mt-4 p-2">
-      <button class="btn btn-primary me-2" id="editBtn">Edit Profile Info</button>
-=======
-<body>
-
-  <div id="profileCard">
-    <h2>My Profile</h2>
-    
-    <img id="profilePhoto" src="" alt="Profile Photo">
-
-    <h4 id="profileName" class="fw-bold mb-1"></h4>
-    <p id="profileEmail" class="text-secondary mb-3"></p>
-    <hr style="border-color: #333;">
-
-    <div id="profileInfo" style="text-align: left; max-width: 450px; margin: 0 auto;">
-      <p><span class="info-label">Full Name:</span> <span id="fullName"></span></p>
-      <p><span class="info-label">Email:</span> <span id="email"></span></p>
-      <p><span class="info-label">Address:</span> <span id="address"></span></p>
-      <p><span class="info-label">Department:</span> <span id="department"></span></p>
-      <p><span class="info-label">Subject to Teach:</span> <span id="subject"></span></p>
-      <p><span class="info-label">WhatsApp:</span> <span id="whatsapp"></span></p>
-      <p><span class="info-label">Available Time:</span> <span id="availableTime"></span></p>
-      <p><span class="info-label">About Me:</span> <span id="aboutMe"></span></p>
-    </div>
-
-    <div class="mt-4">
-      <button class="btn btn-primary" id="editBtn">Edit Profile Info</button>
->>>>>>> f3d5d537594de51870b7f626dea0af27adbc591e
-      <button class="btn btn-danger" id="logoutBtn">Logout</button>
+      <button class="btn" id="editBtn">Edit Profile Info</button>
+      <button class="btn" id="logoutBtn">Logout</button>
     </div>
   </div>
 
@@ -208,7 +203,6 @@
       document.getElementById("address").textContent = user.address || "";
     }
 
-
     document.getElementById("logoutBtn").onclick = () => {
       localStorage.removeItem("loggedInUser");
       window.location.href = "/index.html";
@@ -218,14 +212,9 @@
       window.location.href = "/editinfo.html";
     };
 
-    // Load on page open
     loadProfile();
   </script>
 
 </body>
-<<<<<<< HEAD
 
 </html>
-=======
-</html>
->>>>>>> f3d5d537594de51870b7f626dea0af27adbc591e
