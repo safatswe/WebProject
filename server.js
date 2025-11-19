@@ -271,25 +271,31 @@ app.post("/api/profiles", upload.fields([{ name: "photo" }, { name: "id_photo" }
 });
 
 // Get all profiles with optional filters
+// Get all profiles with optional filters
 app.get("/api/profiles", (req, res) => {
     let query = `
         SELECT id, full_name, email, address, department, subject_to_teach,
         available_time, photo, id_photo, whatsapp_number, available,
         about_me, intro_video_link 
         FROM profiles
+        WHERE 1=1
     `;
 
     const { department, subject } = req.query;
+    const params = [];
 
-    if (department && subject) {
-        query += ` WHERE department = ${db.escape(department)} AND subject_to_teach = ${db.escape(subject)}`;
-    } else if (department) {
-        query += ` WHERE department = ${db.escape(department)}`;
-    } else if (subject) {
-        query += ` WHERE subject_to_teach = ${db.escape(subject)}`;
+    if (department) {
+        query += ` AND department = ?`;
+        params.push(department);
     }
 
-    db.query(query, (err, results) => {
+    if (subject) {
+        // Match if subject exists anywhere in comma-separated string
+        query += ` AND CONCAT(',', subject_to_teach, ',') LIKE ?`;
+        params.push(`%,${subject},%`);
+    }
+
+    db.query(query, params, (err, results) => {
         if (err) {
             console.error("DB Fetch Error:", err);
             return res.status(500).json({ message: "Database error" });

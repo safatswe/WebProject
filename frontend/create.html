@@ -86,6 +86,7 @@
   </div>
 </section>
 
+
 <script>
 const profileForm = document.getElementById("profileForm");
 const otpModal = document.getElementById("otpModal");
@@ -111,6 +112,8 @@ profileForm.onsubmit = async (e) => {
     if (response.ok) {
       alert("OTP sent to your email. Check inbox/spam.");
       otpModal.style.display = "block";
+      // Disable submit button to prevent multiple OTP requests
+      profileForm.querySelector("button[type='submit']").disabled = true;
     } else {
       alert(result.message || "Failed to send OTP.");
     }
@@ -135,7 +138,10 @@ verifyOtpBtn.onclick = async () => {
     const result = await response.json();
     if (response.ok) {
       alert("OTP verified! Creating profile...");
-      
+
+      // Enable submit button (optional, if you want to allow retry)
+      profileForm.querySelector("button[type='submit']").disabled = false;
+
       const profileResponse = await fetch("/api/profiles", {
         method: "POST",
         body: formDataGlobal
@@ -143,8 +149,10 @@ verifyOtpBtn.onclick = async () => {
       const profileResult = await profileResponse.json();
       if (profileResponse.ok) {
         alert("Profile created successfully!");
-        profileForm.reset();
+        // Hide OTP modal
         otpModal.style.display = "none";
+        // Redirect to main page
+        window.location.href = "/index.html"; // or "/" if default
       } else {
         alert(profileResult.message || "Failed to create profile");
       }
@@ -157,6 +165,8 @@ verifyOtpBtn.onclick = async () => {
   }
 };
 </script>
+
+
 
 <script src="/frontend/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 </body>
