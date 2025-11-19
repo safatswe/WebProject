@@ -1,3 +1,4 @@
+// server.js (updated) -----------------------------------------------------
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -10,7 +11,25 @@ require('dotenv').config();
 const crypto = require('crypto');
 const { Resend } = require('resend');
 const resend = new Resend(process.env.RESEND_API_KEY);
+const nodemailer = require("nodemailer");
 
+// Nodemailer transporter (uses Gmail App Password from .env)
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS
+  }
+});
+
+// Test transporter
+transporter.verify((error, success) => {
+  if (error) {
+    console.log("Email config error:", error);
+  } else {
+    console.log("Email server is ready!");
+  }
+});
 
 const app = express();
 app.use(cors());
@@ -28,15 +47,50 @@ if (!fs.existsSync(uploadsDir)) {
 
 // MySQL connection
 const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "profiles_db"
+    host: process.env.DB_HOST || "localhost",
+    user: process.env.DB_USER || "root",
+    password: process.env.DB_PASSWORD || "",
+    database: process.env.DB_NAME || "profiles_db",
+    multipleStatements: false
 });
 
 db.connect((err) => {
-    if (err) console.error(" MySQL Connection Failed:", err);
-    else console.log(" MySQL Connected");
+    if (err) {
+        console.error(" MySQL Connection Failed:", err);
+    } else {
+        console.log(" MySQL Connected");
+
+        // Ensure email_verification table exists
+        const createEmailVerificationTable = `
+        CREATE TABLE IF NOT EXISTS email_verification (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            email VARCHAR(255) NOT NULL,
+            otp VARCHAR(10) NOT NULL,
+            expires_at DATETIME NOT NULL,
+            verified TINYINT(1) DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        `;
+        db.query(createEmailVerificationTable, (errCreate) => {
+            if (errCreate) console.error("Error creating email_verification table:", errCreate);
+            else console.log("email_verification table OK");
+        });
+
+        // Ensure password_resets table exists (you already use it in forgot-password)
+        const createPasswordResetsTable = `
+        CREATE TABLE IF NOT EXISTS password_resets (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            email VARCHAR(255) NOT NULL,
+            reset_code VARCHAR(20) NOT NULL,
+            used TINYINT(1) DEFAULT 0,
+            expires_at DATETIME NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        `;
+        db.query(createPasswordResetsTable, (errCreate) => {
+            if (errCreate) console.error("Error creating password_resets table:", errCreate);
+        });
+    }
 });
 
 // Multer setup
@@ -46,43 +100,91 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Contact us endpoint
+// Helper to send OTP email using nodemailer
+async function sendOtpEmail(email, otp) {
+  const mailOptions = {
+    from: process.env.GMAIL_USER,
+    to: email,
+    subject: "Your OTP Verification Code",
+    text: `Your OTP code is: ${otp}\n\nIt will expire in 5 minutes.`
+  };
 
-app.post('/send-email', async (req, res) => {
-    const { name, email, message } = req.body;
+  await transporter.sendMail(mailOptions);
+}
 
-    if (!name || !email || !message) {
-        return res.status(400).json({ ok: false, error: 'All fields are required' });
-    }
+// ------------------- OTP Routes -------------------
 
-    try {
-        const html = `
-      <h2>New Contact Message</h2>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Message:</strong><br>${message.replace(/\n/g, '<br>')}</p>
+// Send OTP route
+app.post('/api/send-otp', (req, res) => {
+    const { email } = req.body;
+
+    if (!email) return res.status(400).json({ message: "Email is required" });
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
+
+    const sqlInsert = `
+        INSERT INTO email_verification (email, otp, expires_at)
+        VALUES (?, ?, ?)
     `;
 
-        await resend.emails.send({
-            from: 'Your Website <onboarding@resend.dev>',
-            to: 'farabisafat@gmail.com',
-            subject: `New message from ${name}`,
-            html,
-        });
+    db.query(sqlInsert, [email, otp, expiresAt], async (err) => {
+        if (err) {
+            console.error("DB insert error (send-otp):", err);
+            return res.status(500).json({ message: "Database error" });
+        }
 
-        res.json({ ok: true, message: 'Email sent successfully' });
-    } catch (error) {
-        console.error('Email sending error:', error);
-        res.status(500).json({ ok: false, error: 'Failed to send email' });
-    }
+        try {
+            await sendOtpEmail(email, otp);
+            res.json({ success: true, message: "OTP sent to your email" });
+        } catch (error) {
+            console.error("Error sending OTP email:", error);
+            res.status(500).json({ message: "Failed to send OTP email" });
+        }
+    });
 });
 
-// Create profile - FIXED: Added password field and fixed SQL column name
+// Verify OTP route
+app.post('/api/verify-otp', (req, res) => {
+    const { email, otp } = req.body;
+
+    if (!email || !otp)
+        return res.status(400).json({ message: "Email and OTP required" });
+
+    const sqlSelect = `
+        SELECT * FROM email_verification
+        WHERE email = ? AND otp = ? AND verified = 0 AND expires_at > NOW()
+        ORDER BY created_at DESC LIMIT 1
+    `;
+
+    db.query(sqlSelect, [email, otp], (err, results) => {
+        if (err) {
+            console.error("DB select error (verify-otp):", err);
+            return res.status(500).json({ message: "Database error" });
+        }
+
+        if (results.length === 0)
+            return res.status(400).json({ message: "Invalid or expired OTP" });
+
+        const sqlUpdate = `UPDATE email_verification SET verified = 1 WHERE id = ?`;
+        db.query(sqlUpdate, [results[0].id], (errUpd) => {
+            if (errUpd) {
+                console.error("DB update error (verify-otp):", errUpd);
+                return res.status(500).json({ message: "Database error" });
+            }
+            res.json({ success: true, message: "OTP verified successfully" });
+        });
+    });
+});
+
+// ------------------- Existing Routes (modified profiles route) -------------------
+
+// Create profile - now requires email verification first
 app.post("/api/profiles", upload.fields([{ name: "photo" }, { name: "id_photo" }]), async (req, res) => {
     const {
         full_name,
         email,
-        password, // Added password field
+        password,
         address,
         department,
         subject_to_teach,
@@ -93,51 +195,79 @@ app.post("/api/profiles", upload.fields([{ name: "photo" }, { name: "id_photo" }
         intro_video_link
     } = req.body;
 
-    // Extract uploaded file names
-    const photo = req.files["photo"] ? req.files["photo"][0].filename : null;
-    const id_photo = req.files["id_photo"] ? req.files["id_photo"][0].filename : null;
-
-    // Convert available to boolean (1 or 0)
-    const availableBool = (available && available.toLowerCase() === "yes") ? 1 : 0;
-
-    // Hash password if provided
-    let hashedPassword = null;
-    if (password && password.trim() !== "") {
-        hashedPassword = await bcrypt.hash(password, 10);
+    if (!email) {
+        return res.status(400).json({ message: "Email is required" });
     }
 
-    const sql = `
-    INSERT INTO profiles
-    (full_name, email, password, address, department, subject_to_teach, available_time, photo, whatsapp_number, id_photo, available, about_me, intro_video_link)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
+    // Check if email verified
+    const checkSql = `
+        SELECT * FROM email_verification 
+        WHERE email = ? AND verified = 1
+        ORDER BY created_at DESC LIMIT 1
+    `;
 
-    db.query(
-        sql,
-        [
-            full_name,
-            email,
-            hashedPassword,
-            address,
-            department,
-            subject_to_teach, // Fixed: was subject_to_ach
-            available_time,
-            photo,
-            whatsapp_number,
-            id_photo,
-            availableBool,
-            about_me,
-            intro_video_link
-        ],
-        (err, results) => {
-            if (err) {
-                console.error("DB Insert Error:", err);
-                return res.status(500).json({ message: "Database error" });
-            }
-            console.log("Profile created, ID:", results.insertId);
-            res.json({ message: "Profile created successfully!" });
+    db.query(checkSql, [email], async (errCheck, resultCheck) => {
+        if (errCheck) {
+            console.error("DB check error (profiles):", errCheck);
+            return res.status(500).json({ message: "Database error" });
         }
-    );
+
+        if (!resultCheck || resultCheck.length === 0) {
+            return res.status(400).json({ message: "Email not verified. Please verify OTP first." });
+        }
+
+        // Continue to create profile
+        // Extract uploaded file names
+        const photo = req.files && req.files["photo"] ? req.files["photo"][0].filename : null;
+        const id_photo = req.files && req.files["id_photo"] ? req.files["id_photo"][0].filename : null;
+
+        // Convert available to boolean (1 or 0)
+        const availableBool = (available && available.toLowerCase && available.toLowerCase() === "yes") ? 1 : 0;
+
+        // Hash password if provided
+        let hashedPassword = null;
+        if (password && password.trim() !== "") {
+            try {
+                hashedPassword = await bcrypt.hash(password, 10);
+            } catch (hashErr) {
+                console.error("Password hash error:", hashErr);
+                return res.status(500).json({ message: "Server error" });
+            }
+        }
+
+        const sql = `
+            INSERT INTO profiles
+            (full_name, email, password, address, department, subject_to_teach, available_time, photo, whatsapp_number, id_photo, available, about_me, intro_video_link)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        db.query(
+            sql,
+            [
+                full_name,
+                email,
+                hashedPassword,
+                address,
+                department,
+                subject_to_teach,
+                available_time,
+                photo,
+                whatsapp_number,
+                id_photo,
+                availableBool,
+                about_me,
+                intro_video_link
+            ],
+            (err, results) => {
+                if (err) {
+                    console.error("DB Insert Error:", err);
+                    return res.status(500).json({ message: "Database error" });
+                }
+                console.log("Profile created, ID:", results.insertId);
+                res.json({ message: "Profile created successfully!" });
+            }
+        );
+    });
 });
 
 // Get all profiles with optional filters
@@ -168,7 +298,6 @@ app.get("/api/profiles", (req, res) => {
     });
 });
 
-
 // Get single profile by id
 app.get("/api/profiles/:id", (req, res) => {
     const sql = `
@@ -191,7 +320,7 @@ app.get("/api/profiles/:id", (req, res) => {
     });
 });
 
-// LOGIN - FIXED: Better error handling
+// LOGIN
 app.post("/api/login", (req, res) => {
     const { email, password } = req.body;
 
@@ -382,7 +511,7 @@ app.delete("/api/profiles/:id", (req, res) => {
     });
 });
 
-
+// Forgot-password / Reset logic (unchanged)
 app.post('/api/forgot-password', async (req, res) => {
   const { email } = req.body;
 
@@ -423,8 +552,6 @@ app.post('/api/forgot-password', async (req, res) => {
   });
 });
 
-
-
 app.post('/api/verify-reset-code', (req, res) => {
   const { email, reset_code } = req.body;
 
@@ -447,8 +574,6 @@ app.post('/api/verify-reset-code', (req, res) => {
     res.json({ message: "Code verified" });
   });
 });
-
-
 
 app.post('/api/reset-password', async (req, res) => {
   const { email, reset_code, new_password, confirm_password } = req.body;

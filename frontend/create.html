@@ -1,201 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Create Tutor Profile</title>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="/frontend/bootstrap-5.3.3-dist/css/bootstrap.min.css">
-
-<style>
-/* ====== Luxury Dark-Gold Professional Theme ====== */
-body {
-  width: 100%;
-  height: 100%;
-  background-color: #1a1a1a;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #f5f5f5;
-}
-
-.form-container {
-  max-width: 650px;
-  margin: 3rem auto;
-  background-color: #2c2c2c;
-  padding: 2.5rem 3rem;
-  border-radius: 15px;
-  box-shadow: 0 6px 25px rgba(0,0,0,0.5);
-  border: 1px solid #d4af37;
-}
-
-.form-container h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-  font-weight: 700;
-  color: #d4af37; /* Dark-gold heading */
-  letter-spacing: 1px;
-}
-
-.form-container input[type="text"],
-.form-container input[type="email"],
-.form-container input[type="password"],
-.form-container input[type="url"],
-.form-container textarea,
-.form-container input[type="file"] {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  margin-top: 0.5rem;
-  margin-bottom: 1.5rem;
-  border: 1.5px solid #d4af37;
-  border-radius: 8px;
-  font-size: 1rem;
-  color: #f5f5f5;
-  background-color: #3b3b3b;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
-}
-
-.form-container input[type="text"]:focus,
-.form-container input[type="email"]:focus,
-.form-container input[type="password"]:focus,
-.form-container input[type="url"]:focus,
-.form-container textarea:focus,
-.form-container input[type="file"]:focus {
-  border-color: #ffd700;
-  outline: none;
-  background-color: #4b4b4b;
-}
-
-.form-container textarea {
-  resize: vertical;
-  min-height: 120px;
-  font-family: inherit;
-}
-
-.form-container label {
-  display: block;
-  margin-top: 1rem;
-  font-weight: 600;
-  color: #d4af37;
-}
-
-.form-container button[type="submit"] {
-  width: 140px;
-  background-color: #d4af37;
-  color: #1a1a1a;
-  border: none;
-  font-weight: 600;
-  padding: 0.8rem 1rem;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-  display: block;
-  margin: 1.5rem auto 1rem auto;
-  box-shadow: 0 4px 10px rgba(212, 175, 55, 0.5);
-}
-
-.form-container button[type="submit"]:hover {
-  background-color: #ffd700;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(212, 175, 55, 0.7);
-}
-
-.form-container button.bg-primary {
-  background-color: #d4af37 !important;
-  width: 140px;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  font-weight: 600;
-  border-radius: 10px;
-  padding: 0.7rem 0;
-  text-align: center;
-  color: #1a1a1a;
-}
-
-.form-container button.bg-primary a {
-  color: #1a1a1a !important;
-  display: block;
-}
-
-.form-container button.bg-primary:hover {
-  background-color: #ffd700 !important;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(212, 175, 55, 0.7);
-}
-
-/* File input styling */
-.form-container input[type="file"] {
-  color: #f5f5f5;
-}
-
-/* Responsive */
-@media (max-width: 576px) {
-  .form-container {
-    padding: 2rem 1.5rem;
-  }
-
-  .form-container button.bg-primary {
-    margin-left: 0;
-  }
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Create Tutor Profile</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/frontend/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+  <style>
+    body {
+      background: #f4f4f4;
+      font-family: Arial, sans-serif;
+    }
+    .form-container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 30px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .form-container input, .form-container textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .form-container button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+    }
+    #otpModal {
+      display: none;
+      padding: 20px;
+      margin-top: 20px;
+      background: #222;
+      color: #fff;
+      border-radius: 8px;
+    }
+    #otpModal input {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+  </style>
 </head>
 <body>
 
-<section class="form-container rounded-3">
-  <h2>Create Profile</h2>
+<section class="form-container">
+  <h2>Create Your Tutor Profile</h2>
   <form id="profileForm" enctype="multipart/form-data">
-    <input class="mt-3" type="text" name="full_name" placeholder="Full Name" required><br>
-    <input class="mt-3" type="email" name="email" placeholder="Email" required><br>
-    <input class="mt-3" type="password" name="password" placeholder="Create Password" required><br>
-    <input class="mt-3" type="text" name="address" placeholder="Address" required><br>
-    <input class="mt-3" type="text" name="available" placeholder="Are you Available now? (e.g. Yes/No)" required><br>
-    <input class="mt-3" type="text" name="department" placeholder="Department (e.g. Software Engineering)" required><br>
-    <input class="mt-3" type="text" name="available_time" placeholder="Available Time (e.g. 7:00AM-8:30AM & 5:00PM-7:00PM)" required><br>
-    <input class="mt-3" type="text" name="subject_to_teach" placeholder="Subject to Teach (e.g. Math, Physics)" required><br>
-    <input class="mt-3" type="text" name="whatsapp_number" placeholder="WhatsApp Number (e.g. +8801XXXXXXXXX)" required><br>
-    <textarea class="mt-3 p-2" name="about_me" placeholder="Write about yourself"></textarea>
-    <label class="mt-2 fw-bolder" for="">Upload Your Photo:</label>
-    <input class="mt-1" type="file" name="photo" accept="image/*" required><br>
-    <label class="mt-3 fw-bolder" for="">Upload Your Student ID Card:</label>
-    <input class="mt-1" type="file" name="id_photo" accept="image/*" required><br>
-    <label class="mt-3 fw-bolder" for="">Intro Video Link (YouTube or Google Drive public link):</label>
-    <input class="mt-1" type="url" name="intro_video_link" placeholder="https://..." ><br>
-
-   <div class="mt-4 d-flex justify-content-center gap-3">
-    <button class="fw-bold p-2" type="submit">Submit</button>
-    <button class="bg-primary"><a class="text-decoration-none fw-bold" href="index.html">Back home</a></button>
-  </div>
+    <input type="text" name="full_name" placeholder="Full Name" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Create Password" required>
+    <input type="text" name="address" placeholder="Address" required>
+    <input type="text" name="available" placeholder="Are you Available now? (Yes/No)" required>
+    <input type="text" name="department" placeholder="Department" required>
+    <input type="text" name="available_time" placeholder="Available Time" required>
+    <input type="text" name="subject_to_teach" placeholder="Subject to Teach" required>
+    <input type="text" name="whatsapp_number" placeholder="WhatsApp Number" required>
+    <textarea name="about_me" placeholder="Write about yourself"></textarea>
+    <label>Upload Your Photo:</label>
+    <input type="file" name="photo" accept="image/*" required>
+    <label>Upload Your Student ID Card:</label>
+    <input type="file" name="id_photo" accept="image/*" required>
+    <label>Intro Video Link:</label>
+    <input type="url" name="intro_video_link" placeholder="https://..." >
+    <button type="submit">Submit</button>
   </form>
+
+  <!-- OTP Modal -->
+  <div id="otpModal">
+    <h4>Enter OTP sent to your email</h4>
+    <input type="text" id="otpInput" placeholder="6-digit OTP">
+    <button id="verifyOtpBtn">Verify OTP</button>
+  </div>
 </section>
 
 <script>
-document.getElementById("profileForm").onsubmit = async (e) => {
+const profileForm = document.getElementById("profileForm");
+const otpModal = document.getElementById("otpModal");
+const otpInput = document.getElementById("otpInput");
+const verifyOtpBtn = document.getElementById("verifyOtpBtn");
+
+let formDataGlobal = null;
+
+profileForm.onsubmit = async (e) => {
   e.preventDefault();
   const formData = new FormData(e.target);
-  
+  const email = formData.get("email");
+
+  formDataGlobal = formData;
+
   try {
-    const response = await fetch("/api/profiles", { 
-      method: "POST", 
-      body: formData 
+    const response = await fetch("/api/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
     });
-    
     const result = await response.json();
-    
     if (response.ok) {
-      alert("Profile created successfully! You can now login with your email and password.");
-      e.target.reset();
-      setTimeout(() => {
-        window.location.href = "login.html";
-      }, 2000);
+      alert("OTP sent to your email. Check inbox/spam.");
+      otpModal.style.display = "block";
     } else {
-      alert("Error: " + (result.message || "Failed to create profile"));
+      alert(result.message || "Failed to send OTP.");
     }
-  } catch (error) {
-    console.error("Error:", error);
-    alert("Network error. Please try again.");
+  } catch (err) {
+    console.error(err);
+    alert("Network error.");
+  }
+};
+
+verifyOtpBtn.onclick = async () => {
+  const otp = otpInput.value.trim();
+  const email = formDataGlobal.get("email");
+
+  if (!otp) return alert("Enter OTP");
+
+  try {
+    const response = await fetch("/api/verify-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp })
+    });
+    const result = await response.json();
+    if (response.ok) {
+      alert("OTP verified! Creating profile...");
+      
+      const profileResponse = await fetch("/api/profiles", {
+        method: "POST",
+        body: formDataGlobal
+      });
+      const profileResult = await profileResponse.json();
+      if (profileResponse.ok) {
+        alert("Profile created successfully!");
+        profileForm.reset();
+        otpModal.style.display = "none";
+      } else {
+        alert(profileResult.message || "Failed to create profile");
+      }
+    } else {
+      alert(result.message || "Invalid OTP");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Network error.");
   }
 };
 </script>
-<script src="/frontend/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 
+<script src="/frontend/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
