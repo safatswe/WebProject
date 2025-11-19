@@ -6,52 +6,85 @@
   <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
   <style>
     body {
-      background: linear-gradient(135deg, #e9f0ff, #f7f9fb);
+      background: #121212; /* dark background */
+      color: #f0f0f0; /* light text */
       min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
     #profileCard {
-      background: #fff;
+      background: #1e1e1e; /* dark card */
       border-radius: 20px;
       padding: 30px;
       max-width: 600px;
-      margin: auto;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+      text-align: center;
     }
     #profilePhoto {
-      border: 4px solid #007bff;
+      border: 4px solid #f0f0f0; /* white border */
       object-fit: cover;
       margin-bottom: 15px;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      filter: none; /* ensure original colors */
     }
     h2 {
       font-weight: 700;
-      color: #007bff;
+      color: #f0f0f0;
+      margin-bottom: 1rem;
     }
     .info-label {
       font-weight: 600;
-      color: #333;
+      color: #ccc;
+    }
+    p {
+      color: #ddd;
+      margin: 6px 0;
+      font-size: 1rem;
     }
     .btn {
       border-radius: 25px;
       padding: 10px 25px;
       font-weight: 600;
+      border: none;
+      transition: background-color 0.3s ease;
+      margin: 5px;
+      min-width: 140px;
+    }
+    .btn-primary {
+      background-color: #f0f0f0;
+      color: #121212;
+    }
+    .btn-primary:hover {
+      background-color: #ddd;
+    }
+    .btn-danger {
+      background-color: #444;
+      color: #eee;
+    }
+    .btn-danger:hover {
+      background-color: #666;
     }
   </style>
 </head>
 
-<body class="d-flex align-items-center justify-content-center">
+<body>
 
   <div id="profileCard">
-    <h2 class="text-center mb-4">My Profile</h2>
+    <h2>My Profile</h2>
     
-    <div class="text-center mb-3">
-      <img id="profilePhoto" class="rounded-circle" src="" alt="Profile Photo" width="120" height="120">
-    </div>
+    <img id="profilePhoto" src="" alt="Profile Photo">
 
-    <h4 id="profileName" class="text-center fw-bold mb-1"></h4>
-    <p class="text-center text-secondary mb-3" id="profileEmail"></p>
-    <hr>
+    <h4 id="profileName" class="fw-bold mb-1"></h4>
+    <p id="profileEmail" class="text-secondary mb-3"></p>
+    <hr style="border-color: #333;">
 
-    <div id="profileInfo">
+    <div id="profileInfo" style="text-align: left; max-width: 450px; margin: 0 auto;">
       <p><span class="info-label">Full Name:</span> <span id="fullName"></span></p>
       <p><span class="info-label">Email:</span> <span id="email"></span></p>
       <p><span class="info-label">Address:</span> <span id="address"></span></p>
@@ -62,8 +95,8 @@
       <p><span class="info-label">About Me:</span> <span id="aboutMe"></span></p>
     </div>
 
-    <div class="text-center mt-4">
-      <button class="btn btn-primary me-2" id="editBtn">Edit Profile Info</button>
+    <div class="mt-4">
+      <button class="btn btn-primary" id="editBtn">Edit Profile Info</button>
       <button class="btn btn-danger" id="logoutBtn">Logout</button>
     </div>
   </div>
