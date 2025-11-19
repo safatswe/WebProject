@@ -124,129 +124,131 @@
     </div>
   </div>
 
-  <script>
-    const apiBase = "/api";
-    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+ <script>
+  const apiBase = "/api";
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
-    if (!user) {
-      alert("You must login first!");
-      window.location.href = "/login.html";
-    } else {
-      // Pre-fill the form
-      document.getElementById("editName").value = user.full_name || "";
-      document.getElementById("editEmail").value = user.email || "";
-      document.getElementById("editAddress").value = user.address || "";
-      document.getElementById("editDept").value = user.department || "";
-      document.getElementById("editSubject").value = user.subject_to_teach || "";
-      document.getElementById("editWhatsapp").value = user.whatsapp_number || "";
-      document.getElementById("editAbout").value = user.about_me || "";
-      document.getElementById("editVideo").value = user.intro_video_link || "";
-      document.getElementById("editTime").value = user.available_time || "";
-      document.getElementById("editAvailable").value = user.available || "";
+  if (!user) {
+    alert("You must login first!");
+    window.location.href = "/login.html";
+  } else {
+    // Pre-fill the form
+    document.getElementById("editName").value = user.full_name || "";
+    document.getElementById("editEmail").value = user.email || "";
+    document.getElementById("editAddress").value = user.address || "";
+    document.getElementById("editDept").value = user.department || "";
+    document.getElementById("editSubject").value = user.subject_to_teach || "";
+    document.getElementById("editWhatsapp").value = user.whatsapp_number || "";
+    document.getElementById("editAbout").value = user.about_me || "";
+    document.getElementById("editVideo").value = user.intro_video_link || "";
+    document.getElementById("editTime").value = user.available_time || "";
+    document.getElementById("editAvailable").value = user.available || "";
 
-      // Show current photos
-      document.getElementById("photoPreview").src = user.photo ? `/uploads/${user.photo}` : "https://via.placeholder.com/120";
-      document.getElementById("idPhotoPreview").src = user.id_photo ? `/uploads/${user.id_photo}` : "https://via.placeholder.com/120";
+    // Show current photos
+    document.getElementById("photoPreview").src = user.photo ? `/uploads/${user.photo}` : "https://via.placeholder.com/120";
+    document.getElementById("idPhotoPreview").src = user.id_photo ? `/uploads/${user.id_photo}` : "https://via.placeholder.com/120";
+  }
+
+  // Preview uploaded images locally
+  document.getElementById("editPhoto").onchange = e => {
+    const [file] = e.target.files;
+    if (file) document.getElementById("photoPreview").src = URL.createObjectURL(file);
+  };
+  document.getElementById("editIdPhoto").onchange = e => {
+    const [file] = e.target.files;
+    if (file) document.getElementById("idPhotoPreview").src = URL.createObjectURL(file);
+  };
+
+  // Save profile changes
+  document.getElementById("editForm").onsubmit = async (e) => {
+    e.preventDefault();
+    if (!user || !user.id) {
+      alert("User info missing. Please login again.");
+      return window.location.href = "/login.html";
     }
 
-    // Preview uploaded images locally
-    document.getElementById("editPhoto").onchange = e => {
-      const [file] = e.target.files;
-      if (file) document.getElementById("photoPreview").src = URL.createObjectURL(file);
-    };
-    document.getElementById("editIdPhoto").onchange = e => {
-      const [file] = e.target.files;
-      if (file) document.getElementById("idPhotoPreview").src = URL.createObjectURL(file);
-    };
+    const formData = new FormData();
+    formData.append("full_name", document.getElementById("editName").value);
+    formData.append("email", document.getElementById("editEmail").value);
 
-    document.getElementById("editForm").onsubmit = async (e) => {
-      e.preventDefault();
-      if (!user || !user.id) {
-        alert("User info missing. Please login again.");
-        return window.location.href = "/login.html";
-      }
+    const password = document.getElementById("editPassword").value;
+    if (password && password.trim() !== "") formData.append("password", password);
 
-      const formData = new FormData();
-      formData.append("full_name", document.getElementById("editName").value);
-      formData.append("email", document.getElementById("editEmail").value);
+    formData.append("address", document.getElementById("editAddress").value);
+    formData.append("department", document.getElementById("editDept").value);
+    formData.append("subject_to_teach", document.getElementById("editSubject").value);
+    formData.append("available_time", document.getElementById("editTime").value);
+    formData.append("available", document.getElementById("editAvailable").value); // ✅ fixed
+    formData.append("whatsapp_number", document.getElementById("editWhatsapp").value);
+    formData.append("about_me", document.getElementById("editAbout").value);
+    formData.append("intro_video_link", document.getElementById("editVideo").value);
 
-      const password = document.getElementById("editPassword").value;
-      if (password && password.trim() !== "") formData.append("password", password);
+    const photoFile = document.getElementById("editPhoto").files[0];
+    if (photoFile) formData.append("photo", photoFile);
 
-      formData.append("address", document.getElementById("editAddress").value);
-      formData.append("department", document.getElementById("editDept").value);
-      formData.append("subject_to_teach", document.getElementById("editSubject").value);
-      formData.append("available_time", document.getElementById("editTime").value);
-      formData.append("available", document.getElementById("available").value);
-      formData.append("whatsapp_number", document.getElementById("editWhatsapp").value);
-      formData.append("about_me", document.getElementById("editAbout").value);
-      formData.append("intro_video_link", document.getElementById("editVideo").value);
+    const idPhotoFile = document.getElementById("editIdPhoto").files[0];
+    if (idPhotoFile) formData.append("id_photo", idPhotoFile);
 
-      const photoFile = document.getElementById("editPhoto").files[0];
-      if (photoFile) formData.append("photo", photoFile);
+    try {
+      const response = await fetch(`${apiBase}/profiles/${user.id}`, {
+        method: "PUT",
+        body: formData
+      });
+      const data = await response.json();
 
-      const idPhotoFile = document.getElementById("editIdPhoto").files[0];
-      if (idPhotoFile) formData.append("id_photo", idPhotoFile);
+      if (response.ok && data.success) {
+        alert("Profile updated successfully!");
 
-      try {
-        const response = await fetch(`${apiBase}/profiles/${user.id}`, {
-          method: "PUT",
-          body: formData
-        });
-        const data = await response.json();
-
-        if (response.ok && data.success) {
-          alert("Profile updated successfully!");
-
-          if (data.user) {
-            const updatedUser = {
-              id: data.user.id,
-              full_name: data.user.full_name,
-              email: data.user.email,
-              address: data.user.address,
-              department: data.user.department,
-              subject_to_teach: data.user.subject_to_teach,
-              photo: data.user.photo,
-              whatsapp_number: data.user.whatsapp_number,
-              id_photo: data.user.id_photo,
-              about_me: data.user.about_me,
-              intro_video_link: data.user.intro_video_link,
-              available_time: data.user.available_time,
-              available: data.user.available
-            };
-            localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
-          }
-
-          window.location.href = "/myprofile.html";
-        } else {
-          const msg = data && data.message ? data.message : "Failed to update profile.";
-          alert(msg);
+        if (data.user) {
+          const updatedUser = {
+            id: data.user.id,
+            full_name: data.user.full_name,
+            email: data.user.email,
+            address: data.user.address,
+            department: data.user.department,
+            subject_to_teach: data.user.subject_to_teach,
+            photo: data.user.photo,
+            whatsapp_number: data.user.whatsapp_number,
+            id_photo: data.user.id_photo,
+            about_me: data.user.about_me,
+            intro_video_link: data.user.intro_video_link,
+            available_time: data.user.available_time,
+            available: data.user.available
+          };
+          localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
         }
-      } catch (err) {
-        console.error("Update failed:", err);
-        alert("Failed to update profile (network or server error).");
-      }
-    };
 
-    // Delete
-    document.getElementById("deleteBtn").onclick = async () => {
-      if (!user || !user.id) return alert("User info missing.");
-      if (!confirm("If you delete everything will be lost permanently! Are you sure?")) return;
-      try {
-        const response = await fetch(`${apiBase}/profiles/${user.id}`, { method: "DELETE" });
-        const data = await response.json();
-        if (response.ok && data.success) {
-          alert("Profile deleted permanently!");
-          localStorage.removeItem("loggedInUser");
-          window.location.href = "/index.html";
-        } else {
-          alert(data && data.message ? data.message : "Failed to delete profile.");
-        }
-      } catch (err) {
-        console.error("Delete failed:", err);
-        alert("Failed to delete profile (network or server error).");
+        window.location.href = "/myprofile.html";
+      } else {
+        const msg = data && data.message ? data.message : "Failed to update profile.";
+        alert(msg);
       }
-    };
-  </script>
+    } catch (err) {
+      console.error("Update failed:", err);
+      alert("Failed to update profile (network or server error).");
+    }
+  };
+
+  // Delete profile permanently
+  document.getElementById("deleteBtn").onclick = async () => {
+    if (!user || !user.id) return alert("User info missing.");
+    if (!confirm("If you delete everything will be lost permanently! Are you sure?")) return;
+    try {
+      const response = await fetch(`${apiBase}/profiles/${user.id}`, { method: "DELETE" });
+      const data = await response.json();
+      if (response.ok && data.success) {
+        alert("Profile deleted permanently!");
+        localStorage.removeItem("loggedInUser");
+        window.location.href = "/index.html";
+      } else {
+        alert(data && data.message ? data.message : "Failed to delete profile.");
+      }
+    } catch (err) {
+      console.error("Delete failed:", err);
+      alert("Failed to delete profile (network or server error).");
+    }
+  };
+</script>
+
 </body>
 </html>
