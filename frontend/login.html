@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Login | SUST Tutor</title>
   <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css" />
+<<<<<<< HEAD
   <!-- <style>
     .forgot-password-link {
       color: #ffc107; /* Bootstrap warning yellow */
@@ -22,10 +23,98 @@
   <div class="p-4" style="width: 400px; border-radius: 15px; background-color: rgb(189, 179, 47);">
     <div class="text-center mb-4">
       <h2 class="text-dark fw-bold">Login</h2>
+=======
+  <style>
+  
+  body {
+    background: #121212;
+    color: #fff; /* White text for the entire body */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .card {
+    width: 400px;
+    border-radius: 15px;
+    background-color: #1f1f1f;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    color: #fff; /* White text inside the card */
+  }
+
+  h2 {
+    color: #ffc107; /* Bootstrap warning yellow */
+    font-weight: 700;
+  }
+
+  label {
+    font-weight: 600;
+    color: #fff; /* White labels */
+  }
+
+  input.form-control {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: #fff; /* White input text */
+    transition: border-color 0.3s ease;
+  }
+
+  input.form-control::placeholder {
+    color: #ccc; /* Light placeholder */
+  }
+
+  input.form-control:focus {
+    background-color: #333;
+    border-color: #ffc107;
+    color: #fff;
+    box-shadow: none;
+  }
+
+  .btn-primary {
+    background-color: #ffc107;
+    border: none;
+    font-weight: 700;
+    transition: background-color 0.3s ease;
+    color: #000; /* Black text on yellow button for readability */
+  }
+
+  .btn-primary:hover,
+  .btn-primary:focus {
+    background-color: #e6b800;
+    box-shadow: none;
+    color: #000;
+  }
+
+  .forgot-password-link {
+    color: #ffc107;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .forgot-password-link:hover {
+    color: #ffdb4d;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  #message {
+    min-height: 1.5rem;
+    color: #fff; /* White messages */
+  }
+</style>
+
+  </style>
+</head>
+<body class="d-flex justify-content-center align-items-center vh-100">
+
+  <div class="card shadow-lg p-4">
+    <div class="text-center mb-4">
+      <h2>Login</h2>
+>>>>>>> f3d5d537594de51870b7f626dea0af27adbc591e
     </div>
 
-    <form id="loginForm">
+    <form id="loginForm" novalidate>
       <div class="mb-3">
+<<<<<<< HEAD
         <label for="email" class="form-label fw-bold">Email</label>
         <input type="email" class="form-control p-2" id="email" required />
       </div>
@@ -38,6 +127,32 @@
       <div class="login-sub-btn d-flex justify-content-center">
         <button type="submit" class="btn btn-primary w-50 fw-bold mt-3 p-2">Login</button>
       </div>
+=======
+        <label for="email" class="form-label">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          placeholder="Enter your email"
+          required
+          autocomplete="username"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          placeholder="Enter your password"
+          required
+          autocomplete="current-password"
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Login</button>
+>>>>>>> f3d5d537594de51870b7f626dea0af27adbc591e
 
       <div class="text-center mt-3">
         <a href="forgot-password.html" class="text-decoration-none fw-bolder text-danger">Forgot Password?</a>
@@ -50,9 +165,16 @@
   <script>
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
       const msg = document.getElementById("message");
+
+      msg.textContent = '';
+      if (!email || !password) {
+        msg.textContent = "Please fill out all fields.";
+        msg.style.color = "orange";
+        return;
+      }
 
       try {
         const res = await fetch("/api/login", {
@@ -64,13 +186,13 @@
         const data = await res.json();
 
         if (data.success) {
-          msg.textContent = "✅ Login successful! Redirecting...";
-          msg.style.color = "green";
+          msg.textContent = "Login successful! Redirecting...";
+          msg.style.color = "lightgreen";
           localStorage.setItem("loggedInUser", JSON.stringify(data.user));
           setTimeout(() => (window.location.href = "myprofile.html"), 1000);
         } else {
-          msg.textContent = data.message || "❌ Invalid email or password.";
-          msg.style.color = "red";
+          msg.textContent = data.message || " Invalid email or password.";
+          msg.style.color = "tomato";
         }
       } catch (err) {
         msg.textContent = "⚠ Server not reachable.";

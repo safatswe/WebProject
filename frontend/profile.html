@@ -4,11 +4,297 @@
 <head>
   <meta charset="UTF-8">
   <title>Tutor Portfolio</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="/frontend/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+
+  <style>
+    /* ====== BLACK & WHITE PROFESSIONAL THEME ====== */
+
+    body {
+  background-color: #fff;
+  color: #000;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 2.5rem 1.5rem;
+  min-height: 100vh;
+  font-size: 18px; /* Increased base font size */
+  line-height: 1.6;
+}
+
+#profile-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5rem 3rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* stronger shadow */
+  color: #000;
+}
+
+.profile-interface {
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+.profile-box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.pic-box {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 5px solid #000; /* thicker black border */
+  flex-shrink: 0;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.3s ease;
+}
+
+.pic-box:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.pic-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: none !important;
+  transition: transform 0.3s ease;
+}
+
+.pic-box img:hover {
+  transform: scale(1.05);
+}
+
+.tutor-info {
+  max-width: 600px;
+  margin-top: 1rem;
+  color: #000;
+}
+
+.tutor-info h3 {
+  font-weight: 800;
+  margin-bottom: 1rem;
+  font-size: 2.2rem;
+}
+
+.tutor-info h5 {
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.subject-address {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2.5rem;
+}
+
+.sub-address-left,
+.sub-address-right {
+  width: 450px;
+  padding: 2rem;
+  border: 2px solid #000;
+  border-radius: 14px;
+  background-color: #fff;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  color: #000;
+  text-align: center;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sub-address-left:hover,
+.sub-address-right:hover {
+  background-color: #f9f9f9;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.sub-address-left h5,
+.sub-address-right h5 {
+  font-weight: 800;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.sub-address-left h6,
+.sub-address-right h6 {
+  font-weight: 600;
+  color: #000;
+  font-size: 1.1rem;
+}
+
+.tutor-id-card {
+  width: 400px;
+  margin: 3.5rem auto 0;
+  padding: 2rem 2.5rem;
+  border-radius: 14px;
+  background-color: #fff;
+  border: 2px solid #000;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  color: #000;
+}
+
+.tutor-id-card h4 {
+  font-weight: 800;
+  color: #000;
+  margin-bottom: 1.5rem;
+  font-size: 1.6rem;
+}
+
+.tutor-id-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  filter: none !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.tutor-id-card img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.direct-contact {
+  width: 500px;
+  margin: 3.5rem auto 5rem;
+  padding: 1.8rem 2.5rem;
+  border-radius: 14px;
+  border: 2px solid #000;
+  background-color: #fff;
+  color: #000;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  font-weight: 700;
+  text-align: center;
+  user-select: none;
+  font-size: 1.2rem;
+}
+
+#whatsappBtn {
+  background-color: #000 !important;
+  color: #fff !important;
+  border: none;
+  padding: 1rem 2rem;
+  font-weight: 800;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.3rem;
+  transition: background-color 0.3s ease;
+}
+
+#whatsappBtn i {
+  font-size: 1.6rem;
+  color: #fff;
+}
+
+#whatsappBtn:hover,
+#whatsappBtn:focus {
+  background-color: #222 !important;
+  outline: none;
+  color: #fff !important;
+}
+
+.video-embed {
+  margin-top: 2.5rem;
+  text-align: center;
+}
+
+.video-embed iframe {
+  width: 100%;
+  max-width: 560px;
+  height: 315px;
+  border-radius: 14px;
+  border: none;
+  filter: none !important;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+}
+
+.video-link {
+  margin-top: 1.8rem;
+  text-align: center;
+}
+
+.video-link a {
+  color: #000;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.video-link a:hover,
+.video-link a:focus {
+  border-color: #000;
+  text-decoration: none;
+}
+
+.about-me {
+  width: 800px;
+  max-width: 100%;
+  margin: 2.5rem auto 5rem;
+  padding: 2.5rem 3rem;
+  border-radius: 14px;
+  border: 2px solid #000;
+  background-color: #fff;
+  color: #000;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-align: left;
+  font-weight: 700;
+  white-space: pre-wrap;
+  font-size: 1.15rem;
+  line-height: 1.7;
+}
+
+.about-me h4 {
+  font-weight: 900;
+  margin-bottom: 1.2rem;
+  color: #000;
+  font-size: 1.7rem;
+}
+
+.about-me p {
+  margin: 0;
+  line-height: 1.7;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .profile-box,
+  .subject-address {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .sub-address-left,
+  .sub-address-right,
+  .tutor-id-card,
+  .about-me,
+  .direct-contact {
+    width: 90%;
+  }
+
+  #profile-container {
+    padding: 2rem 1.5rem;
+  }
+}
+
+  </style>
+
 </head>
 
-<body style="background-image: url('/uploads/bg-3.jpg');background-size: cover;">
+<body>
   <div id="profile-container">
   </div>
 
@@ -60,25 +346,31 @@
         }
 
         div.innerHTML = `
+<<<<<<< HEAD
     <div class="profile-box d-flex flex-wrap justify-content-center gap-3 mt-5" style="width:400px">
       <div class="pic-box border border-5 bg-info border-success overflow-hidden" style="width: 250px; height: 250px; border-radius: 50%;">
         <img style="width: 250px; height: 250px; object-fit: cover;" src="/uploads/${p.photo}" alt="profile-pic">
+=======
+    <div class="profile-box d-flex flex-wrap justify-content-center gap-3 mt-5">
+      <div class="pic-box">
+        <img src="/uploads/${p.photo}" alt="profile-pic">
+>>>>>>> f3d5d537594de51870b7f626dea0af27adbc591e
       </div>
       <div class="tutor-info text-start" style="margin-top: 100px;">
-        <h3 class=" text-primary fw-bold">${p.full_name}</h3>
-        <h5 class="fw-bold">Department: ${p.department}</h5>
-        <h5 class="fw-bold">Available: ${p.available}</h5>
+        <h3>${p.full_name}</h3>
+        <h5>Department: ${p.department}</h5>
+        <h5>Available: ${p.available}</h5>
       </div>
     </div>
 
     <div class="subject-address mt-5 d-flex flex-wrap justify-content-center gap-5">
-      <div class="sub-address-left border border-2 p-2 rounded-3 text-center" style="width: 450px; background-color: rgb(188, 235, 59);">
+      <div class="sub-address-left">
         <h5>Teaching Subjects:</h5>
         <h6><b>${p.subject_to_teach}</b></h6>
         <h5>Available Time:</h5>
         <h6><b>${p.available_time}</b></h6>
       </div>
-      <div class="sub-address-right border border-2 p-2 rounded-3 text-center" style="width: 450px; background-color: rgb(188, 235, 59); ">
+      <div class="sub-address-right">
         <h5>Address:</h5>
         <h6><b>${p.address}</b></h6>
         <h5>Email:</h5>
@@ -86,23 +378,23 @@
       </div>
     </div>
 
-    <div class="tutor-id-card border box-shadow rounded-4 p-2 mt-5" style="width: 400px; background-color: rgb(136, 181, 213); margin: auto;">
-      <h4 class="fw-bold text-dark text-center">Tutor's ID Card</h4>
+    <div class="tutor-id-card">
+      <h4>Tutor's ID Card</h4>
       <div class="id-photo" style="width: 350px; margin: auto;">
         <img class="img-fluid" id="idPhoto" src="/uploads/${p.id_photo}" alt="ID Photo">
       </div>
     </div>
 
-    <div class="direct-contact border border-2 mt-5 p-4 rounded-3 text-bold text-center" style="width: 500px; background-color: rgb(243, 170, 75); margin: auto;">
+    <div class="direct-contact">
       <h6>To contact directly to tutor: Click the link</h6>
-      <button class="p-2" id="whatsappBtn" style="background-color: rgb(28, 233, 38); "><i class="fab fa-whatsapp me-2"></i><b>Message on WhatsApp</b></button>
+      <button id="whatsappBtn"><i class="fab fa-whatsapp me-2"></i><b>Message on WhatsApp</b></button>
     </div>
 
     ${embedHtml}
 
-    <div class="about-me border border-2 rounded mt-5 mb-5 p-3 text-center" style="width: 800px; background-color: rgb(181, 148, 235); margin: auto;">
-      <h4 class="mt-3 fw-bold">About Me</h4>
-      <p class="text-start p-2">${p.about_me}</p>
+    <div class="about-me">
+      <h4>About Me</h4>
+      <p>${p.about_me}</p>
     </div>
   `;
         container.appendChild(div);
@@ -121,6 +413,8 @@
   </script>
   <script src="/frontend/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 
+  <!-- FontAwesome for WhatsApp icon -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 </body>
 

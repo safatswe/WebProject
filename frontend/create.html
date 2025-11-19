@@ -5,6 +5,129 @@
 <title>Create Tutor Profile</title>
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="/frontend/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+
+<style>
+
+/* ====== Create Profile Form ====== */
+.form-container {
+  max-width: 600px;
+  margin: 3rem auto;
+  background-color: #fff;
+  padding: 2.5rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  color: #111;
+  font-weight: 600;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.form-container h2 {
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container input[type="password"],
+.form-container input[type="url"],
+.form-container textarea,
+.form-container input[type="file"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  border: 2px solid #000;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111;
+  background-color: #fff;
+  transition: border-color 0.3s ease;
+}
+
+.form-container input[type="text"]:focus,
+.form-container input[type="email"]:focus,
+.form-container input[type="password"]:focus,
+.form-container input[type="url"]:focus,
+.form-container textarea:focus,
+.form-container input[type="file"]:focus {
+  border-color: #444;
+  outline: none;
+  background-color: #f9f9f9;
+}
+
+.form-container textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+}
+
+.form-container label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 700;
+  color: #000;
+}
+
+.form-container button[type="submit"] {
+  width: 120px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: block;
+  margin: 1.5rem auto 1rem auto;
+}
+
+.form-container button[type="submit"]:hover,
+.form-container button[type="submit"]:focus {
+  background-color: #444;
+  outline: none;
+}
+
+.form-container button.bg-primary {
+  background-color: #000 !important;
+  width: 120px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 0.6rem 0;
+}
+
+.form-container button.bg-primary a {
+  color: #fff !important;
+  display: block;
+}
+
+.form-container button.bg-primary:hover,
+.form-container button.bg-primary:focus {
+  background-color: #444 !important;
+  outline: none;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .form-container {
+    padding: 2rem 1.5rem;
+  }
+
+  .form-container button.bg-primary {
+    margin-left: 0;
+  }
+}
+
+
+</style>
+
+
 </head>
 <body>
 
@@ -27,8 +150,11 @@
     <input class="mt-1 bg-light text-dark" type="file" name="id_photo" accept="image/*" required><br>
     <label class="mt-3 fw-bolder" for="">Intro Video Link (YouTube or Google Drive public link):</label>
     <input class="mt-1 bg-light text-dark" type="url" name="intro_video_link" placeholder="https://..." ><br>
-    <button class="btn mt-3 rounded bg-danger text-light fw-bold p-2 text-center mb-0" type="submit" style="width: 100px;">Submit</button><br>
-    <button class="btn bg-primary p-2" style="margin-left: 460px;"><a class="text-decoration-none text-light" href="index.html">Back Home</a></button>  
+   <div class="button-group mt-4 d-flex justify-content-center gap-3">
+  <button class="btn btn-danger fw-bold px-4" type="submit">Submit</button>
+  <a href="index.html" class="btn btn-primary fw-bold px-4 text-decoration-none">Back Home</a>
+</div>
+
   </form>
 </section>
 
