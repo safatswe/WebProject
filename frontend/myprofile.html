@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>My Profile | SUST Tutor</title>
   <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
-  <style>
+  <!-- <style>
     body {
       background: linear-gradient(135deg, #e9f0ff, #f7f9fb);
       min-height: 100vh;
@@ -35,34 +36,49 @@
       padding: 10px 25px;
       font-weight: 600;
     }
-  </style>
+  </style> -->
 </head>
 
-<body class="d-flex align-items-center justify-content-center">
+<body class="d-flex align-items-center justify-content-center p-5" style="background-color: rgb(230, 234, 225);">
 
-  <div id="profileCard">
-    <h2 class="text-center mb-4">My Profile</h2>
-    
-    <div class="text-center mb-3">
-      <img id="profilePhoto" class="rounded-circle" src="" alt="Profile Photo" width="120" height="120">
+  <div id="profileCard" class=" card p-3 rounded" style="width: 500px;">
+    <div class="profile-header p-2">
+      <h2 class="text-center mb-4">My Profile</h2>
+      <div class="box d-flex justify-content-center">
+        <div class="mb-3 border border-2 border-dark d-flex justify-content-center"
+          style="width: 200px; height: 200px; border-radius: 50%;">
+          <img id="profilePhoto" class="rounded-circle w-100" src="" alt="Profile Photo">
+        </div>
+      </div>
+      <h4 id="profileName" class="text-center fw-bold mb-1"></h4>
+      <p class="text-center text-secondary mb-3" id="profileEmail"></p>
     </div>
-
-    <h4 id="profileName" class="text-center fw-bold mb-1"></h4>
-    <p class="text-center text-secondary mb-3" id="profileEmail"></p>
     <hr>
-
-    <div id="profileInfo">
-      <p><span class="info-label">Full Name:</span> <span id="fullName"></span></p>
-      <p><span class="info-label">Email:</span> <span id="email"></span></p>
-      <p><span class="info-label">Address:</span> <span id="address"></span></p>
-      <p><span class="info-label">Department:</span> <span id="department"></span></p>
-      <p><span class="info-label">Subject to Teach:</span> <span id="subject"></span></p>
-      <p><span class="info-label">WhatsApp:</span> <span id="whatsapp"></span></p>
-      <p><span class="info-label">Available Time:</span> <span id="availableTime"></span></p>
-      <p><span class="info-label">About Me:</span> <span id="aboutMe"></span></p>
+    <div id="profileInfo" class="p-3 rounded" style="">
+      <label class="mt-1" for="">Department:</label>
+      <h6 class="border border-1 rounded p-2 w-100 "> <span
+          id="department"></span></h6>
+      <label class="mt-2" for="">Subjects to teach:</label>
+      <h6 class="border border-1 rounded p-2 w-100 "><span
+          id="subject"></span></h6>
+      <label class="mt-2" for="">Available:</label>
+      <h6 class="border border-1 rounded p-2 w-100 "><span
+          id="available"></span></h6>
+      <label class="mt-2" for="">Available Time:</label>
+      <h6 class="border border-1 rounded p-2 w-100 "><span
+          id="availableTime"></span></h6>
+      <label class="mt-2" for="">Address:</label>
+      <h6 class="border border-1 rounded p-2 w-100 "><span
+          id="address"></span></h6>
+      <label class="mt-2" for="">About Me:</label>
+      <h6 class="border border-1 rounded p-2 w-100 "><span
+          id="aboutMe"></span></h6>
+      <label class="mt-2" for="">WhatsApp Number:</label>
+      <h6 class="border border-1 rounded p-2 w-100 "><span
+          id="whatsapp"></span></h6>
     </div>
 
-    <div class="text-center mt-4">
+    <div class="text-center mt-4 p-2">
       <button class="btn btn-primary me-2" id="editBtn">Edit Profile Info</button>
       <button class="btn btn-danger" id="logoutBtn">Logout</button>
     </div>
@@ -110,23 +126,25 @@
     }
 
     function renderProfile(user) {
-      document.getElementById("profilePhoto").src = user.photo ? `/uploads/${user.photo}` : "https://via.placeholder.com/120";
+      document.getElementById("profilePhoto").src =
+        user.photo ? `/uploads/${user.photo}` : "https://via.placeholder.com/120";
+
       document.getElementById("profileName").textContent = user.full_name || "";
       document.getElementById("profileEmail").textContent = user.email || "";
 
-      document.getElementById("fullName").textContent = user.full_name || "";
-      document.getElementById("email").textContent = user.email || "";
-      document.getElementById("address").textContent = user.address || "";
       document.getElementById("department").textContent = user.department || "";
       document.getElementById("subject").textContent = user.subject_to_teach || "";
-      document.getElementById("whatsapp").textContent = user.whatsapp_number || "";
+      document.getElementById("available").textContent = user.available || "";
       document.getElementById("availableTime").textContent = user.available_time || "Not specified";
       document.getElementById("aboutMe").textContent = user.about_me || "Not provided";
+      document.getElementById("whatsapp").textContent = user.whatsapp_number || "";
+      document.getElementById("address").textContent = user.address || "";
     }
+
 
     document.getElementById("logoutBtn").onclick = () => {
       localStorage.removeItem("loggedInUser");
-      window.location.href = "/login.html";
+      window.location.href = "/index.html";
     };
 
     document.getElementById("editBtn").onclick = () => {
@@ -138,4 +156,5 @@
   </script>
 
 </body>
+
 </html>

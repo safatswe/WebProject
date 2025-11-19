@@ -83,6 +83,14 @@
         <input type="text" id="editSubject" name="subject_to_teach" class="form-control" required>
       </div>
       <div class="mb-3">
+        <label class="form-label fw-semibold">Available</label>
+        <input type="text" id="editAvailable" name="available" class="form-control" placeholder="e.g., Yes/No">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Available Time</label>
+        <input type="text" id="editTime" name="available_time" class="form-control" placeholder="e.g., Weekdays 6-9 PM">
+      </div>
+      <div class="mb-3">
         <label class="form-label fw-semibold">WhatsApp Number</label>
         <input type="text" id="editWhatsapp" name="whatsapp_number" class="form-control" required>
       </div>
@@ -93,10 +101,6 @@
       <div class="mb-3">
         <label class="form-label fw-semibold">Intro Video Link</label>
         <input type="text" id="editVideo" name="intro_video_link" class="form-control" placeholder="YouTube or other video link">
-      </div>
-      <div class="mb-3">
-        <label class="form-label fw-semibold">Available Time</label>
-        <input type="text" id="editTime" name="available_time" class="form-control" placeholder="e.g., Weekdays 6-9 PM">
       </div>
       <div class="mb-3">
         <label class="form-label fw-semibold">Profile Photo</label>
@@ -110,7 +114,7 @@
       </div>
 
       <div class="d-flex justify-content-between mt-4">
-        <button type="submit" class="btn save-btn">Save Changes</button>
+        <button type="submit" id="saveBtn" class="btn save-btn">Save Changes</button>
         <a href="myprofile.html" class="btn btn-secondary">Cancel</a>
       </div>
     </form>
@@ -138,6 +142,7 @@
       document.getElementById("editAbout").value = user.about_me || "";
       document.getElementById("editVideo").value = user.intro_video_link || "";
       document.getElementById("editTime").value = user.available_time || "";
+      document.getElementById("editAvailable").value = user.available || "";
 
       // Show current photos
       document.getElementById("photoPreview").src = user.photo ? `/uploads/${user.photo}` : "https://via.placeholder.com/120";
@@ -171,10 +176,11 @@
       formData.append("address", document.getElementById("editAddress").value);
       formData.append("department", document.getElementById("editDept").value);
       formData.append("subject_to_teach", document.getElementById("editSubject").value);
+      formData.append("available_time", document.getElementById("editTime").value);
+      formData.append("available", document.getElementById("available").value);
       formData.append("whatsapp_number", document.getElementById("editWhatsapp").value);
       formData.append("about_me", document.getElementById("editAbout").value);
       formData.append("intro_video_link", document.getElementById("editVideo").value);
-      formData.append("available_time", document.getElementById("editTime").value);
 
       const photoFile = document.getElementById("editPhoto").files[0];
       if (photoFile) formData.append("photo", photoFile);
@@ -205,7 +211,8 @@
               id_photo: data.user.id_photo,
               about_me: data.user.about_me,
               intro_video_link: data.user.intro_video_link,
-              available_time: data.user.available_time
+              available_time: data.user.available_time,
+              available: data.user.available
             };
             localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
           }
