@@ -9,7 +9,6 @@ const fs = require('fs');
 require('dotenv').config();
 const crypto = require('crypto');
 
-const { Resend } = require('resend');
 
 const app = express();
 app.use(cors());
@@ -46,7 +45,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Contact us endpoint
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 app.post('/send-email', async (req, res) => {
     const { name, email, message } = req.body;
