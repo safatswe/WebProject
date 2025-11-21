@@ -517,107 +517,183 @@ app.delete("/api/profiles/:id", (req, res) => {
     });
 });
 
-// Forgot-password / Reset logic (unchanged)
-app.post('/api/forgot-password', async (req, res) => {
+
+
+
+// ---------- RESET PASSWORD (OTP) ROUTES ----------
+
+// Use this TTL (minutes). You can set OTP_TTL_MINUTES in .env; default 5 min.
+const OTP_TTL_MINUTES = parseInt(process.env.OTP_TTL_MINUTES || '5', 10);
+
+// Helper: send reset OTP email (re-uses your transporter)
+async function sendResetEmail(toEmail, otp) {
+  const mailOptions = {
+    from: process.env.GMAIL_USER,
+    to: toEmail,
+    subject: "Password reset code",
+    text: `Your password reset code is: ${otp}\n\nThis code will expire in ${OTP_TTL_MINUTES} minutes.\nIf you didn't request a password reset, ignore this email.`
+  };
+  return transporter.sendMail(mailOptions);
+}
+
+/**
+ * POST /api/reset/send-otp
+ * Body: { email }
+ * - Generates a 6-digit OTP, hashes it with bcrypt, stores hash in password_resets (used=0)
+ * - Deletes any previous reset rows for this email (optional cleanup)
+ */
+app.post('/api/reset/send-otp', (req, res) => {
   const { email } = req.body;
+  if (!email) return res.status(400).json({ success: false, message: 'Email is required' });
 
-  if (!email) return res.status(400).json({ message: "Email is required" });
+  // generate OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-  // Generate 6-digit numeric code
-  const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+  // expires at
+  const expiresAt = new Date(Date.now() + OTP_TTL_MINUTES * 60 * 1000);
 
-  // Code expires in 15 minutes
-  const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
-
-  const sqlInsert = `INSERT INTO password_resets (email, reset_code, expires_at) VALUES (?, ?, ?)`;
-
-  db.query(sqlInsert, [email, resetCode, expiresAt], async (err) => {
-    if (err) {
-      console.error("DB insert error:", err);
-      return res.status(500).json({ message: "Database error" });
+  // hash OTP and insert
+  bcrypt.hash(otp, 10, (errHash, hash) => {
+    if (errHash) {
+      console.error('Hash error (send-otp):', errHash);
+      return res.status(500).json({ success: false, message: 'Server error' });
     }
 
-    const html = `
-      <h2>Password Reset Code</h2>
-      <p>Your reset code is: <strong>${resetCode}</strong></p>
-      <p>This code will expire in 15 minutes.</p>
-    `;
+    // optional: remove old reset records for this email to keep DB clean
+    db.query('DELETE FROM password_resets WHERE email = ?', [email], (delErr) => {
+      if (delErr) console.warn('Could not delete old password_resets:', delErr);
 
-    try {
-      await resend.emails.send({
-        from: 'Your Website <onboarding@resend.dev>',
-        to: email,
-        subject: 'Your Password Reset Code',
-        html,
+      const insertSql = `INSERT INTO password_resets (email, reset_code, used, expires_at) VALUES (?, ?, 0, ?)`;
+      db.query(insertSql, [email, hash, expiresAt], async (insertErr, insertRes) => {
+        if (insertErr) {
+          console.error('DB insert error (send-otp):', insertErr);
+          return res.status(500).json({ success: false, message: 'Database error' });
+        }
+
+        try {
+          await sendResetEmail(email, otp);
+          // generic success message (don't reveal whether email exists)
+          return res.json({ success: true, message: 'If an account with that email exists, a reset code was sent.' });
+        } catch (mailErr) {
+          console.error('Error sending reset email:', mailErr);
+          return res.status(500).json({ success: false, message: 'Failed to send reset email' });
+        }
       });
-      res.json({ message: "Reset code sent to your email" });
-    } catch (error) {
-      console.error("Email sending error:", error);
-      res.status(500).json({ message: "Failed to send reset code email" });
-    }
-  });
-});
-
-app.post('/api/verify-reset-code', (req, res) => {
-  const { email, reset_code } = req.body;
-
-  if (!email || !reset_code)
-    return res.status(400).json({ message: "Email and code are required" });
-
-  const sqlSelect = `
-    SELECT * FROM password_resets
-    WHERE email = ? AND reset_code = ? AND used = FALSE AND expires_at > NOW()
-    ORDER BY created_at DESC LIMIT 1
-  `;
-
-  db.query(sqlSelect, [email, reset_code], (err, results) => {
-    if (err) return res.status(500).json({ message: "Database error" });
-
-    if (results.length === 0) {
-      return res.status(400).json({ message: "Invalid or expired reset code" });
-    }
-
-    res.json({ message: "Code verified" });
-  });
-});
-
-app.post('/api/reset-password', async (req, res) => {
-  const { email, reset_code, new_password, confirm_password } = req.body;
-
-  if (!email || !reset_code || !new_password || !confirm_password)
-    return res.status(400).json({ message: "All fields are required" });
-
-  if (new_password !== confirm_password)
-    return res.status(400).json({ message: "Passwords do not match" });
-
-  const sqlSelect = `
-    SELECT * FROM password_resets
-    WHERE email = ? AND reset_code = ? AND used = FALSE AND expires_at > NOW()
-    ORDER BY created_at DESC LIMIT 1
-  `;
-
-  db.query(sqlSelect, [email, reset_code], async (err, results) => {
-    if (err) return res.status(500).json({ message: "Database error" });
-
-    if (results.length === 0) {
-      return res.status(400).json({ message: "Invalid or expired reset code" });
-    }
-
-    const hashed = await bcrypt.hash(new_password, 10);
-
-    const sqlUpdate = `UPDATE profiles SET password = ? WHERE email = ?`;
-    db.query(sqlUpdate, [hashed, email], (err2) => {
-      if (err2) return res.status(500).json({ message: "Failed to update password" });
-
-      // Mark reset code as used
-      const sqlMarkUsed = `UPDATE password_resets SET used = TRUE WHERE id = ?`;
-      db.query(sqlMarkUsed, [results[0].id], () => {});
-
-      res.json({ message: "Password updated successfully" });
     });
   });
 });
 
+/**
+ * POST /api/reset/verify-otp
+ * Body: { email, otp }
+ * - Verifies the latest non-used, non-expired reset row for the email.
+ * - If match: mark used=1 (meaning "OTP verified") and respond success.
+ */
+app.post('/api/reset/verify-otp', (req, res) => {
+  const { email, otp } = req.body;
+  if (!email || !otp) return res.status(400).json({ success: false, message: 'Email and OTP required' });
+
+  const selectSql = `
+    SELECT * FROM password_resets
+    WHERE email = ? AND used = 0 AND expires_at > NOW()
+    ORDER BY created_at DESC LIMIT 1
+  `;
+  db.query(selectSql, [email], (selErr, rows) => {
+    if (selErr) {
+      console.error('DB select error (verify-otp):', selErr);
+      return res.status(500).json({ success: false, message: 'Database error' });
+    }
+
+    if (!rows || rows.length === 0) {
+      return res.status(400).json({ success: false, message: 'Invalid or expired OTP' });
+    }
+
+    const row = rows[0];
+
+    // compare otp with stored hash
+    bcrypt.compare(otp, row.reset_code, (cmpErr, isMatch) => {
+      if (cmpErr) {
+        console.error('Bcrypt compare error (verify-otp):', cmpErr);
+        return res.status(500).json({ success: false, message: 'Server error' });
+      }
+
+      if (!isMatch) {
+        return res.status(400).json({ success: false, message: 'Invalid OTP' });
+      }
+
+      // mark as used (verified)
+      db.query('UPDATE password_resets SET used = 1 WHERE id = ?', [row.id], (updErr) => {
+        if (updErr) {
+          console.error('DB update error (verify-otp):', updErr);
+          return res.status(500).json({ success: false, message: 'Database error' });
+        }
+        return res.json({ success: true, message: 'OTP verified. You may set a new password now.' });
+      });
+    });
+  });
+});
+
+/**
+ * POST /api/reset/update-password
+ * Body: { email, newPassword }
+ * - Checks for a password_resets row with email AND used = 1 AND expires_at > NOW()
+ * - If exists: update profiles.password (bcrypt hash) and remove/reset password_resets rows.
+ */
+app.post('/api/reset/update-password', (req, res) => {
+  const { email, newPassword } = req.body;
+  if (!email || !newPassword) return res.status(400).json({ success: false, message: 'Email and new password required' });
+
+  if (typeof newPassword !== 'string' || newPassword.length < 6) {
+    return res.status(400).json({ success: false, message: 'Password must be at least 6 characters' });
+  }
+
+  const selectSql = `
+    SELECT * FROM password_resets
+    WHERE email = ? AND used = 1 AND expires_at > NOW()
+    ORDER BY created_at DESC LIMIT 1
+  `;
+
+  db.query(selectSql, [email], (selErr, rows) => {
+    if (selErr) {
+      console.error('DB select error (update-password):', selErr);
+      return res.status(500).json({ success: false, message: 'Database error' });
+    }
+
+    if (!rows || rows.length === 0) {
+      return res.status(400).json({ success: false, message: 'No verified reset request found or it expired' });
+    }
+
+    // ok: update password in profiles table
+    bcrypt.hash(newPassword, 10, (hashErr, hashed) => {
+      if (hashErr) {
+        console.error('Hash error (update-password):', hashErr);
+        return res.status(500).json({ success: false, message: 'Server error' });
+      }
+
+      const updateSql = 'UPDATE profiles SET password = ? WHERE email = ?';
+      db.query(updateSql, [hashed, email], (updErr, updRes) => {
+        if (updErr) {
+          console.error('DB update error (update-password):', updErr);
+          return res.status(500).json({ success: false, message: 'Database error' });
+        }
+
+        if (updRes.affectedRows === 0) {
+          // No profile with that email
+          return res.status(404).json({ success: false, message: 'Account not found' });
+        }
+
+        // Cleanup: delete any password_resets for this email
+        db.query('DELETE FROM password_resets WHERE email = ?', [email], (delErr) => {
+          if (delErr) console.warn('Could not delete password_resets after reset:', delErr);
+          return res.json({ success: true, message: 'Password updated successfully. You can now login.' });
+        });
+      });
+    });
+  });
+});
+
+
+// Forgot-password / Reset logic (unchanged)
 
 
 // Start server
