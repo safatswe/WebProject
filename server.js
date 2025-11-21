@@ -693,6 +693,33 @@ app.post('/api/reset/update-password', (req, res) => {
 });
 
 
+
+// Contact form email route
+app.post('/send-email', async (req, res) => {
+  const { name, email, message } = req.body;
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ ok: false, error: 'All fields are required' });
+  }
+
+  const mailOptions = {
+    from: process.env.GMAIL_USER,       // your email
+    to: process.env.GMAIL_USER,         // receive contact messages at your email
+    subject: `Contact Form Message from ${name}`,
+    text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.json({ ok: true });
+  } catch (error) {
+    console.error('Error sending contact email:', error);
+    res.status(500).json({ ok: false, error: 'Failed to send email' });
+  }
+});
+
+
+
 // Forgot-password / Reset logic (unchanged)
 
 

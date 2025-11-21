@@ -5,144 +5,41 @@
   <meta charset="UTF-8">
   <title>My Profile | SUST Tutor</title>
   <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
-  <style>
-    /* ===== Modern Blue-Gray Professional Theme ===== */
-    body {
-      background: linear-gradient(135deg, #e0e4ec, #cfd6e1);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #2c3e50;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-    }
-
-    #profileCard {
-      background-color: #ffffff;
-      border-radius: 20px;
-      padding: 2.5rem 2rem;
-      width: 500px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    #profileCard:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-    }
-
-    h2 {
-      font-weight: 800;
-      color: #3498db; /* Primary blue heading */
-      letter-spacing: 1px;
-    }
-
-    #profilePhoto {
-      border: 3px solid #3498db;
-      object-fit: cover;
-      width: 200px;
-      height: 200px;
-    }
-
-    #profileInfo label {
-      font-weight: 600;
-      color: #2980b9; /* Blue accent for labels */
-      margin-top: 1rem;
-    }
-
-    #profileInfo h6 {
-      border: 1px solid #3498db;
-      border-radius: 8px;
-      padding: 0.5rem 1rem;
-      background-color: #f0f4f8;
-      color: #2c3e50;
-    }
-
-    .btn {
-      border-radius: 12px;
-      font-weight: 600;
-      padding: 0.6rem 1.5rem;
-      transition: all 0.3s ease;
-    }
-
-    #editBtn {
-      background-color: #3498db;
-      color: #ffffff;
-      border: none;
-      margin-right: 0.5rem;
-    }
-
-    #editBtn:hover {
-      background-color: #2980b9;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(52, 152, 219, 0.5);
-    }
-
-    #logoutBtn {
-      background-color: #e74c3c;
-      color: #ffffff;
-      border: none;
-    }
-
-    #logoutBtn:hover {
-      background-color: #c0392b;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(231, 76, 60, 0.5);
-    }
-
-    hr {
-      border-top: 1px solid #3498db;
-    }
-
-    @media (max-width: 576px) {
-      #profileCard {
-        width: 100%;
-        padding: 2rem 1.5rem;
-      }
-
-      #profilePhoto {
-        width: 150px;
-        height: 150px;
-      }
-    }
-  </style>
 </head>
-
-<body>
-  <div id="profileCard" class="card p-3 rounded">
+<body style="background-color: black;">
+  <div id="profileCard" class="bg-green p-3 border border-1 rounded mt-5 mb-5" style="width: 600px; margin: auto; background-color: rgb(7, 30, 72);">
     <div class="profile-header p-2">
-      <h2 class="text-center mb-4">My Profile</h2>
+      <h2 class="text-center mb-4 text-light" style="font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">My Profile</h2>
       <div class="box d-flex justify-content-center">
-        <div class="mb-3 border border-2 border-dark d-flex justify-content-center"
+        <div class="mb-3 border border-5 d-flex justify-content-center border-light overflow-hidde"
           style="width: 200px; height: 200px; border-radius: 50%;">
-          <img id="profilePhoto" class="rounded-circle w-100" src="" alt="Profile Photo">
+          <img id="profilePhoto" class="rounded-circle w-100" style="object-fit: cover;" src="" alt="Profile Photo">
         </div>
       </div>
-      <h4 id="profileName" class="text-center fw-bold mb-1"></h4>
-      <p class="text-center text-secondary mb-3" id="profileEmail"></p>
+      <h3 id="profileName" class="text-center text-warning fw-bold mb-1"></h3>
+      <h5 class="text-center mb-3 text-light" id="profileEmail"></h5>
     </div>
     <hr>
     <div id="profileInfo" class="p-3 rounded">
-      <label class="mt-1" for="">Department:</label>
-      <h6 class="border border-1 rounded p-2 w-100 "> <span id="department"></span></h6>
-      <label class="mt-2" for="">Subjects to teach:</label>
-      <h6 class="border border-1 rounded p-2 w-100 "><span id="subject"></span></h6>
-      <label class="mt-2" for="">Available:</label>
-      <h6 class="border border-1 rounded p-2 w-100 "><span id="available"></span></h6>
-      <label class="mt-2" for="">Available Time:</label>
-      <h6 class="border border-1 rounded p-2 w-100 "><span id="availableTime"></span></h6>
-      <label class="mt-2" for="">Address:</label>
-      <h6 class="border border-1 rounded p-2 w-100 "><span id="address"></span></h6>
-      <label class="mt-2" for="">About Me:</label>
-      <h6 class="border border-1 rounded p-2 w-100 "><span id="aboutMe"></span></h6>
-      <label class="mt-2" for="">WhatsApp Number:</label>
-      <h6 class="border border-1 rounded p-2 w-100 "><span id="whatsapp"></span></h6>
+      <label class="mt-1 text-warning fs-5" for="">Department:</label>
+      <h6 class="input-box border border-1 rounded p-2 w-100" style="background-color: rgb(110, 133, 121); border:red"> <span id="department"></span></h6>
+      <label class="mt-2 text-warning fs-5" for="">Subjects to teach:</label>
+      <h6 class="input-box border border-1 rounded p-2 w-100 " style="background-color: rgb(110, 133, 121);"><span id="subject"></span></h6>
+      <label class="mt-2 text-warning fs-5" for="">Available:</label>
+      <h6 class="input-box border border-1 rounded p-2 w-100 " style="background-color: rgb(110, 133, 121);"><span id="available"></span></h6>
+      <label class="mt-2 text-warning fs-5" for="">Available Time:</label>
+      <h6 class="input-box border border-1 rounded p-2 w-100 " style="background-color: rgb(110, 133, 121);"><span id="availableTime"></span></h6>
+      <label class="mt-2 text-warning fs-5" for="">Address:</label>
+      <h6 class="input-box border border-1 rounded p-2 w-100 " style="background-color: rgb(110, 133, 121);"><span id="address"></span></h6>
+      <label class="mt-2 text-warning fs-5" for="">About Me:</label>
+      <h6 class="input-box border border-1 rounded p-2 w-100 " style="background-color: rgb(110, 133, 121);"><span id="aboutMe"></span></h6>
+      <label class="mt-2 text-warning fs-5" for="">WhatsApp Number:</label>
+      <h6 class="input-box border border-1 rounded p-2 w-100 " style="background-color: rgb(110, 133, 121);"><span id="whatsapp"></span></h6>
     </div>
 
-    <div class="text-center mt-4 p-2">
-      <button class="btn" id="editBtn">Edit Profile Info</button>
-      <button class="btn" id="logoutBtn">Logout</button>
+    <div class="text-center mt-3 d-flex justify-content-center gap-5 p-2">
+      <button class="btn myProfile-btn text-light" id="editBtn" style="background-color: rgb(7, 202, 7);">Edit Profile Info</button>
+      <button class="btn myProfile-btn text-light" id="logoutBtn" style="background-color: rgb(218, 103, 16);">Logout</button>
     </div>
   </div>
 
