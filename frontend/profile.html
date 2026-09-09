@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <title>Tutor Portfolio</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="/frontend/bootstrap-5.3.3-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="bootstrap-5.3.3-dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
 
@@ -62,7 +62,7 @@
       </div>
     </div>
     <div class="video-upload p-3" style="box-shadow:2px 2px 2px 3px rgb(117, 129, 2); width: 600px; height: 350px; margin: auto; margin-top: 80px;"  >
-      
+
     </div>
     <div class="about-me rounded mt-5 mb-5 p-3 text-center"
       style="width: 720px; background-color: rgb(5, 45, 32); margin: auto;">
@@ -79,7 +79,13 @@
       .then(res => res.json())
       .then(p => {
 
-        document.querySelector(".pic-box img").src = `/uploads/${p.photo}` || "/uploads/bg-1.jpg";
+        // Use a proper fallback: `/uploads/${p.photo}` is always a
+        // non-empty string even when p.photo is missing, so `||` never
+        // triggered before. Check p.photo itself instead.
+        document.querySelector(".pic-box img").src = p.photo
+          ? `/uploads/${p.photo}`
+          : "/uploads/bg-1.jpg";
+
         document.querySelector(".tutor-info h3").textContent = p.full_name;
         document.querySelector(".tutor-info h5:nth-of-type(1)").textContent = `Department: ${p.department}`;
         document.querySelector(".tutor-info h5:nth-of-type(2)").innerHTML = `Available: ${p.available}`;
@@ -87,7 +93,11 @@
         document.querySelector(".sub-address-left h5:nth-of-type(4)").innerHTML = `<strong>${p.available_time}</strong>`;
         document.querySelector(".sub-address-right h5:nth-of-type(2)").innerHTML = `<strong>${p.address}</strong>`;
         document.querySelector(".sub-address-right h5:nth-of-type(4)").innerHTML = `<strong>${p.email}</strong>`;
-        document.querySelector(".id-photo img").src = `/uploads/${p.id_photo}` || "/uploads/defaultID.jpeg";
+
+        document.querySelector(".id-photo img").src = p.id_photo
+          ? `/uploads/${p.id_photo}`
+          : "/uploads/defaultID.jpeg";
+
         document.querySelector(".about-me h5:nth-of-type(1)").innerHTML = p.about_me;
 
         function getYouTubeEmbed(url) {
@@ -103,7 +113,7 @@
           return null;
         }
 
-        //determine embed html
+        // determine embed html
         let embedHtml = "";
         if (p.intro_video_link) {
           const link = p.intro_video_link.trim();
@@ -118,13 +128,15 @@
                      <iframe width="560" height="315" src="${dr}" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                    </div>`;
           } else {
-            embedHtml = `<div class="video-embed text-center" >
-                  <iframe width="560" height="315" src="${dr}" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            // Neither a YouTube nor a Drive link could be parsed — there is
+            // no valid embeddable src, so just link out instead of
+            // rendering an iframe with src="null".
+            embedHtml = `<div class="video-embed text-center">
                    <a href="${p.intro_video_link}" target="_blank">Open Intro Video</a>
                  </div>`;
           }
         }
-        document.querySelector(".video-upload ").innerHTML = embedHtml;
+        document.querySelector(".video-upload").innerHTML = embedHtml;
 
         const waBtn = document.getElementById("whatsappBtn");
         if (p.whatsapp_number) {
@@ -135,11 +147,19 @@
         } else {
           waBtn.style.display = "none";
         }
+      })
+      .catch(error => {
+        console.error("PROFILE LOAD ERROR:", error);
+        document.getElementById("profile-container").innerHTML = `
+          <div class="alert alert-danger text-center mt-5" style="width: 500px; margin: auto;">
+            Failed to load this profile. Please go back and try again.
+          </div>
+        `;
       });
 
 
   </script>
-  <script src="/frontend/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+  <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 
 
 </body>

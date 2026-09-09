@@ -1,5 +1,5 @@
-```javascript
 // server.js
+
 const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql2");
@@ -12,22 +12,33 @@ require("dotenv").config();
 
 const app = express();
 
+
+// =====================================================
+// MIDDLEWARE
+// =====================================================
+
 app.use(cors());
 
-// Use built-in Express parsers
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+
+// =====================================================
+// FRONTEND & UPLOADS
+// =====================================================
 
 // Serve frontend files from "frontend" folder
 app.use(express.static(path.join(__dirname, "frontend")));
 
-// Serve uploaded images
+// Upload folder
 const uploadsDir = path.join(__dirname, "uploads");
 
+// Create uploads folder if it does not exist
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
+// Serve uploaded images
 app.use("/uploads", express.static(uploadsDir));
 
 
@@ -35,17 +46,19 @@ app.use("/uploads", express.static(uploadsDir));
 // RESEND EMAIL CONFIGURATION
 // =====================================================
 
-// Resend API key should be provided through environment variable.
-// Local: create .env and add RESEND_API_KEY=your_key
-// Deployment: add RESEND_API_KEY in hosting platform Environment Variables.
+// Resend API key should be stored in .env locally
+// and Environment Variables on deployment.
 
 let resend = null;
 
 if (process.env.RESEND_API_KEY) {
   resend = new Resend(process.env.RESEND_API_KEY);
+
   console.log("✅ Resend email service configured");
 } else {
-  console.log("⚠️ RESEND_API_KEY not configured. Email service is disabled.");
+  console.log(
+    "⚠️ RESEND_API_KEY not configured. Email service is disabled."
+  );
 }
 
 
@@ -63,6 +76,7 @@ app.post("/send-email", async (req, res) => {
     });
   }
 
+  // Do not crash the server if email API key is missing
   if (!resend) {
     return res.status(503).json({
       ok: false,
@@ -90,24 +104,28 @@ app.post("/send-email", async (req, res) => {
 
     await resend.emails.send({
       from: "SUST Tutor <on@resend.dev>",
+
       to: [
         "afazurr8@gmail.com",
         "Farabisafat@gmail.com"
       ],
+
       reply_to: email,
+
       subject: `New message from ${name}`,
-      html
+
+      html: html
     });
 
-    res.json({
+    return res.json({
       ok: true,
       message: "Email sent successfully"
     });
 
   } catch (error) {
-    console.error("Email sending error:", error);
+    console.error("❌ Email sending error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       ok: false,
       error: "Failed to send email"
     });
@@ -126,7 +144,7 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME || "profiles_db"
 });
 
-db.connect(err => {
+db.connect((err) => {
   if (err) {
     console.error("❌ MySQL Connection Failed:", err);
   } else {
@@ -145,14 +163,36 @@ const storage = multer.diskStorage({
   },
 
   filename: (req, file, cb) => {
+    const extension = path.extname(file.originalname);
+
     cb(
       null,
-      Date.now() + path.extname(file.originalname)
+      Date.now() + extension
     );
   }
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage: storage
+});
+
+
+// =====================================================
+// COLUMNS SAFE TO EXPOSE PUBLICLY (never include password)
+// =====================================================
+
+const PUBLIC_PROFILE_COLUMNS = `
+  id,
+  full_name,
+  email,
+  address,
+  department,
+  salary_range,
+  subject_to_teach,
+  photo,
+  whatsapp_number,
+  id_photo
+`;
 
 
 // =====================================================
@@ -180,29 +220,40 @@ app.post(
         whatsapp_number
       } = req.body;
 
-      if (!password) {
+
+      // Required field validation
+      if (!full_name || !email || !password) {
         return res.status(400).json({
           success: false,
-          message: "Password is required"
+          message: "Full name, email and password are required"
         });
       }
 
+
+      // Hash password
       const hashedPassword = await bcrypt.hash(
         password,
         10
       );
 
+
+      // Get uploaded photo
       const photo =
         req.files &&
-        req.files["photo"]
+        req.files["photo"] &&
+        req.files["photo"][0]
           ? req.files["photo"][0].filename
           : null;
 
+
+      // Get uploaded ID photo
       const id_photo =
         req.files &&
-        req.files["id_photo"]
+        req.files["id_photo"] &&
+        req.files["id_photo"][0]
           ? req.files["id_photo"][0].filename
           : null;
+
 
       const sql = `
         INSERT INTO profiles
@@ -221,6 +272,7 @@ app.post(
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
+
       db.query(
         sql,
         [
@@ -238,7 +290,19 @@ app.post(
         (err, result) => {
 
           if (err) {
-            console.error("DB INSERT ERROR:", err);
+
+            console.error(
+              "❌ DB INSERT ERROR:",
+              err
+            );
+
+            // Duplicate email gives a clearer message
+            if (err.code === "ER_DUP_ENTRY") {
+              return res.status(409).json({
+                success: false,
+                message: "An account with this email already exists"
+              });
+            }
 
             return res.status(500).json({
               success: false,
@@ -246,30 +310,27 @@ app.post(
             });
           }
 
+
           const createdId = result.insertId;
 
-          db.query(
-            `
-            SELECT
-              id,
-              full_name,
-              email,
-              address,
-              department,
-              salary_range,
-              subject_to_teach,
-              photo,
-              whatsapp_number,
-              id_photo
+
+          // Return created profile
+          const selectSql = `
+            SELECT ${PUBLIC_PROFILE_COLUMNS}
             FROM profiles
             WHERE id = ?
-            `,
+          `;
+
+
+          db.query(
+            selectSql,
             [createdId],
             (err2, rows) => {
 
               if (err2) {
+
                 console.error(
-                  "DB SELECT AFTER INSERT ERROR:",
+                  "❌ DB SELECT AFTER INSERT ERROR:",
                   err2
                 );
 
@@ -279,7 +340,8 @@ app.post(
                 });
               }
 
-              res.json({
+
+              return res.json({
                 success: true,
                 message: "✅ Profile created successfully!",
                 user: rows[0]
@@ -293,9 +355,12 @@ app.post(
 
     } catch (error) {
 
-      console.error("CREATE PROFILE ERROR:", error);
+      console.error(
+        "❌ CREATE PROFILE ERROR:",
+        error
+      );
 
-      res.status(500).json({
+      return res.status(500).json({
         success: false,
         message: "Server error"
       });
@@ -312,10 +377,23 @@ app.post(
 
 app.post("/api/login", (req, res) => {
 
-  const { email, password } = req.body;
+  const {
+    email,
+    password
+  } = req.body;
+
+
+  if (!email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "Email and password are required"
+    });
+  }
+
 
   const sql =
     "SELECT * FROM profiles WHERE email = ?";
+
 
   db.query(
     sql,
@@ -324,14 +402,17 @@ app.post("/api/login", (req, res) => {
 
       if (err) {
 
-        console.error("LOGIN DB ERROR:", err);
+        console.error(
+          "❌ LOGIN DB ERROR:",
+          err
+        );
 
         return res.status(500).json({
           success: false,
           message: "Database error"
         });
-
       }
+
 
       if (results.length === 0) {
 
@@ -342,39 +423,62 @@ app.post("/api/login", (req, res) => {
 
       }
 
+
       const user = results[0];
 
-      const match = await bcrypt.compare(
-        password,
-        user.password
-      );
 
-      if (!match) {
+      try {
 
-        return res.status(401).json({
+        const match = await bcrypt.compare(
+          password,
+          user.password
+        );
+
+
+        if (!match) {
+
+          return res.status(401).json({
+            success: false,
+            message: "Invalid email or password"
+          });
+
+        }
+
+
+        return res.json({
+
+          success: true,
+
+          message: "✅ Login successful!",
+
+          user: {
+            id: user.id,
+            full_name: user.full_name,
+            email: user.email,
+            address: user.address,
+            department: user.department,
+            salary_range: user.salary_range,
+            subject_to_teach: user.subject_to_teach,
+            photo: user.photo,
+            whatsapp_number: user.whatsapp_number,
+            id_photo: user.id_photo
+          }
+
+        });
+
+      } catch (passwordError) {
+
+        console.error(
+          "❌ PASSWORD CHECK ERROR:",
+          passwordError
+        );
+
+        return res.status(500).json({
           success: false,
-          message: "Invalid email or password"
+          message: "Server error"
         });
 
       }
-
-      res.json({
-        success: true,
-        message: "✅ Login successful!",
-
-        user: {
-          id: user.id,
-          full_name: user.full_name,
-          email: user.email,
-          address: user.address,
-          department: user.department,
-          salary_range: user.salary_range,
-          subject_to_teach: user.subject_to_teach,
-          photo: user.photo,
-          whatsapp_number: user.whatsapp_number,
-          id_photo: user.id_photo
-        }
-      });
 
     }
   );
@@ -384,46 +488,45 @@ app.post("/api/login", (req, res) => {
 
 // =====================================================
 // GET ALL PROFILES
+// (fixed: never exposes the password column,
+//  and uses parameterized values instead of string building)
 // =====================================================
 
 app.get("/api/profiles", (req, res) => {
-
-  let query = "SELECT * FROM profiles";
 
   const {
     department,
     subject
   } = req.query;
 
-  if (department && subject) {
+  let query = `SELECT ${PUBLIC_PROFILE_COLUMNS} FROM profiles`;
+  const conditions = [];
+  const values = [];
 
-    query += `
-      WHERE department = ${db.escape(department)}
-      AND subject_to_teach = ${db.escape(subject)}
-    `;
-
-  } else if (department) {
-
-    query += `
-      WHERE department = ${db.escape(department)}
-    `;
-
-  } else if (subject) {
-
-    query += `
-      WHERE subject_to_teach = ${db.escape(subject)}
-    `;
-
+  if (department) {
+    conditions.push("department = ?");
+    values.push(department);
   }
+
+  if (subject) {
+    conditions.push("subject_to_teach = ?");
+    values.push(subject);
+  }
+
+  if (conditions.length > 0) {
+    query += " WHERE " + conditions.join(" AND ");
+  }
+
 
   db.query(
     query,
+    values,
     (err, results) => {
 
       if (err) {
 
         console.error(
-          "GET ALL PROFILES ERROR:",
+          "❌ GET ALL PROFILES ERROR:",
           err
         );
 
@@ -434,7 +537,8 @@ app.get("/api/profiles", (req, res) => {
 
       }
 
-      res.json(results);
+
+      return res.json(results);
 
     }
   );
@@ -449,20 +553,11 @@ app.get("/api/profiles", (req, res) => {
 app.get("/api/profiles/:id", (req, res) => {
 
   const sql = `
-    SELECT
-      id,
-      full_name,
-      email,
-      address,
-      department,
-      salary_range,
-      subject_to_teach,
-      photo,
-      whatsapp_number,
-      id_photo
+    SELECT ${PUBLIC_PROFILE_COLUMNS}
     FROM profiles
     WHERE id = ?
   `;
+
 
   db.query(
     sql,
@@ -472,7 +567,7 @@ app.get("/api/profiles/:id", (req, res) => {
       if (err) {
 
         console.error(
-          "GET PROFILE ERROR:",
+          "❌ GET PROFILE ERROR:",
           err
         );
 
@@ -483,7 +578,11 @@ app.get("/api/profiles/:id", (req, res) => {
 
       }
 
-      if (!result || result.length === 0) {
+
+      if (
+        !result ||
+        result.length === 0
+      ) {
 
         return res.status(404).json({
           success: false,
@@ -492,7 +591,8 @@ app.get("/api/profiles/:id", (req, res) => {
 
       }
 
-      res.json(result[0]);
+
+      return res.json(result[0]);
 
     }
   );
@@ -506,13 +606,18 @@ app.get("/api/profiles/:id", (req, res) => {
 
 app.put(
   "/api/profiles/:id",
+
   upload.fields([
     { name: "photo" },
     { name: "id_photo" }
   ]),
+
   async (req, res) => {
 
-    const { id } = req.params;
+    const {
+      id
+    } = req.params;
+
 
     try {
 
@@ -523,6 +628,11 @@ app.put(
 
           if (errSelect) {
 
+            console.error(
+              "❌ UPDATE SELECT ERROR:",
+              errSelect
+            );
+
             return res.status(500).json({
               success: false,
               message: "Database error"
@@ -530,7 +640,11 @@ app.put(
 
           }
 
-          if (!rows || rows.length === 0) {
+
+          if (
+            !rows ||
+            rows.length === 0
+          ) {
 
             return res.status(404).json({
               success: false,
@@ -539,11 +653,14 @@ app.put(
 
           }
 
+
           const existing = rows[0];
 
           const fields = [];
           const values = [];
 
+
+          // Fields allowed to update
           const updatable = [
             "full_name",
             "email",
@@ -554,37 +671,56 @@ app.put(
             "whatsapp_number"
           ];
 
-          updatable.forEach(key => {
 
-            if (req.body[key] !== undefined) {
+          updatable.forEach((key) => {
 
-              fields.push(`${key} = ?`);
-              values.push(req.body[key]);
+            if (
+              req.body[key] !== undefined
+            ) {
+
+              fields.push(
+                `${key} = ?`
+              );
+
+              values.push(
+                req.body[key]
+              );
 
             }
 
           });
 
 
-          // Update password only if provided
+          // ---------------------------------------------
+          // UPDATE PASSWORD
+          // ---------------------------------------------
 
           if (
             req.body.password &&
             req.body.password.trim() !== ""
           ) {
 
-            const hashed = await bcrypt.hash(
-              req.body.password,
-              10
+            const hashedPassword =
+              await bcrypt.hash(
+                req.body.password,
+                10
+              );
+
+
+            fields.push(
+              "password = ?"
             );
 
-            fields.push("password = ?");
-            values.push(hashed);
+            values.push(
+              hashedPassword
+            );
 
           }
 
 
-          // Update photo
+          // ---------------------------------------------
+          // UPDATE PROFILE PHOTO
+          // ---------------------------------------------
 
           if (
             req.files &&
@@ -595,16 +731,28 @@ app.put(
             const newPhoto =
               req.files["photo"][0].filename;
 
-            fields.push("photo = ?");
-            values.push(newPhoto);
 
+            fields.push(
+              "photo = ?"
+            );
+
+            values.push(
+              newPhoto
+            );
+
+
+            // Delete old photo
             if (existing.photo) {
 
-              fs.unlink(
+              const oldPhotoPath =
                 path.join(
                   uploadsDir,
                   existing.photo
-                ),
+                );
+
+
+              fs.unlink(
+                oldPhotoPath,
                 () => {}
               );
 
@@ -613,7 +761,9 @@ app.put(
           }
 
 
-          // Update ID photo
+          // ---------------------------------------------
+          // UPDATE ID PHOTO
+          // ---------------------------------------------
 
           if (
             req.files &&
@@ -624,16 +774,28 @@ app.put(
             const newIdPhoto =
               req.files["id_photo"][0].filename;
 
-            fields.push("id_photo = ?");
-            values.push(newIdPhoto);
 
+            fields.push(
+              "id_photo = ?"
+            );
+
+            values.push(
+              newIdPhoto
+            );
+
+
+            // Delete old ID photo
             if (existing.id_photo) {
 
-              fs.unlink(
+              const oldIdPhotoPath =
                 path.join(
                   uploadsDir,
                   existing.id_photo
-                ),
+                );
+
+
+              fs.unlink(
+                oldIdPhotoPath,
                 () => {}
               );
 
@@ -642,7 +804,10 @@ app.put(
           }
 
 
-          if (fields.length === 0) {
+          // No update data
+          if (
+            fields.length === 0
+          ) {
 
             return res.status(400).json({
               success: false,
@@ -658,6 +823,7 @@ app.put(
             WHERE id = ?
           `;
 
+
           values.push(id);
 
 
@@ -669,7 +835,7 @@ app.put(
               if (errUpdate) {
 
                 console.error(
-                  "UPDATE PROFILE ERROR:",
+                  "❌ UPDATE PROFILE ERROR:",
                   errUpdate
                 );
 
@@ -679,6 +845,7 @@ app.put(
                 });
 
               }
+
 
               if (
                 resultUpdate.affectedRows === 0
@@ -692,26 +859,25 @@ app.put(
               }
 
 
-              db.query(
-                `
-                SELECT
-                  id,
-                  full_name,
-                  email,
-                  address,
-                  department,
-                  salary_range,
-                  subject_to_teach,
-                  photo,
-                  whatsapp_number,
-                  id_photo
+              // Get updated profile
+              const selectUpdatedSql = `
+                SELECT ${PUBLIC_PROFILE_COLUMNS}
                 FROM profiles
                 WHERE id = ?
-                `,
+              `;
+
+
+              db.query(
+                selectUpdatedSql,
                 [id],
                 (err2, updatedRows) => {
 
                   if (err2) {
+
+                    console.error(
+                      "❌ GET UPDATED PROFILE ERROR:",
+                      err2
+                    );
 
                     return res.status(500).json({
                       success: false,
@@ -720,11 +886,17 @@ app.put(
 
                   }
 
-                  res.json({
+
+                  return res.json({
+
                     success: true,
+
                     message:
                       "✅ Profile updated successfully!",
-                    user: updatedRows[0]
+
+                    user:
+                      updatedRows[0]
+
                   });
 
                 }
@@ -739,16 +911,129 @@ app.put(
     } catch (error) {
 
       console.error(
-        "PUT /api/profiles/:id ERROR:",
+        "❌ PUT /api/profiles/:id ERROR:",
         error
       );
 
-      res.status(500).json({
+
+      return res.status(500).json({
         success: false,
         message: "Server error"
       });
 
     }
+
+  }
+);
+
+
+// =====================================================
+// DELETE PROFILE
+// =====================================================
+
+app.delete(
+  "/api/profiles/:id",
+  (req, res) => {
+
+    const {
+      id
+    } = req.params;
+
+
+    db.query(
+      "SELECT * FROM profiles WHERE id = ?",
+      [id],
+      (errSelect, rows) => {
+
+        if (errSelect) {
+
+          console.error(
+            "❌ DELETE SELECT ERROR:",
+            errSelect
+          );
+
+          return res.status(500).json({
+            success: false,
+            message: "Database error"
+          });
+
+        }
+
+
+        if (
+          !rows ||
+          rows.length === 0
+        ) {
+
+          return res.status(404).json({
+            success: false,
+            message: "Profile not found"
+          });
+
+        }
+
+
+        const user = rows[0];
+
+
+        db.query(
+          "DELETE FROM profiles WHERE id = ?",
+          [id],
+          (err, result) => {
+
+            if (err) {
+
+              console.error(
+                "❌ DELETE PROFILE ERROR:",
+                err
+              );
+
+              return res.status(500).json({
+                success: false,
+                message: "Database error"
+              });
+
+            }
+
+
+            // Delete profile photo
+            if (user.photo) {
+
+              fs.unlink(
+                path.join(
+                  uploadsDir,
+                  user.photo
+                ),
+                () => {}
+              );
+
+            }
+
+
+            // Delete ID photo
+            if (user.id_photo) {
+
+              fs.unlink(
+                path.join(
+                  uploadsDir,
+                  user.id_photo
+                ),
+                () => {}
+              );
+
+            }
+
+
+            return res.json({
+              success: true,
+              message: "Profile deleted successfully!"
+            });
+
+          }
+        );
+
+      }
+    );
 
   }
 );
@@ -772,99 +1057,20 @@ app.get("/", (req, res) => {
 
 
 // =====================================================
-// DELETE PROFILE
-// =====================================================
-
-app.delete("/api/profiles/:id", (req, res) => {
-
-  const { id } = req.params;
-
-  db.query(
-    "SELECT * FROM profiles WHERE id = ?",
-    [id],
-    (errSel, rows) => {
-
-      if (errSel) {
-
-        return res.status(500).json({
-          success: false,
-          message: "Database error"
-        });
-
-      }
-
-      if (!rows || rows.length === 0) {
-
-        return res.status(404).json({
-          success: false,
-          message: "Profile not found"
-        });
-
-      }
-
-      const user = rows[0];
-
-      db.query(
-        "DELETE FROM profiles WHERE id = ?",
-        [id],
-        (err, result) => {
-
-          if (err) {
-
-            return res.status(500).json({
-              success: false,
-              message: "Database error"
-            });
-
-          }
-
-          if (user.photo) {
-
-            fs.unlink(
-              path.join(
-                uploadsDir,
-                user.photo
-              ),
-              () => {}
-            );
-
-          }
-
-          if (user.id_photo) {
-
-            fs.unlink(
-              path.join(
-                uploadsDir,
-                user.id_photo
-              ),
-              () => {}
-            );
-
-          }
-
-          res.json({
-            success: true,
-            message: "Profile deleted successfully!"
-          });
-
-        }
-      );
-
-    }
-  );
-
-});
-
-
-// =====================================================
 // SERVER START
 // =====================================================
 
-const PORT = process.env.PORT || 5000;
+const PORT =
+  process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(
-    `🚀 Server running on http://localhost:${PORT}`
-  );
-});
-```
+
+app.listen(
+  PORT,
+  () => {
+
+    console.log(
+      `🚀 Server running on port ${PORT}`
+    );
+
+  }
+);

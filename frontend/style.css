@@ -1,36 +1,108 @@
-/* -------------------- GENERAL -------------------- */
+/* ===================================================== GENERAL ===================================================== */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  background-image: url('/uploads/bg-4.jpg');
+  padding: 0;
+  background-image: url("/uploads/bg-4.jpg");
   background-repeat: repeat;
   background-size: cover;
 }
-html {
-  scroll-behavior: smooth; /* Smooth scrolling for nav links */
-}
-section {
-  display: block; /* Make all sections visible */
-  padding: 60px 20px;
-}
 
-/* -------------------- NAVBAR -------------------- */
+/* ===================================================== NAVBAR ===================================================== */
 .navbar {
   width: 100%;
-  height: 60px;
+  min-height: 60px;
+  padding: 8px 30px;
 }
+
+.navbar-left {
+  width: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-left h4 {
+  margin: 0;
+  color: white;
+}
+
+.navbar-right {
+  margin-right: 20px;
+}
+
+.list-nav {
+  display: inline-block;
+  padding: 6px 8px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
 .list-nav:hover {
   cursor: pointer;
   background-color: #7385eb;
-  padding: 3px;
-  border-radius: 5px;
 }
+
+.btn-nav {
+  display: inline-block;
+  background-color: white;
+  padding: 7px 15px;
+  transition: 0.3s;
+}
+
 .btn-nav:hover {
-  cursor: pointer;
   background-color: #e9442b;
 }
 
-/* -------------------- BUTTONS -------------------- */
+/* ===================================================== SECTIONS ===================================================== */
+section {
+  display: block;
+  padding: 60px 20px;
+}
+
+/* ===================================================== HOME SECTION ===================================================== */
+.home-section {
+  min-height: 550px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero {
+  background-image: url("/uploads/background2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  width: 1100px;
+  max-width: 95%;
+  min-height: 450px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+
+.banner-heading {
+  width: 400px;
+}
+
+.banner-right {
+  width: 600px;
+}
+
+.banner-right img {
+  width: 100%;
+  max-width: 650px;
+  height: 420px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* ===================================================== BUTTONS ===================================================== */
 .btn {
   background: #007bff;
   color: white;
@@ -41,65 +113,198 @@ section {
   cursor: pointer;
   font-size: 16px;
 }
+
 .btn:hover {
   background: #0056b3;
 }
 
-/* -------------------- PROFILE DISPLAY -------------------- */
-.show-profile {
+/* ===================================================== PROFILE SECTION ===================================================== */
+.profiles-container {
   width: 100%;
-}
-.tutor-details {
-  width: 280px;
-  box-shadow: 4px 4px 8px sandybrown;
-  background-color: rgb(218, 239, 169);
-}
-.tutor-img {
-  width: 100%;
-  height: 250px;
+  min-height: 600px;
+  background-color: #a6e5ea;
+  padding-top: 60px;
+  padding-bottom: 70px;
 }
 
-/* -------------------- HERO SECTION -------------------- */
-.hero {
-  background-image: url('/uploads/background2.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  width: 1100px;
-}
-.banner-heading {
-  width: 400px;
-}
-.banner-right {
-  width: 600px;
-}
-@media (max-width: 768px) {
-  .hero {
-    flex-direction: column;
-    text-align: center;
-  }
-  .hero-text {
-    text-align: center;
-  }
+.profiles-container h2 {
+  margin-bottom: 25px;
 }
 
-/* -------------------- ABOUT SECTION -------------------- */
+/* ===================================================== FILTER PANEL ===================================================== */
+.filter-panel {
+  width: 90%;
+  max-width: 950px;
+  margin: 20px auto 35px auto;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 15px;
+  box-shadow: 4px 4px 8px rgba(213, 65, 24, 0.4);
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.filter-item label {
+  font-weight: bold;
+  color: #333;
+  text-align: left;
+}
+
+.filter-item input {
+  width: 220px;
+  padding: 10px;
+  margin: 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.filter-item input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+.search-btn,
+.clear-btn {
+  width: 110px;
+  height: 43px;
+  margin: 0;
+}
+
+/* ===================================================== PROFILE MESSAGE ===================================================== */
+.profile-message {
+  min-height: 30px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* ===================================================== PROFILE GRID ===================================================== */
+#profiles {
+  width: 100%;
+}
+
+.profiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 320px));
+  justify-content: center;
+  gap: 25px;
+  width: 100%;
+}
+
+/* ===================================================== PROFILE CARD ===================================================== */
+.profile-card {
+  width: 100%;
+  min-height: 410px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* ===================================================== PROFILE PHOTO ===================================================== */
+.profile-card>img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+  background-color: #e9ecef;
+}
+
+.no-photo {
+  width: 100%;
+  height: 220px;
+  background: #dee2e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 70px;
+  color: #6c757d;
+}
+
+/* ===================================================== PROFILE INFORMATION ===================================================== */
+.profile-info {
+  padding: 18px;
+  text-align: left;
+}
+
+.profile-info h4 {
+  margin: 0 0 12px 0;
+  font-size: 21px;
+  font-weight: bold;
+  color: #212529;
+}
+
+.profile-info p {
+  margin: 8px 0;
+  font-size: 14px;
+  color: #444;
+  line-height: 1.5;
+}
+
+.profile-info p strong {
+  color: #212529;
+}
+
+/* ===================================================== VIEW PROFILE BUTTON ===================================================== */
+.view-profile-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  border: none;
+  border-radius: 7px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.view-profile-btn:hover {
+  background-color: #0056b3;
+}
+
+/* ===================================================== ABOUT SECTION ===================================================== */
+.bg-color1 {
+  background-image: linear-gradient(135deg, rgb(172, 179, 237), rgb(182, 236, 182));
+}
+
 .about-us {
   width: 1000px;
+  max-width: 95%;
   margin: auto;
+  overflow: hidden;
 }
+
 .about-left {
   width: 60%;
   background-image: linear-gradient(to bottom right, #eee613, #89ee31);
 }
+
 .about-right {
   width: 40%;
 }
+
 .cartoon-img {
   width: 100%;
   height: 350px;
+  object-fit: cover;
+  display: block;
 }
 
-/* -------------------- FORM SECTION -------------------- */
+/* ===================================================== FORM ===================================================== */
 .form-container {
   background: #3fc3cc;
   padding: 20px;
@@ -108,6 +313,7 @@ section {
   max-width: 700px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
+
 input,
 select,
 textarea {
@@ -118,88 +324,67 @@ textarea {
   border: 1px solid #ccc;
 }
 
-/* -------------------- PROFILES SECTION -------------------- */
-.profiles-container {
-  margin: auto;
-  width: 100%;
-  background-color: #a6e5ea;
-}
-#profiles {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-}
-.profile-card {
-  width: 280px;
-  height: 350px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.profile-card:hover {
-  transform: translateY(-5px);
-}
-.profile-card img {
-  width: 100%;
-  height: 220px;
-}
-.profile-info {
-  padding: 15px;
-  text-align: left;
-}
-.filter-panel {
-  width: 90%;
-  max-width: 900px;
-}
-
-/* -------------------- SECTION COLORS -------------------- */
-.bg-color1 {
-  background-image: linear-gradient(135deg, rgb(172, 179, 237), rgb(182, 236, 182));
-}
+/* ===================================================== CONTACT ===================================================== */
 .bg-color2 {
   background-color: rgb(221, 244, 203);
 }
 
-/* -------------------- FILTER PANEL -------------------- */
-.filter-panel {
-  display: none;
-  width: 90%;
-  max-width: 700px;
-  box-shadow: 4px 4px 8px rgb(213, 65, 24);
-  margin: 20px auto 30px auto;
+.contact-form {
+  width: 450px;
+  max-width: 95%;
 }
 
-/* -------------------- CONTACT & FOOTER -------------------- */
-.contact-box {
-  width: 700px;
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
 }
-.input {
-  width: 400px;
-  padding: 5px;
+
+#contactStatus {
+  font-weight: bold;
 }
+
+/* ===================================================== FOOTER ===================================================== */
+footer {
+  width: 100%;
+}
+
 .footer-content {
   margin: auto;
   width: 1200px;
   max-width: 100%;
 }
+
+.footer-left,
+.footer-center,
+.footer-right {
+  width: 25%;
+}
+
 .footer-center a {
   color: white;
 }
+
 .footer-center a:hover {
   cursor: pointer;
   color: #007bff;
   transition: color 0.3s, transform 0.3s;
 }
+
 .social-icons a {
   color: #fff;
   transition: color 0.3s, transform 0.3s;
 }
+
 .social-icons a:hover {
   color: #007bff;
   transform: scale(1.2);
 }
 
-/* -------------------- LOGIN PAGE -------------------- */
+.footer-bottom {
+  border-top: 1px solid #555;
+}
+
+/* ===================================================== LOGIN PAGE ===================================================== */
 body.login-page {
   background-color: #a6e5ea;
   background-image: linear-gradient(135deg, #3fc3cc, #a6e5ea);
@@ -209,6 +394,7 @@ body.login-page {
 .login-card {
   background: #ffffff;
   width: 400px;
+  max-width: 90%;
   padding: 30px 35px;
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -229,7 +415,6 @@ body.login-page {
   margin-bottom: 25px;
 }
 
-/* Input fields */
 .login-card .form-control {
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -244,7 +429,6 @@ body.login-page {
   box-shadow: 0 0 8px rgba(220, 53, 69, 0.4);
 }
 
-/* Login button */
 .login-card .btn-login {
   background-color: #dc3545;
   color: white;
@@ -256,29 +440,167 @@ body.login-page {
   margin-top: 10px;
   transition: 0.3s;
 }
+
 .login-card .btn-login:hover {
   background-color: #b02a37;
   transform: translateY(-2px);
 }
 
-/* Register link */
 .login-card .register-link {
   text-align: center;
   margin-top: 15px;
   font-size: 15px;
 }
+
 .login-card .register-link a {
   color: #dc3545;
   font-weight: bold;
   text-decoration: none;
 }
+
 .login-card .register-link a:hover {
   text-decoration: underline;
 }
 
-/* Message feedback */
 #message {
   margin-top: 10px;
   text-align: center;
   font-weight: 600;
+}
+
+/* ===================================================== RESPONSIVE ===================================================== */
+@media (max-width: 992px) {
+  .navbar {
+    padding: 10px 15px;
+  }
+
+  .navbar-left {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .navbar-right {
+    width: 100%;
+    margin: 0;
+  }
+
+  .navbar-right .list {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero {
+    width: 95%;
+    flex-direction: column;
+    text-align: center;
+    gap: 10px !important;
+  }
+
+  .banner-heading {
+    width: 100%;
+  }
+
+  .banner-right {
+    width: 100%;
+  }
+
+  .banner-right img {
+    width: 90%;
+    height: 350px;
+  }
+
+  .about-left,
+  .about-right {
+    width: 100%;
+  }
+
+  .cartoon-img {
+    height: 300px;
+  }
+
+  .footer-left,
+  .footer-center,
+  .footer-right {
+    width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  section {
+    padding: 40px 15px;
+  }
+
+  .navbar {
+    height: auto;
+  }
+
+  .navbar-right .list {
+    gap: 10px !important;
+  }
+
+  .hero {
+    min-height: auto;
+  }
+
+  .banner-heading {
+    padding: 20px !important;
+  }
+
+  .banner-heading h1 {
+    margin-left: 0 !important;
+  }
+
+  .banner-heading h2 {
+    margin-left: 0 !important;
+  }
+
+  .banner-right img {
+    height: 280px;
+  }
+
+  .filter-panel {
+    flex-direction: column;
+    align-items: stretch;
+    width: 95%;
+  }
+
+  .filter-item input {
+    width: 100% !important;
+  }
+
+  .search-btn,
+  .clear-btn {
+    width: 100%;
+  }
+
+  .about-us {
+    width: 95%;
+  }
+
+  .about-left {
+    padding: 30px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-right .list {
+    flex-direction: column;
+  }
+
+  .btn-nav {
+    text-align: center;
+    width: 120px;
+  }
+
+  .hero-headline {
+    font-size: 24px;
+  }
+
+  .banner-right img {
+    height: 220px;
+  }
+
+  .profile-card {
+    width: 100%;
+  }
 }
