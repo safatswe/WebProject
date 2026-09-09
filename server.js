@@ -1,3 +1,4 @@
+```javascript
 // server.js
 const express = require("express");
 const cors = require("cors");
@@ -7,6 +8,7 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const fs = require("fs");
 const { Resend } = require("resend");
+require("dotenv").config();
 
 const app = express();
 
@@ -20,11 +22,36 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "frontend")));
 
 // Serve uploaded images
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+const uploadsDir = path.join(__dirname, "uploads");
 
-// ---------------- CONTACT US / SEND EMAIL ----------------
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+app.use("/uploads", express.static(uploadsDir));
+
+
+// =====================================================
+// RESEND EMAIL CONFIGURATION
+// =====================================================
+
+// Resend API key should be provided through environment variable.
+// Local: create .env and add RESEND_API_KEY=your_key
+// Deployment: add RESEND_API_KEY in hosting platform Environment Variables.
+
+let resend = null;
+
+if (process.env.RESEND_API_KEY) {
+  resend = new Resend(process.env.RESEND_API_KEY);
+  console.log("✅ Resend email service configured");
+} else {
+  console.log("⚠️ RESEND_API_KEY not configured. Email service is disabled.");
+}
+
+
+// =====================================================
+// CONTACT US EMAIL
+// =====================================================
 
 app.post("/send-email", async (req, res) => {
   const { name, email, message } = req.body;
@@ -36,16 +63,33 @@ app.post("/send-email", async (req, res) => {
     });
   }
 
+  if (!resend) {
+    return res.status(503).json({
+      ok: false,
+      error: "Email service is not configured on the server"
+    });
+  }
+
   try {
     const html = `
       <h2>New Contact Message</h2>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Message:</strong><br>${message.replace(/\n/g, "<br>")}</p>
+
+      <p>
+        <strong>Name:</strong> ${name}
+      </p>
+
+      <p>
+        <strong>Email:</strong> ${email}
+      </p>
+
+      <p>
+        <strong>Message:</strong><br>
+        ${String(message).replace(/\n/g, "<br>")}
+      </p>
     `;
 
     await resend.emails.send({
-      from: "Your Website <on@resend.dev>",
+      from: "SUST Tutor <on@resend.dev>",
       to: [
         "afazurr8@gmail.com",
         "Farabisafat@gmail.com"
@@ -70,13 +114,16 @@ app.post("/send-email", async (req, res) => {
   }
 });
 
-// ---------------- MYSQL CONNECTION ----------------
+
+// =====================================================
+// MYSQL CONNECTION
+// =====================================================
 
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "profiles_db"
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_NAME || "profiles_db"
 });
 
 db.connect(err => {
@@ -87,15 +134,10 @@ db.connect(err => {
   }
 });
 
-// ---------------- UPLOADS FOLDER ----------------
 
-const uploadsDir = path.join(__dirname, "uploads");
-
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir);
-}
-
-// ---------------- MULTER SETUP ----------------
+// =====================================================
+// MULTER SETUP
+// =====================================================
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -112,7 +154,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// ---------------- CREATE PROFILE ----------------
+
+// =====================================================
+// CREATE PROFILE
+// =====================================================
 
 app.post(
   "/api/profiles",
@@ -123,6 +168,7 @@ app.post(
   async (req, res) => {
 
     try {
+
       const {
         full_name,
         email,
@@ -141,7 +187,10 @@ app.post(
         });
       }
 
-      const hashedPassword = await bcrypt.hash(password, 10);
+      const hashedPassword = await bcrypt.hash(
+        password,
+        10
+      );
 
       const photo =
         req.files &&
@@ -235,23 +284,31 @@ app.post(
                 message: "✅ Profile created successfully!",
                 user: rows[0]
               });
+
             }
           );
+
         }
       );
 
     } catch (error) {
+
       console.error("CREATE PROFILE ERROR:", error);
 
       res.status(500).json({
         success: false,
         message: "Server error"
       });
+
     }
+
   }
 );
 
-// ---------------- LOGIN ----------------
+
+// =====================================================
+// LOGIN
+// =====================================================
 
 app.post("/api/login", (req, res) => {
 
@@ -266,19 +323,23 @@ app.post("/api/login", (req, res) => {
     async (err, results) => {
 
       if (err) {
+
         console.error("LOGIN DB ERROR:", err);
 
         return res.status(500).json({
           success: false,
           message: "Database error"
         });
+
       }
 
       if (results.length === 0) {
+
         return res.status(401).json({
           success: false,
           message: "Invalid email or password"
         });
+
       }
 
       const user = results[0];
@@ -289,10 +350,12 @@ app.post("/api/login", (req, res) => {
       );
 
       if (!match) {
+
         return res.status(401).json({
           success: false,
           message: "Invalid email or password"
         });
+
       }
 
       res.json({
@@ -312,11 +375,16 @@ app.post("/api/login", (req, res) => {
           id_photo: user.id_photo
         }
       });
+
     }
   );
+
 });
 
-// ---------------- GET ALL PROFILES ----------------
+
+// =====================================================
+// GET ALL PROFILES
+// =====================================================
 
 app.get("/api/profiles", (req, res) => {
 
@@ -345,6 +413,7 @@ app.get("/api/profiles", (req, res) => {
     query += `
       WHERE subject_to_teach = ${db.escape(subject)}
     `;
+
   }
 
   db.query(
@@ -352,6 +421,7 @@ app.get("/api/profiles", (req, res) => {
     (err, results) => {
 
       if (err) {
+
         console.error(
           "GET ALL PROFILES ERROR:",
           err
@@ -361,14 +431,20 @@ app.get("/api/profiles", (req, res) => {
           success: false,
           message: "Database error"
         });
+
       }
 
       res.json(results);
+
     }
   );
+
 });
 
-// ---------------- GET SINGLE PROFILE ----------------
+
+// =====================================================
+// GET SINGLE PROFILE
+// =====================================================
 
 app.get("/api/profiles/:id", (req, res) => {
 
@@ -394,6 +470,7 @@ app.get("/api/profiles/:id", (req, res) => {
     (err, result) => {
 
       if (err) {
+
         console.error(
           "GET PROFILE ERROR:",
           err
@@ -403,24 +480,29 @@ app.get("/api/profiles/:id", (req, res) => {
           success: false,
           message: "Error fetching profile"
         });
+
       }
 
-      if (
-        !result ||
-        result.length === 0
-      ) {
+      if (!result || result.length === 0) {
+
         return res.status(404).json({
           success: false,
           message: "Profile not found"
         });
+
       }
 
       res.json(result[0]);
+
     }
   );
+
 });
 
-// ---------------- UPDATE PROFILE ----------------
+
+// =====================================================
+// UPDATE PROFILE
+// =====================================================
 
 app.put(
   "/api/profiles/:id",
@@ -440,20 +522,21 @@ app.put(
         async (errSelect, rows) => {
 
           if (errSelect) {
+
             return res.status(500).json({
               success: false,
               message: "Database error"
             });
+
           }
 
-          if (
-            !rows ||
-            rows.length === 0
-          ) {
+          if (!rows || rows.length === 0) {
+
             return res.status(404).json({
               success: false,
               message: "Profile not found"
             });
+
           }
 
           const existing = rows[0];
@@ -479,25 +562,30 @@ app.put(
               values.push(req.body[key]);
 
             }
+
           });
 
+
           // Update password only if provided
+
           if (
             req.body.password &&
             req.body.password.trim() !== ""
           ) {
 
-            const hashed =
-              await bcrypt.hash(
-                req.body.password,
-                10
-              );
+            const hashed = await bcrypt.hash(
+              req.body.password,
+              10
+            );
 
             fields.push("password = ?");
             values.push(hashed);
+
           }
 
+
           // Update photo
+
           if (
             req.files &&
             req.files["photo"] &&
@@ -511,6 +599,7 @@ app.put(
             values.push(newPhoto);
 
             if (existing.photo) {
+
               fs.unlink(
                 path.join(
                   uploadsDir,
@@ -518,10 +607,14 @@ app.put(
                 ),
                 () => {}
               );
+
             }
+
           }
 
+
           // Update ID photo
+
           if (
             req.files &&
             req.files["id_photo"] &&
@@ -535,6 +628,7 @@ app.put(
             values.push(newIdPhoto);
 
             if (existing.id_photo) {
+
               fs.unlink(
                 path.join(
                   uploadsDir,
@@ -542,17 +636,21 @@ app.put(
                 ),
                 () => {}
               );
+
             }
+
           }
+
 
           if (fields.length === 0) {
 
             return res.status(400).json({
               success: false,
-              message:
-                "No fields provided to update"
+              message: "No fields provided to update"
             });
+
           }
+
 
           const sql = `
             UPDATE profiles
@@ -562,6 +660,7 @@ app.put(
 
           values.push(id);
 
+
           db.query(
             sql,
             values,
@@ -570,7 +669,7 @@ app.put(
               if (errUpdate) {
 
                 console.error(
-                  "UPDATE PROFILE DB ERROR:",
+                  "UPDATE PROFILE ERROR:",
                   errUpdate
                 );
 
@@ -578,6 +677,7 @@ app.put(
                   success: false,
                   message: "Database error"
                 });
+
               }
 
               if (
@@ -586,10 +686,11 @@ app.put(
 
                 return res.status(404).json({
                   success: false,
-                  message:
-                    "Profile not found"
+                  message: "Profile not found"
                 });
+
               }
+
 
               db.query(
                 `
@@ -614,9 +715,9 @@ app.put(
 
                     return res.status(500).json({
                       success: false,
-                      message:
-                        "Database error"
+                      message: "Database error"
                     });
+
                   }
 
                   res.json({
@@ -625,10 +726,13 @@ app.put(
                       "✅ Profile updated successfully!",
                     user: updatedRows[0]
                   });
+
                 }
               );
+
             }
           );
+
         }
       );
 
@@ -643,11 +747,16 @@ app.put(
         success: false,
         message: "Server error"
       });
+
     }
+
   }
 );
 
-// ---------------- DEFAULT ROUTE ----------------
+
+// =====================================================
+// DEFAULT ROUTE
+// =====================================================
 
 app.get("/", (req, res) => {
 
@@ -658,98 +767,104 @@ app.get("/", (req, res) => {
       "index.html"
     )
   );
+
 });
 
-// ---------------- DELETE PROFILE ----------------
 
-app.delete(
-  "/api/profiles/:id",
-  (req, res) => {
+// =====================================================
+// DELETE PROFILE
+// =====================================================
 
-    const { id } = req.params;
+app.delete("/api/profiles/:id", (req, res) => {
 
-    db.query(
-      "SELECT * FROM profiles WHERE id = ?",
-      [id],
-      (errSel, rows) => {
+  const { id } = req.params;
 
-        if (errSel) {
+  db.query(
+    "SELECT * FROM profiles WHERE id = ?",
+    [id],
+    (errSel, rows) => {
 
-          return res.status(500).json({
-            success: false,
-            message: "Database error"
-          });
-        }
+      if (errSel) {
 
-        if (
-          !rows ||
-          rows.length === 0
-        ) {
+        return res.status(500).json({
+          success: false,
+          message: "Database error"
+        });
 
-          return res.status(404).json({
-            success: false,
-            message: "Profile not found"
-          });
-        }
-
-        const user = rows[0];
-
-        db.query(
-          "DELETE FROM profiles WHERE id = ?",
-          [id],
-          (err, result) => {
-
-            if (err) {
-
-              return res.status(500).json({
-                success: false,
-                message: "Database error"
-              });
-            }
-
-            if (user.photo) {
-
-              fs.unlink(
-                path.join(
-                  uploadsDir,
-                  user.photo
-                ),
-                () => {}
-              );
-            }
-
-            if (user.id_photo) {
-
-              fs.unlink(
-                path.join(
-                  uploadsDir,
-                  user.id_photo
-                ),
-                () => {}
-              );
-            }
-
-            res.json({
-              success: true,
-              message:
-                "Profile deleted successfully!"
-            });
-          }
-        );
       }
-    );
-  }
-);
 
-// ---------------- START SERVER ----------------
+      if (!rows || rows.length === 0) {
 
-const PORT =
-  process.env.PORT || 5000;
+        return res.status(404).json({
+          success: false,
+          message: "Profile not found"
+        });
 
-app.listen(
-  PORT,
-  () =>
-    console.log(
-      `🚀 Server running on http://localhost:${PORT}`
-    )
-);
+      }
+
+      const user = rows[0];
+
+      db.query(
+        "DELETE FROM profiles WHERE id = ?",
+        [id],
+        (err, result) => {
+
+          if (err) {
+
+            return res.status(500).json({
+              success: false,
+              message: "Database error"
+            });
+
+          }
+
+          if (user.photo) {
+
+            fs.unlink(
+              path.join(
+                uploadsDir,
+                user.photo
+              ),
+              () => {}
+            );
+
+          }
+
+          if (user.id_photo) {
+
+            fs.unlink(
+              path.join(
+                uploadsDir,
+                user.id_photo
+              ),
+              () => {}
+            );
+
+          }
+
+          res.json({
+            success: true,
+            message: "Profile deleted successfully!"
+          });
+
+        }
+      );
+
+    }
+  );
+
+});
+
+
+// =====================================================
+// SERVER START
+// =====================================================
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(
+    `🚀 Server running on http://localhost:${PORT}`
+  );
+});
+```
